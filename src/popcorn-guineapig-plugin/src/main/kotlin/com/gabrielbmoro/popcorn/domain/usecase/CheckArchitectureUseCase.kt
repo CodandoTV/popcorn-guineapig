@@ -1,32 +1,12 @@
-package tasks.checkarcviolation
+package com.gabrielbmoro.popcorn.domain.usecase
 
-internal class ArcViolationChecker {
-    private val rules = listOf(
-        ArcViolationRule.JustWith(
-            targetModule = "data",
-            justWith = listOf(
-                "domain",
-            ),
-        ),
-        ArcViolationRule.NoRelationship(
-            targetModule = "domain"
-        ),
-        ArcViolationRule.NoRelationship(
-            targetModule = "resources"
-        ),
-        ArcViolationRule.JustWith(
-            targetModule = "designsystem",
-            justWith = listOf("resources")
-        ),
-        ArcViolationRule.Feature(
-            targetModule = "featureModule"
-        ),
-        ArcViolationRule.NoRelationship(
-            targetModule = "platform",
-        )
-    )
+import com.gabrielbmoro.popcorn.domain.entity.ArcViolationRule
+import com.gabrielbmoro.popcorn.domain.entity.CheckResult
+import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 
-    fun check(targetModule: TargetModule): CheckResult {
+class CheckArchitectureUseCase {
+
+    fun execute(rules: List<ArcViolationRule>, targetModule: TargetModule): CheckResult {
         val sortedInternalProjectDependencies = targetModule.internalDependencies.sorted()
 
         val targetRule = rules.firstOrNull { rule ->

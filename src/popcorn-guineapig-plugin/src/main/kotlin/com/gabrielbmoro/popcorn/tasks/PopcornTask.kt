@@ -1,11 +1,40 @@
-package tasks.checkarcviolation
+package com.gabrielbmoro.popcorn.tasks
 
+import com.gabrielbmoro.popcorn.domain.entity.ArcViolationRule
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import com.gabrielbmoro.popcorn.domain.entity.CheckResult
+import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.domain.usecase.CheckArchitectureUseCase
 
-open class CheckArchitectureViolationTask : DefaultTask() {
+open class PopcornTask : DefaultTask() {
 
-    private val checker = ArcViolationChecker()
+    private val checkArcUseCase = CheckArchitectureUseCase()
+
+    private val rules = listOf(
+        ArcViolationRule.JustWith(
+            targetModule = "data",
+            justWith = listOf(
+                "com/gabrielbmoro/popcorn/domain",
+            ),
+        ),
+        ArcViolationRule.NoRelationship(
+            targetModule = "com/gabrielbmoro/popcorn/domain"
+        ),
+        ArcViolationRule.NoRelationship(
+            targetModule = "resources"
+        ),
+        ArcViolationRule.JustWith(
+            targetModule = "designsystem",
+            justWith = listOf("resources")
+        ),
+        ArcViolationRule.Feature(
+            targetModule = "featureModule"
+        ),
+        ArcViolationRule.NoRelationship(
+            targetModule = "platform",
+        )
+    )
 
     @TaskAction
     fun process() {
@@ -17,7 +46,7 @@ open class CheckArchitectureViolationTask : DefaultTask() {
             internalDependencies = internalProjectDependencies
         )
 
-        val result = checker.check(targetModule = targetModule)
+        val result = checkArcUseCase.execute(rules = rules, targetModule = targetModule)
 
         if (result is CheckResult.Failure) {
             throw IllegalStateException(result.errorMessage)

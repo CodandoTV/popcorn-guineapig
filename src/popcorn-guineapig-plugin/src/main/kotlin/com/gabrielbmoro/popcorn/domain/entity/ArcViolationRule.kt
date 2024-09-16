@@ -1,6 +1,6 @@
-package tasks.checkarcviolation
+package com.gabrielbmoro.popcorn.domain.entity
 
-internal sealed class ArcViolationRule(
+sealed class ArcViolationRule(
     open val targetModule: String
 ) {
     data class NoRelationship(

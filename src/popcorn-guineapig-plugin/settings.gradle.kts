@@ -6,4 +6,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "build-logic"
+rootProject.name = "popcorn-guineapig"

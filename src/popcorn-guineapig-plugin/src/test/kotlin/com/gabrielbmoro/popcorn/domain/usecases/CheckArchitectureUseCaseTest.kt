@@ -1,12 +1,12 @@
-package tasks
+package com.gabrielbmoro.popcorn.domain.usecases
 
 import org.junit.Test
-import tasks.checkarcviolation.ArcViolationChecker
-import tasks.checkarcviolation.CheckResult
-import tasks.checkarcviolation.TargetModule
+import com.gabrielbmoro.popcorn.tasks.checkarcviolation.ArcViolationChecker
+import com.gabrielbmoro.popcorn.domain.entity.CheckResult
+import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 import kotlin.test.assertIs
 
-class ArcViolationCheckerTest {
+class CheckArchitectureUseCaseTest {
 
     @Test
     fun `Given a data layer with an invalid relationship when it is checked then fails`() {
@@ -15,7 +15,7 @@ class ArcViolationCheckerTest {
         val result = arcViolationChecker.check(
             TargetModule(
                 moduleName = "data",
-                internalDependencies = listOf("domain", "resources"),
+                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain", "resources"),
                 isFeatureModule = false
             )
         )
@@ -30,7 +30,7 @@ class ArcViolationCheckerTest {
         val result = arcViolationChecker.check(
             TargetModule(
                 moduleName = "data",
-                internalDependencies = listOf("domain"),
+                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain"),
                 isFeatureModule = false
             )
         )
@@ -44,7 +44,7 @@ class ArcViolationCheckerTest {
 
         val result = arcViolationChecker.check(
             TargetModule(
-                moduleName = "domain",
+                moduleName = "com/gabrielbmoro/popcorn/domain",
                 internalDependencies = emptyList(),
                 isFeatureModule = false
             )
@@ -74,7 +74,7 @@ class ArcViolationCheckerTest {
 
         val result = arcViolationChecker.check(
             TargetModule(
-                moduleName = "domain",
+                moduleName = "com/gabrielbmoro/popcorn/domain",
                 internalDependencies = listOf("data"),
                 isFeatureModule = false
             )
@@ -150,7 +150,7 @@ class ArcViolationCheckerTest {
         val result = arcViolationChecker.check(
             TargetModule(
                 moduleName = "details",
-                internalDependencies = listOf("domain", "resources"),
+                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain", "resources"),
                 isFeatureModule = true
             )
         )
@@ -165,7 +165,7 @@ class ArcViolationCheckerTest {
         val result = arcViolationChecker.check(
             TargetModule(
                 moduleName = "chuck norris",
-                internalDependencies = listOf("domain"),
+                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain"),
                 isFeatureModule = false
             )
         )
