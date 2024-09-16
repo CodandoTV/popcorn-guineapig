@@ -3,7 +3,7 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-    includeBuild("build-logic")
+    includeBuild("popcorn-guineapig-plugin")
     repositories {
         gradlePluginPortal()
         google()
@@ -18,17 +18,4 @@ dependencyResolutionManagement {
     }
 }
 
-include(
-    ":composeApp",
-    ":data",
-    ":domain",
-    ":designsystem",
-    ":feature:wishlist",
-    ":feature:search",
-    ":feature:details",
-    ":feature:movies",
-    ":platform",
-    ":resources"
-)
-
-rootProject.name = "MovieDBApp"
+rootProject.name = "PopcornGuineaPig"
