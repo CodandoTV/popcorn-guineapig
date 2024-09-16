@@ -4,6 +4,7 @@ kotlin = "2.0.20"
 junit = "4.13.2"
 coroutines = "1.8.1"
 gradle = "8.2.2"
+jetbrains-kotlin-jvm = "1.9.10"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -18,3 +19,4 @@ kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 test_multiplatform = ["kotlin_test", "kotlin_test_common", "kotlinx_coroutines_test"]
 
 [plugins]
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }
