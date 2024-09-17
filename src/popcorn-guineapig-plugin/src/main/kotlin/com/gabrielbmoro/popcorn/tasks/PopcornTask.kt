@@ -6,6 +6,7 @@ import com.gabrielbmoro.popcorn.domain.entity.CheckResult
 import com.gabrielbmoro.popcorn.domain.entity.PopCornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 import com.gabrielbmoro.popcorn.domain.usecase.CheckArchitectureUseCase
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 
 open class PopcornTask : DefaultTask() {
@@ -33,7 +34,7 @@ open class PopcornTask : DefaultTask() {
             throw IllegalStateException(result.errorMessage)
         }
 
-        println("Check: $targetModule")
+        logger.log(LogLevel.INFO, "$targetModule")
     }
 
 
@@ -51,7 +52,7 @@ open class PopcornTask : DefaultTask() {
         project.configurations.onEach { conf ->
             if (conf.name == configurationTarget) {
                 conf.dependencies.map {
-                    if (it.group == configuration.project.group) {
+                    if (it.group?.contains(configuration.project.group) == true) {
                         internalProjectDependencies.add(it.name)
                     }
                 }

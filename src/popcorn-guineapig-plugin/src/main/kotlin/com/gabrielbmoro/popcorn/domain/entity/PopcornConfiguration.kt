@@ -17,7 +17,8 @@ data class PopCornProject(
 @Serializable
 data class PopcornRules(
     val no_relation_ship: List<PopcornNoRelationShipRule>,
-    val just_with: List<PopcornJustWithRule>
+    val just_with: List<PopcornJustWithRule>,
+    val do_not_with: List<PopcornDoNotWithRule>
 )
 
 @Serializable
@@ -31,4 +32,11 @@ data class PopcornJustWithRule(
     val regex_enabled: Boolean,
     val target: String,
     val with: List<String>
+)
+
+@Serializable
+data class PopcornDoNotWithRule(
+    val regex_enabled: Boolean,
+    val target: String,
+    val not_with: List<String>
 )

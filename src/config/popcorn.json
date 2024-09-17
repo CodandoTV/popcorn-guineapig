@@ -10,12 +10,13 @@
         "target": "platform"
       }
     ],
-    "just_with": [
+    "just_with": [],
+    "do_not_with": [
       {
         "regex_enabled": false,
         "target": "sample-presentation",
-        "with": [
-          "sample-domain"
+        "not_with": [
+          "sample-data"
         ]
       }
     ]

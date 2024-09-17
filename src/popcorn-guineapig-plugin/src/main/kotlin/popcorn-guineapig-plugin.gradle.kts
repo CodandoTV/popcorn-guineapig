@@ -22,6 +22,8 @@ val configureTextContent = configurationText.toString()
 
 val popcornConfiguration = Json.decodeFromString<PopCornConfiguration>(configureTextContent)
 
+println("Popcorn config: $popcornConfiguration")
+
 tasks.register<PopcornTask>("popcorn") {
     configuration = popcornConfiguration
 }

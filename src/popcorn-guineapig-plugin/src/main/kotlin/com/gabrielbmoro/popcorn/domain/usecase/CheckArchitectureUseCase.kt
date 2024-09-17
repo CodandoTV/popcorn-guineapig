@@ -11,11 +11,6 @@ class CheckArchitectureUseCase {
 
         configuration.rules.just_with.firstOrNull { rule -> rule.target == targetModule.moduleName }
             ?.let { targetRule ->
-                if(targetRule.regex_enabled) {
-
-                } else {
-
-                }
                 if (sortedInternalProjectDependencies != targetRule.with) {
                     return CheckResult.Failure(
                         errorMessage = "${targetModule.moduleName} should only have deps " +
@@ -24,16 +19,23 @@ class CheckArchitectureUseCase {
                 }
             }
 
-        configuration.rules.no_relation_ship.firstOrNull { rule ->
-
-
-
-            rule.target == targetModule.moduleName
-        }
+        configuration.rules.no_relation_ship.firstOrNull { rule -> rule.target == targetModule.moduleName }
             ?.run {
                 if (sortedInternalProjectDependencies.isNotEmpty()) {
                     return CheckResult.Failure(
                         errorMessage = "${targetModule.moduleName} should not have deps"
+                    )
+                }
+            }
+
+        configuration.rules.do_not_with.firstOrNull { rule -> rule.target == targetModule.moduleName }
+            ?.let { targetRule ->
+                val isThereNotAllowedDep = sortedInternalProjectDependencies.any { internalDep ->
+                    targetRule.not_with.contains(internalDep)
+                }
+                if (isThereNotAllowedDep) {
+                    return CheckResult.Failure(
+                        errorMessage = "${targetModule.moduleName} has a not allowed dependency"
                     )
                 }
             }
