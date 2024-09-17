@@ -1,0 +1,23 @@
+{
+  "project": {
+    "type": "java",
+    "group": "PopcornGuineaPig"
+  },
+  "rules": {
+    "no_relation_ship": [
+      {
+        "regex_enabled": false,
+        "target": "platform"
+      }
+    ],
+    "just_with": [
+      {
+        "regex_enabled": false,
+        "target": "sample-presentation",
+        "with": [
+          "sample-domain"
+        ]
+      }
+    ]
+  }
+}
