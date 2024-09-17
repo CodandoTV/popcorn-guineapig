@@ -1,6 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
-plugins { alias(libs.plugins.jetbrains.kotlin.jvm) apply false }
+plugins {
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+}
 
 buildscript {
     repositories {

@@ -1,6 +1,7 @@
 plugins {
     `kotlin-dsl`
     `kotlin-dsl-precompiled-script-plugins`
+    alias(libs.plugins.kotlin.serialization)
 }
 
 repositories {
@@ -13,6 +14,7 @@ repositories {
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.gradle)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
