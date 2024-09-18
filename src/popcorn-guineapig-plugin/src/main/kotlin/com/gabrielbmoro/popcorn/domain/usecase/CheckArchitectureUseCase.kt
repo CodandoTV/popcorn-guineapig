@@ -11,7 +11,8 @@ class CheckArchitectureUseCase {
 
         configuration.rules.justWith.firstOrNull { rule -> rule.target == targetModule.moduleName }
             ?.let { targetRule ->
-                if (sortedInternalProjectDependencies != targetRule.with) {
+                val sortedTargetRuleAllowedDep = targetRule.with.sorted()
+                if (sortedInternalProjectDependencies != sortedTargetRuleAllowedDep) {
                     return CheckResult.Failure(
                         errorMessage = "${targetModule.moduleName} should only have deps " +
                                 "with ${targetRule.with}"
