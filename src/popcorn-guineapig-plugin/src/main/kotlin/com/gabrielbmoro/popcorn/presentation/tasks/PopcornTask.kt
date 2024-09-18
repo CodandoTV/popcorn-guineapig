@@ -5,7 +5,7 @@ import org.gradle.api.tasks.TaskAction
 import com.gabrielbmoro.popcorn.domain.entity.CheckResult
 import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
-import com.gabrielbmoro.popcorn.domain.usecase.CheckArchitectureUseCase
+import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
 import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input

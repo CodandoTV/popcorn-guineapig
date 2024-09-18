@@ -6,7 +6,8 @@ import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
 import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
 import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
-import com.gabrielbmoro.popcorn.domain.usecase.CheckArchitectureUseCase
+import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
+import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
 import org.junit.Before
 import kotlin.test.assertIs
 
@@ -23,7 +24,10 @@ class CheckArchitectureUseCaseTest {
     fun `Given a data layer + invalid relation when do not with rule is checked then fails`() {
         val targetModule = TargetModule(
             moduleName = "data",
-            internalDependencies = listOf("domain", "resources"),
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+                InternalDependenciesMetadata(group = null, moduleName = "resources"),
+            )
         )
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
@@ -47,7 +51,9 @@ class CheckArchitectureUseCaseTest {
     fun `Given a data layer + valid relation when do not with rule is checked then passes`() {
         val targetModule = TargetModule(
             moduleName = "data",
-            internalDependencies = listOf("domain"),
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain")
+            ),
         )
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
@@ -94,7 +100,12 @@ class CheckArchitectureUseCaseTest {
     fun `Given a domain layer + some relationship when no relationship rule is checked then fails`() {
         val targetModule = TargetModule(
             moduleName = "domain",
-            internalDependencies = listOf("domain"),
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(
+                    group = null,
+                    moduleName = "domain"
+                )
+            ),
         )
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
@@ -117,7 +128,10 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + some relations when just with rule is checked then passes`() {
         val targetModule = TargetModule(
             moduleName = "presentation",
-            internalDependencies = listOf("domain", "resources"),
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, "domain"),
+                InternalDependenciesMetadata(group = null, moduleName = "resources"),
+            )
         )
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
@@ -141,7 +155,10 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + some relations (not sorted) when just with rule is checked then passes`() {
         val targetModule = TargetModule(
             moduleName = "presentation",
-            internalDependencies = listOf("domain", "resources"),
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+                InternalDependenciesMetadata(group = null, moduleName = "resources")
+            )
         )
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
@@ -165,7 +182,10 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + missing relation when just with rule is checked then fails`() {
         val targetModule = TargetModule(
             moduleName = "presentation",
-            internalDependencies = listOf("resources", "domain"),
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "resources"),
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+            )
         )
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,

@@ -2,9 +2,13 @@ package com.gabrielbmoro.popcorn.domain.entity
 
 data class TargetModule(
     val moduleName: String,
-    val internalDependencies: List<String>
+    val internalDependencies: List<InternalDependenciesMetadata>
 ) {
     override fun toString(): String {
-        return "[Mod $moduleName, internalDeps $internalDependencies]"
+        val internalDep = internalDependencies.map {
+            it.moduleName
+        }.reduce { acc, s -> acc.plus(",$s") }
+
+        return "[Mod $moduleName, internalDeps $internalDep]"
     }
 }
