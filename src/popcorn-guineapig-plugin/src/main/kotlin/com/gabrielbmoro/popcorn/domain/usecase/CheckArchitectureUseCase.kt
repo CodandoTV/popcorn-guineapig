@@ -1,15 +1,15 @@
 package com.gabrielbmoro.popcorn.domain.usecase
 
 import com.gabrielbmoro.popcorn.domain.entity.CheckResult
-import com.gabrielbmoro.popcorn.domain.entity.PopCornConfiguration
+import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 
 class CheckArchitectureUseCase {
 
-    fun execute(configuration: PopCornConfiguration, targetModule: TargetModule): CheckResult {
+    fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult {
         val sortedInternalProjectDependencies = targetModule.internalDependencies.sorted()
 
-        configuration.rules.just_with.firstOrNull { rule -> rule.target == targetModule.moduleName }
+        configuration.rules.justWith.firstOrNull { rule -> rule.target == targetModule.moduleName }
             ?.let { targetRule ->
                 if (sortedInternalProjectDependencies != targetRule.with) {
                     return CheckResult.Failure(
@@ -19,7 +19,7 @@ class CheckArchitectureUseCase {
                 }
             }
 
-        configuration.rules.no_relation_ship.firstOrNull { rule -> rule.target == targetModule.moduleName }
+        configuration.rules.noRelationship.firstOrNull { rule -> rule.target == targetModule.moduleName }
             ?.run {
                 if (sortedInternalProjectDependencies.isNotEmpty()) {
                     return CheckResult.Failure(
@@ -28,10 +28,10 @@ class CheckArchitectureUseCase {
                 }
             }
 
-        configuration.rules.do_not_with.firstOrNull { rule -> rule.target == targetModule.moduleName }
+        configuration.rules.doNotWith.firstOrNull { rule -> rule.target == targetModule.moduleName }
             ?.let { targetRule ->
                 val isThereNotAllowedDep = sortedInternalProjectDependencies.any { internalDep ->
-                    targetRule.not_with.contains(internalDep)
+                    targetRule.notWith.contains(internalDep)
                 }
                 if (isThereNotAllowedDep) {
                     return CheckResult.Failure(

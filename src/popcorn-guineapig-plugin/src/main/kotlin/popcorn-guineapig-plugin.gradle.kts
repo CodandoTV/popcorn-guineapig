@@ -1,5 +1,5 @@
-import com.gabrielbmoro.popcorn.domain.entity.PopCornConfiguration
-import com.gabrielbmoro.popcorn.tasks.PopcornTask
+import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
+import com.gabrielbmoro.popcorn.presentation.tasks.PopcornTask
 import kotlinx.serialization.json.Json
 
 val configurationPath = project.rootDir.path
@@ -20,7 +20,7 @@ configurationFile.useLines { lines ->
 
 val configureTextContent = configurationText.toString()
 
-val popcornConfiguration = Json.decodeFromString<PopCornConfiguration>(configureTextContent)
+val popcornConfiguration = Json.decodeFromString<PopcornConfiguration>(configureTextContent)
 
 println("Popcorn config: $popcornConfiguration")
 

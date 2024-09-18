@@ -1,22 +1,40 @@
 package com.gabrielbmoro.popcorn.domain.usecases
 
 import org.junit.Test
-//import com.gabrielbmoro.popcorn.tasks.checkarcviolation.ArcViolationChecker
 import com.gabrielbmoro.popcorn.domain.entity.CheckResult
+import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.domain.usecase.CheckArchitectureUseCase
+import org.junit.Before
 import kotlin.test.assertIs
 
 class CheckArchitectureUseCaseTest {
-/*
-    @Test
-    fun `Given a data layer with an invalid relationship when it is checked then fails`() {
-        val arcViolationChecker = ArcViolationChecker()
 
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "data",
-                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain", "resources"),
-                isFeatureModule = false
+    private lateinit var checkArchitectureUseCase: CheckArchitectureUseCase
+
+    @Before
+    fun before() {
+        checkArchitectureUseCase = CheckArchitectureUseCase()
+    }
+
+    @Test
+    fun `Given a data layer + invalid relation when do not with rule is checked then fails`() {
+        val targetModule = TargetModule(
+            moduleName = "data",
+            internalDependencies = listOf("domain", "resources"),
+        )
+        val result = checkArchitectureUseCase.execute(
+            targetModule = targetModule,
+            configuration = fakePopcornConfiguration.copy(
+                rules = fakePopcornConfiguration.rules.copy(
+                    doNotWith = listOf(
+                        PopcornDoNotWithRule(
+                            regexEnabled = false,
+                            notWith = listOf("resources"),
+                            target = "data"
+                        )
+                    )
+                )
             )
         )
 
@@ -24,152 +42,26 @@ class CheckArchitectureUseCaseTest {
     }
 
     @Test
-    fun `Given a data layer with a valid relationship when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "data",
-                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain"),
-                isFeatureModule = false
+    fun `Given a data layer + valid relation when do not with rule is checked then passes`() {
+        val targetModule = TargetModule(
+            moduleName = "data",
+            internalDependencies = listOf("domain"),
+        )
+        val result = checkArchitectureUseCase.execute(
+            targetModule = targetModule,
+            configuration = fakePopcornConfiguration.copy(
+                rules = fakePopcornConfiguration.rules.copy(
+                    doNotWith = listOf(
+                        PopcornDoNotWithRule(
+                            regexEnabled = false,
+                            notWith = listOf("resources"),
+                            target = "data"
+                        )
+                    )
+                )
             )
         )
 
         assertIs<CheckResult.Success>(result)
     }
-
-    @Test
-    fun `Given a domain layer with no relationship when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "com/gabrielbmoro/popcorn/domain",
-                internalDependencies = emptyList(),
-                isFeatureModule = false
-            )
-        )
-
-        assertIs<CheckResult.Success>(result)
-    }
-
-    @Test
-    fun `Given a platform layer with no relationship when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "platform",
-                internalDependencies = emptyList(),
-                isFeatureModule = false
-            )
-        )
-
-        assertIs<CheckResult.Success>(result)
-    }
-
-    @Test
-    fun `Given a domain layer with an invalid relationship when it is checked then fails`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "com/gabrielbmoro/popcorn/domain",
-                internalDependencies = listOf("data"),
-                isFeatureModule = false
-            )
-        )
-
-        assertIs<CheckResult.Failure>(result)
-    }
-
-    @Test
-    fun `Given a resources layer with an invalid relationship when it is checked then fails`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "resources",
-                internalDependencies = listOf("presentation"),
-                isFeatureModule = false
-            )
-        )
-
-        assertIs<CheckResult.Failure>(result)
-    }
-
-    @Test
-    fun `Given a resources layer with no relationship when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "resources",
-                isFeatureModule = false,
-                internalDependencies = emptyList()
-            )
-        )
-
-        assertIs<CheckResult.Success>(result)
-    }
-
-    @Test
-    fun `Given a design system layer with a valid relationship when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "designsystem",
-                internalDependencies = listOf("resources"),
-                isFeatureModule = false
-            )
-        )
-
-        assertIs<CheckResult.Success>(result)
-    }
-
-    @Test
-    fun `Given a feature module with an invalid relationship when it is checked then fails`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "details",
-                internalDependencies = listOf("data"),
-                isFeatureModule = true
-            )
-        )
-
-        assertIs<CheckResult.Failure>(result)
-    }
-
-    @Test
-    fun `Given a feature module with a valid relationship when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "details",
-                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain", "resources"),
-                isFeatureModule = true
-            )
-        )
-
-        assertIs<CheckResult.Success>(result)
-    }
-
-    @Test
-    fun `Given a unknown module with no rule when it is checked then pass`() {
-        val arcViolationChecker = ArcViolationChecker()
-
-        val result = arcViolationChecker.check(
-            TargetModule(
-                moduleName = "chuck norris",
-                internalDependencies = listOf("com/gabrielbmoro/popcorn/domain"),
-                isFeatureModule = false
-            )
-        )
-
-        assertIs<CheckResult.Success>(result)
-    }*/
 }

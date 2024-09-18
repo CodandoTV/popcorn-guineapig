@@ -4,18 +4,18 @@
     "group": "PopcornGuineaPig"
   },
   "rules": {
-    "no_relation_ship": [
+    "noRelationship": [
       {
-        "regex_enabled": false,
+        "regexEnabled": false,
         "target": "platform"
       }
     ],
-    "just_with": [],
-    "do_not_with": [
+    "justWith": [],
+    "doNotWith": [
       {
-        "regex_enabled": false,
+        "regexEnabled": false,
         "target": "sample-presentation",
-        "not_with": [
+        "notWith": [
           "sample-data"
         ]
       }
