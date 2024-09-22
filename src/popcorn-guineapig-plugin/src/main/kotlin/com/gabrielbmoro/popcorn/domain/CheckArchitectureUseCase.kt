@@ -20,8 +20,8 @@ class CheckArchitectureUseCase {
         )
 
         runCatching {
-            configuration.rules.all().filter {
-                it.target == targetModule.moduleName
+            configuration.rules.all().filter { rule ->
+                rule.target.toRegex().matches(targetModule.moduleName)
             }.forEach { targetRule ->
                 when (targetRule) {
                     is PopcornJustWithRule -> visitor.doJustWithRule(targetRule)
