@@ -6,14 +6,12 @@
   "rules": {
     "noRelationship": [
       {
-        "regexEnabled": false,
         "target": "platform"
       }
     ],
     "justWith": [],
     "doNotWith": [
       {
-        "regexEnabled": false,
         "target": "sample-presentation",
         "notWith": [
           "sample-data"

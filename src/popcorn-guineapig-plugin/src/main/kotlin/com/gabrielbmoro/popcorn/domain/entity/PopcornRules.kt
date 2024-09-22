@@ -11,24 +11,23 @@ data class PopcornRules(
     fun all() = noRelationship + justWith + doNotWith
 }
 
-interface BaseArcRule
+interface BaseArcRule {
+    val target: String
+}
 
 @Serializable
 data class PopcornNoRelationShipRule(
-    val regexEnabled: Boolean,
-    val target: String
+    override val target: String
 ) : BaseArcRule
 
 @Serializable
 data class PopcornJustWithRule(
-    val regexEnabled: Boolean,
-    val target: String,
+    override val target: String,
     val with: List<String>
 ) : BaseArcRule
 
 @Serializable
 data class PopcornDoNotWithRule(
-    val regexEnabled: Boolean,
-    val target: String,
+    override val target: String,
     val notWith: List<String>
 ) : BaseArcRule

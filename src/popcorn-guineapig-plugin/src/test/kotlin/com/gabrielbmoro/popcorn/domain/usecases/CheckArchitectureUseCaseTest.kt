@@ -35,7 +35,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     doNotWith = listOf(
                         PopcornDoNotWithRule(
-                            regexEnabled = false,
                             notWith = listOf("resources"),
                             target = "data"
                         )
@@ -61,7 +60,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     doNotWith = listOf(
                         PopcornDoNotWithRule(
-                            regexEnabled = false,
                             notWith = listOf("resources"),
                             target = "data"
                         )
@@ -85,7 +83,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     noRelationship = listOf(
                         PopcornNoRelationShipRule(
-                            regexEnabled = false,
                             target = "domain"
                         )
                     )
@@ -113,7 +110,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     noRelationship = listOf(
                         PopcornNoRelationShipRule(
-                            regexEnabled = false,
                             target = "domain"
                         )
                     )
@@ -139,7 +135,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     justWith = listOf(
                         PopcornJustWithRule(
-                            regexEnabled = false,
                             target = "presentation",
                             with = listOf("domain", "resources")
                         )
@@ -166,7 +161,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     justWith = listOf(
                         PopcornJustWithRule(
-                            regexEnabled = false,
                             target = "presentation",
                             with = listOf("resources", "domain")
                         )
@@ -193,7 +187,6 @@ class CheckArchitectureUseCaseTest {
                 rules = fakePopcornConfiguration.rules.copy(
                     justWith = listOf(
                         PopcornJustWithRule(
-                            regexEnabled = false,
                             target = "presentation",
                             with = listOf("domain")
                         )
