@@ -20,7 +20,9 @@ class CheckArchitectureUseCase {
         )
 
         runCatching {
-            configuration.rules.all().forEach { targetRule ->
+            configuration.rules.all().filter {
+                it.target == targetModule.moduleName
+            }.forEach { targetRule ->
                 when (targetRule) {
                     is PopcornJustWithRule -> visitor.doJustWithRule(targetRule)
                     is PopcornDoNotWithRule -> visitor.doForDoNotWithRule(targetRule)

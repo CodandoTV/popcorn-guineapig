@@ -6,6 +6,7 @@ import com.gabrielbmoro.popcorn.domain.entity.CheckResult
 import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
+import com.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
 import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
@@ -13,6 +14,7 @@ import org.gradle.api.tasks.Input
 open class PopcornTask : DefaultTask() {
 
     private val checkArcUseCase = CheckArchitectureUseCase()
+    private val getRightConfigurationNameUseCase = GetRightConfigurationNameUseCase()
 
     @Input
     lateinit var configuration: PopcornConfiguration
@@ -20,7 +22,8 @@ open class PopcornTask : DefaultTask() {
     @TaskAction
     fun process() {
         val internalProjectDependencies = project.internalProjectDependencies(
-            configuration = configuration
+            configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
+            projectGroupName = configuration.project.group
         )
 
         val targetModule = TargetModule(

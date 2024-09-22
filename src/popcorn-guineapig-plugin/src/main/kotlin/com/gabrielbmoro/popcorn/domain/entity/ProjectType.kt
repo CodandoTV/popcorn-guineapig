@@ -4,11 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class ProjectType(val configurationTarget: String) {
+enum class ProjectType {
     @SerialName("java")
-    JAVA("implementation"),
+    JAVA,
     @SerialName("kmp")
-    KMP("commonImplementation"),
+    KMP,
     @SerialName("android")
-    ANDROID("implementation")
+    ANDROID
 }
