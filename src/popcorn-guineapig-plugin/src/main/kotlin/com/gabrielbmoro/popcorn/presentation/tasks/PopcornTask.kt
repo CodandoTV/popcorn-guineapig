@@ -23,7 +23,6 @@ open class PopcornTask : DefaultTask() {
     fun process() {
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
-            projectGroupName = configuration.project.group
         )
 
         val targetModule = TargetModule(

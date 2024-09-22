@@ -7,7 +7,6 @@ import com.gabrielbmoro.popcorn.domain.entity.ProjectType
 
 val fakePopcornConfiguration = PopcornConfiguration(
     project = PopcornProject(
-        group = "PopcornSample",
         type = ProjectType.KMP
     ),
     rules = PopcornRules(

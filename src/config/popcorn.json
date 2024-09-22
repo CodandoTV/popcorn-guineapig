@@ -1,7 +1,6 @@
 {
   "project": {
-    "type": "java",
-    "group": "PopcornGuineaPig"
+    "type": "java"
   },
   "rules": {
     "noRelationship": [
