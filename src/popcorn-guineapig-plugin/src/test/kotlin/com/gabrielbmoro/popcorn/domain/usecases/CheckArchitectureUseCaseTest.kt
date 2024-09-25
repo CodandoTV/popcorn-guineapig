@@ -197,4 +197,30 @@ class CheckArchitectureUseCaseTest {
 
         assertIs<CheckResult.Failure>(result)
     }
+
+    @Test
+    fun `Given a presentation layer + missing relation + regex rule when just with rule is checked then fails`() {
+        val targetModule = TargetModule(
+            moduleName = "referral-presentation",
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "resources"),
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+            )
+        )
+        val result = checkArchitectureUseCase.execute(
+            targetModule = targetModule,
+            configuration = fakePopcornConfiguration.copy(
+                rules = fakePopcornConfiguration.rules.copy(
+                    justWith = listOf(
+                        PopcornJustWithRule(
+                            target = "[a-z]*-presentation",
+                            with = listOf("domain")
+                        )
+                    )
+                )
+            )
+        )
+
+        assertIs<CheckResult.Failure>(result)
+    }
 }
