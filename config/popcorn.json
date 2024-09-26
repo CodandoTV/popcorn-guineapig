@@ -11,9 +11,9 @@
     "justWith": [],
     "doNotWith": [
       {
-        "target": "sample-presentation",
+        "target": "[a-z]+-presentation",
         "notWith": [
-          "sample-data"
+          "[a-z]+-data"
         ]
       }
     ]

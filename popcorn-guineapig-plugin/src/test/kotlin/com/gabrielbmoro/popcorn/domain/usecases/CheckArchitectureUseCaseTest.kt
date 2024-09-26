@@ -47,6 +47,31 @@ class CheckArchitectureUseCaseTest {
     }
 
     @Test
+    fun `Given a data layer + invalid relation + regex when do not with rule is checked then fails`() {
+        val targetModule = TargetModule(
+            moduleName = "user-data",
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "user-presentation"),
+            )
+        )
+        val result = checkArchitectureUseCase.execute(
+            targetModule = targetModule,
+            configuration = fakePopcornConfiguration.copy(
+                rules = fakePopcornConfiguration.rules.copy(
+                    doNotWith = listOf(
+                        PopcornDoNotWithRule(
+                            notWith = listOf("[a-z]+-presentation"),
+                            target = "[a-z]+-data"
+                        )
+                    )
+                )
+            )
+        )
+
+        assertIs<CheckResult.Failure>(result)
+    }
+
+    @Test
     fun `Given a data layer + valid relation when do not with rule is checked then passes`() {
         val targetModule = TargetModule(
             moduleName = "data",

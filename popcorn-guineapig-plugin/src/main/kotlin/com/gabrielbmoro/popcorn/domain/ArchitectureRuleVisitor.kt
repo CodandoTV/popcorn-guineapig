@@ -13,13 +13,14 @@ class ArchitectureRuleVisitorImpl(
     fun doForDoNotWithRule(notWithRule: PopcornDoNotWithRule) {
         println("Checking $notWithRule")
 
-        val isThereNotAllowedDep = sortedInternalProjectDependencies.any { internalDep ->
-            notWithRule.notWith.contains(internalDep.moduleName)
-        }
-        if (isThereNotAllowedDep) {
-            throw IllegalStateException(
-                "${targetModule.moduleName} has a not allowed dependency"
-            )
+        notWithRule.notWith.forEach { notWithRuleItem ->
+            sortedInternalProjectDependencies.forEach { internalDependencyItem ->
+                if (notWithRuleItem.toRegex().matches(internalDependencyItem.moduleName)) {
+                    error(
+                        "${targetModule.moduleName} has a not allowed dependency: ${internalDependencyItem.moduleName}"
+                    )
+                }
+            }
         }
     }
 
@@ -27,7 +28,7 @@ class ArchitectureRuleVisitorImpl(
         println("Checking $noRelationShipRule")
 
         if (sortedInternalProjectDependencies.isNotEmpty()) {
-            throw IllegalStateException(
+            error(
                 "${targetModule.moduleName} should not have deps"
             )
         }
@@ -42,7 +43,7 @@ class ArchitectureRuleVisitorImpl(
 
         val sortedTargetRuleAllowedDep = justWithRule.with.sorted()
         if (sortedInternalProjectDependencyModuleNames != sortedTargetRuleAllowedDep) {
-            throw IllegalStateException(
+            error(
                 "${targetModule.moduleName} should only have deps " +
                         "with ${justWithRule.with}"
             )
