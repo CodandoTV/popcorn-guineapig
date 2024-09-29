@@ -6,4 +6,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "popcorn-guineapig"
+rootProject.name = "popcornguineapig"
