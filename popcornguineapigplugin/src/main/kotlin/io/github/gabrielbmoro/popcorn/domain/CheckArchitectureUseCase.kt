@@ -1,11 +1,11 @@
-package com.gabrielbmoro.popcorn.domain
+package io.github.gabrielbmoro.popcorn.domain
 
-import com.gabrielbmoro.popcorn.domain.entity.CheckResult
-import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
-import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
-import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import io.github.gabrielbmoro.popcorn.domain.entity.CheckResult
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
+import io.github.gabrielbmoro.popcorn.domain.entity.TargetModule
 
 class CheckArchitectureUseCase {
 

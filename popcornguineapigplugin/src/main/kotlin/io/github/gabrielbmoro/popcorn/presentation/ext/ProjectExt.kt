@@ -1,7 +1,7 @@
-package com.gabrielbmoro.popcorn.presentation.ext
+package io.github.gabrielbmoro.popcorn.presentation.ext
 
 import com.android.build.gradle.internal.scope.ProjectInfo.Companion.getBaseName
-import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
+import io.github.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
 import org.gradle.api.Project
 
 internal fun Project.internalProjectDependencies(

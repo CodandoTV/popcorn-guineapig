@@ -1,4 +1,4 @@
-package com.gabrielbmoro.popcorn.domain.entity
+package io.github.gabrielbmoro.popcorn.domain.entity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

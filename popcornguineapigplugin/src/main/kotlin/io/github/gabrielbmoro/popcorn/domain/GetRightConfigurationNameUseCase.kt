@@ -1,6 +1,6 @@
-package com.gabrielbmoro.popcorn.domain
+package io.github.gabrielbmoro.popcorn.domain
 
-import com.gabrielbmoro.popcorn.domain.entity.ProjectType
+import io.github.gabrielbmoro.popcorn.domain.entity.ProjectType
 
 class GetRightConfigurationNameUseCase {
 

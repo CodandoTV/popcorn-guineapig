@@ -1,13 +1,13 @@
-package com.gabrielbmoro.popcorn.domain.usecases
+package io.github.gabrielbmoro.popcorn.domain.usecases
 
 import org.junit.Test
-import com.gabrielbmoro.popcorn.domain.entity.CheckResult
-import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
-import com.gabrielbmoro.popcorn.domain.entity.TargetModule
-import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
-import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
+import io.github.gabrielbmoro.popcorn.domain.entity.CheckResult
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
+import io.github.gabrielbmoro.popcorn.domain.entity.TargetModule
+import io.github.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
+import io.github.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
 import org.junit.Before
 import kotlin.test.assertIs
 

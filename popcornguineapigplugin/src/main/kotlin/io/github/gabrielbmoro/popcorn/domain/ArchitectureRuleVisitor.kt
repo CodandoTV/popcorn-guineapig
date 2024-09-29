@@ -1,10 +1,10 @@
-package com.gabrielbmoro.popcorn.domain
+package io.github.gabrielbmoro.popcorn.domain
 
-import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
-import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
-import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import io.github.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
+import io.github.gabrielbmoro.popcorn.domain.entity.TargetModule
 
 class ArchitectureRuleVisitorImpl(
     private val targetModule: TargetModule,

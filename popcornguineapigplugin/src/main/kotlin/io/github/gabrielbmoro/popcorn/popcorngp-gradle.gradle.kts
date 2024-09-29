@@ -1,6 +1,9 @@
-import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
-import com.gabrielbmoro.popcorn.presentation.tasks.PopcornTask
+package io.github.gabrielbmoro.popcorn
+
+import io.github.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
+import io.github.gabrielbmoro.popcorn.presentation.tasks.PopcornTask
 import kotlinx.serialization.json.Json
+import org.gradle.kotlin.dsl.register
 
 val configurationPath = project.rootDir.path
     .plus(File.separator)

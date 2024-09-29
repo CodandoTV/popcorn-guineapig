@@ -1,7 +1,7 @@
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
-    id("popcornguineapigplugin")
+    id("io.github.gabrielbmoro.popcorn.popcorngp-gradle")
 }
 
 java {
