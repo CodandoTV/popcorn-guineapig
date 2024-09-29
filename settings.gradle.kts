@@ -11,7 +11,7 @@ include(
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-    includeBuild("popcorn-guineapig-plugin")
+    includeBuild("popcornguineapigplugin")
     repositories {
         gradlePluginPortal()
         google()
