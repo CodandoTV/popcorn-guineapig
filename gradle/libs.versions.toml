@@ -1,11 +1,12 @@
 [versions]
 gradle-test-kit-version = "7.6"
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 junit = "4.13.2"
 coroutines = "1.8.1"
 gradle = "8.2.1"
-jetbrains-kotlin-jvm = "1.9.10"
+jetbrains-kotlin-jvm = "1.9.20"
 kotlinx-serialization-json = "1.6.0"
+vanniktech = "0.28.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -23,3 +24,4 @@ test_multiplatform = ["kotlin_test", "kotlin_test_common", "kotlinx_coroutines_t
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech"}
