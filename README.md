@@ -8,27 +8,37 @@ Welcome to the **Popcorn Gradle Plugin**!
 
 This project is currently under development 🛠️
 
-The goal of this plugin is to help enforce architectural rules in your project. Once you apply the plugin and specify your architecture guidelines in a `config/popcorn.json` file (located at the root of your project), the plugin will automatically verify whether your architecture adheres to these rules.
+The goal of this plugin is to help enforce architectural rules in your project. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
-## How to use? 🤔
+## 🚀 Getting Started
+
+## 1. Add the Plugin Dependency
 
 Go to your build-logic folder, in the `build-logic/build.gradle.kts`, add the following dependency:
 
 ```
-implementation("io.github.gabrielbmoro:popcornguineapig:1.0.8")
+implementation("io.github.gabrielbmoro:popcornguineapig:<version>")
 ```
+
+### 2. Apply the Plugin
 
 You can chose a conventional gradle plugin to define your rules. 
 
 For example, I have a gradle plugin applied to all modules `kmp-library-setup.gradle.kts`. In this conventional plugin, you can add:
 
-```
+
+```kotlin
 plugins {
   ...
   id("io.github.gabrielbmoro.popcorngp")
 }
+```
 
-...
+### 3. Configure Your Architecture Rules
+
+After apply the plugin, you can sync and define the architecture rules:
+
+```kotlin
 popcornGuineapigConfig {
     configuration = PopcornConfiguration(
         project = PopcornProject(
@@ -60,10 +70,31 @@ popcornGuineapigConfig {
 }
 ```
 
-After that, you can run:
+### 4. **Run the task**
 
 ```sh
 ./gradlew popcorn
 ```
 
 It is simple as a popcorn 🍿 + 🐹
+
+## 🎯 Supported Project Types
+
+The Popcorn Gradle Plugin supports:
+
+- Kotlin Multiplatform Projects (KMP)
+
+- Java Projects
+
+- Android Projects
+
+## 🧩 Prerequisites:
+
+Multi-module structure: Ensure your project is structured into multiple modules, as the plugin is designed to work with multi-module architecture.
+
+## 🤝 Contributions Welcome!
+
+We encourage contributions of all types! Whether it's reporting issues, suggesting new features, or submitting pull requests, you're welcome to help improve the plugin.
+
+- Check out the [issues](https://github.com/CodandoTV/popcorn-guineapig/issues) page for ideas.
+- Feel free to submit [pull requests](https://github.com/CodandoTV/popcorn-guineapig/pulls).
