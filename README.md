@@ -1,4 +1,5 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.9.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.gabrielbmoro/popcornguineapig)](https://central.sonatype.com/artifact/io.github.gabrielbmoro/popcornguineapig)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
 # Welcome! 👋
@@ -9,57 +10,60 @@ This project is currently under development 🛠️
 
 The goal of this plugin is to help enforce architectural rules in your project. Once you apply the plugin and specify your architecture guidelines in a `config/popcorn.json` file (located at the root of your project), the plugin will automatically verify whether your architecture adheres to these rules.
 
-## Installation
+## How to use? 🤔
 
-Currently, this plugin is not deployed, so this section will be updated soon.
+Go to your build-logic folder, in the `build-logic/build.gradle.kts`, add the following dependency:
 
-## How to use?
-
-1. Specify a `config/popcorn.json` file in the root part of your project:
-
-```json
-{
-  "project": {
-    "type": "java"
-  },
-  "rules": {
-    "noRelationship": [
-      {
-        "target": "platform"
-      }
-    ],
-    "justWith": [],
-    "doNotWith": [
-      {
-        "target": "[a-z]+-presentation",
-        "notWith": [
-          "[a-z]+-data"
-        ]
-      }
-    ]
-  }
-}
+```
+implementation("io.github.gabrielbmoro:popcornguineapig:1.0.8")
 ```
 
-The project type can be `java`, `kmp`, or `android`.
+You can chose a conventional gradle plugin to define your rules. 
 
-The rules are predefined, so we have a limited set of rules for now.
+For example, I have a gradle plugin applied to all modules `kmp-library-setup.gradle.kts`. In this conventional plugin, you can add:
 
-2. Apply the plugin to your module:
-
-```kotlin
+```
 plugins {
-    id("popcorn-guineapig-plugin")
-    ...
+  ...
+  id("io.github.gabrielbmoro.popcorngp")
 }
+
 ...
+popcornGuineapigConfig {
+    configuration = PopcornConfiguration(
+        project = PopcornProject(
+            type = ProjectType.KMP
+        ),
+        rules = PopcornRules(
+            noRelationship = listOf(
+                PopcornNoRelationShipRule("domain"),
+                PopcornNoRelationShipRule("resources"),
+                PopcornNoRelationShipRule("platform")
+            ),
+            justWith = listOf(
+                PopcornJustWithRule(
+                    target = "data",
+                    with = listOf(
+                        "domain"
+                    )
+                ),
+                PopcornJustWithRule(
+                    target = "designsystem",
+                    with = listOf(
+                        "resources"
+                    )
+                )
+            ),
+            doNotWith = emptyList()
+        )
+    )
+}
 ```
 
-3. Check if there is some architecture violation in your module:
+After that, you can run:
 
-```shell
-./gradlew :sample:sample-presentation:popcorn
+```sh
+./gradlew popcorn
 ```
 
-That's it! 🍿🐹
-
+It is simple as a popcorn 🍿 + 🐹
