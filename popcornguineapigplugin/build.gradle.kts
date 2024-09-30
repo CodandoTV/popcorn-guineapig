@@ -17,7 +17,6 @@ repositories {
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.gradle)
-    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
@@ -29,6 +28,18 @@ tasks.test {
     }
 }
 
+val popcornGpVersion = "1.0.8"
+
+gradlePlugin {
+    plugins {
+        create("popcorngp") {
+            id = "io.github.gabrielbmoro.popcorngp"
+            implementationClass = "com.gabrielbmoro.popcorn.PopcornGpPlugin"
+            version = popcornGpVersion
+        }
+    }
+}
+
 mavenPublishing {
     signAllPublications()
 
@@ -36,7 +47,7 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.gabrielbmoro",
         artifactId = "popcornguineapig",
-        version = "1.0.0"
+        version = popcornGpVersion
     )
 
     pom {

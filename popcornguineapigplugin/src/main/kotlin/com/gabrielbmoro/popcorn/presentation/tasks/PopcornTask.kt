@@ -1,13 +1,13 @@
-package io.github.gabrielbmoro.popcorn.presentation.tasks
+package com.gabrielbmoro.popcorn.presentation.tasks
 
+import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
+import com.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
+import com.gabrielbmoro.popcorn.domain.entity.CheckResult
+import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
+import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import io.github.gabrielbmoro.popcorn.domain.entity.CheckResult
-import io.github.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
-import io.github.gabrielbmoro.popcorn.domain.entity.TargetModule
-import io.github.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
-import io.github.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
-import io.github.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 
@@ -21,6 +21,8 @@ open class PopcornTask : DefaultTask() {
 
     @TaskAction
     fun process() {
+        logger.log(LogLevel.INFO, "PopcornGp: Checking ${project.name}")
+
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
         )
@@ -34,6 +36,8 @@ open class PopcornTask : DefaultTask() {
             configuration = configuration,
             targetModule = targetModule
         )
+
+        logger.log(LogLevel.INFO, "PopcornGp: Result of checking $targetModule --> $result")
 
         if (result is CheckResult.Failure) {
             throw IllegalStateException(result.errorMessage)

@@ -1,4 +1,4 @@
-package io.github.gabrielbmoro.popcorn.domain.entity
+package com.gabrielbmoro.popcorn.domain.entity
 
 sealed class CheckResult {
     object Success : CheckResult()

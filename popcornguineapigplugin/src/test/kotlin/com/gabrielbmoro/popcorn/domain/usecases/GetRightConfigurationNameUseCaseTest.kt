@@ -1,13 +1,10 @@
-package io.github.gabrielbmoro.popcorn.domain.usecases
+package com.gabrielbmoro.popcorn.domain.usecases
 
+import com.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
 import org.junit.Test
-import io.github.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
-import io.github.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
 import com.gabrielbmoro.popcorn.domain.entity.*
-import io.github.gabrielbmoro.popcorn.domain.entity.ProjectType
 import org.junit.Before
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 
 class GetRightConfigurationNameUseCaseTest {
 
