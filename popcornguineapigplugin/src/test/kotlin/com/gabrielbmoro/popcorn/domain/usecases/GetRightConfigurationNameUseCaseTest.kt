@@ -26,7 +26,7 @@ class GetRightConfigurationNameUseCaseTest {
     fun `Given a kmp project when the get right configuration is invoked then check if it is right`() {
         val result = getRightConfigurationNameUseCase.execute(ProjectType.KMP)
 
-        assertEquals("commonImplementation", result)
+        assertEquals("commonMainImplementation", result)
     }
 
     @Test
