@@ -6,9 +6,10 @@ import org.gradle.api.logging.LogLevel
 
 internal fun Project.internalProjectDependencies(
     configurationName: String,
+    groupName: String?,
 ): List<InternalDependenciesMetadata> {
     val internalProjectDependencies = mutableListOf<InternalDependenciesMetadata>()
-    val projectGroupName = project.rootProject.name
+    val projectGroupName = groupName ?: project.rootProject.name
 
     logger.log(LogLevel.INFO, "PopcornGp: Project group name is $projectGroupName")
 
