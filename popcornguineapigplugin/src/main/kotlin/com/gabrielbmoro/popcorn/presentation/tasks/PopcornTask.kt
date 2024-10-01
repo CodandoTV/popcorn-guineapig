@@ -25,6 +25,7 @@ open class PopcornTask : DefaultTask() {
 
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
+            groupName = configuration.project.groupName
         )
 
         val targetModule = TargetModule(
