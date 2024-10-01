@@ -167,6 +167,33 @@ class CheckArchitectureUseCaseTest {
     }
 
     @Test
+    fun `Given a presentation layer + some relations + 2 domains when just with rule is checked then passes`() {
+        val targetModule = TargetModule(
+            moduleName = "presentation",
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, "domain"),
+                InternalDependenciesMetadata(group = null, "domain"),
+                InternalDependenciesMetadata(group = null, moduleName = "resources"),
+            )
+        )
+        val result = checkArchitectureUseCase.execute(
+            targetModule = targetModule,
+            configuration = fakePopcornConfiguration.copy(
+                rules = fakePopcornConfiguration.rules.copy(
+                    justWith = listOf(
+                        PopcornJustWithRule(
+                            target = "presentation",
+                            with = listOf("domain", "resources")
+                        )
+                    )
+                )
+            )
+        )
+
+        assertIs<CheckResult.Success>(result)
+    }
+
+    @Test
     fun `Given a presentation layer + some relations (not sorted) when just with rule is checked then passes`() {
         val targetModule = TargetModule(
             moduleName = "presentation",

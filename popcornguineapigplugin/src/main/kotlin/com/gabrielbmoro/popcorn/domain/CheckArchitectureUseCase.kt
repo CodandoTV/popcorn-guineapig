@@ -5,9 +5,11 @@ import com.gabrielbmoro.popcorn.domain.entity.*
 class CheckArchitectureUseCase {
 
     fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult {
-        val sortedInternalProjectDependencies = targetModule.internalDependencies.sortedBy {
-            it.moduleName
-        }
+        val sortedInternalProjectDependencies = targetModule.internalDependencies
+            .distinct()
+            .sortedBy {
+                it.moduleName
+            }
 
         val visitor = ArchitectureRuleVisitorImpl(
             targetModule = targetModule,
