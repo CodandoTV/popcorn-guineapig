@@ -21,7 +21,11 @@ popcornGuineapigConfig {
             type = ProjectType.JAVA
         ),
         rules = PopcornRules(
-            noRelationship = emptyList(),
+            noRelationship = listOf(
+                PopcornNoRelationShipRule(
+                    target = "[a-z]+-presentation"
+                )
+            ),
             justWith = emptyList(),
             doNotWith = listOf(
                 PopcornDoNotWithRule(
