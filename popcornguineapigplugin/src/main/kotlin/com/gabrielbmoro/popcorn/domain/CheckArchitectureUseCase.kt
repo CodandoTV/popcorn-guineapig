@@ -2,7 +2,7 @@ package com.gabrielbmoro.popcorn.domain
 
 import com.gabrielbmoro.popcorn.domain.entity.*
 
-class CheckArchitectureUseCase {
+internal class CheckArchitectureUseCase {
 
     fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult {
         val sortedInternalProjectDependencies = targetModule.internalDependencies
@@ -11,27 +11,41 @@ class CheckArchitectureUseCase {
                 it.moduleName
             }
 
-        val visitor = ArchitectureRuleVisitorImpl(
+        val visitor = ArchitectureRuleVisitor(
             targetModule = targetModule,
             sortedInternalProjectDependencies = sortedInternalProjectDependencies
         )
 
-        runCatching {
-            configuration.rules.all().filter { rule ->
+        val errors = mutableListOf<ArchitectureViolationError>()
+
+        configuration.rules
+            .all()
+            .filter { rule ->
                 rule.target.toRegex().matches(targetModule.moduleName)
-            }.forEach { targetRule ->
-                when (targetRule) {
+            }
+            .forEach { targetRule ->
+                val error: ArchitectureViolationError? = when (targetRule) {
                     is PopcornJustWithRule -> visitor.doJustWithRule(targetRule)
                     is PopcornDoNotWithRule -> visitor.doForDoNotWithRule(targetRule)
                     is PopcornNoRelationShipRule -> visitor.doNoRelationshipRule(targetRule)
+                    else -> null
+                }
+
+                if (error != null) {
+                    errors.add(error)
                 }
             }
-        }.onFailure {
+
+        if (errors.isEmpty()) {
+            return CheckResult.Success
+        } else {
+            val errorMessage = errors
+                .map { it.toString() }
+                .reduce { acc, s -> "$acc,$s" }
+
             return CheckResult.Failure(
-                errorMessage = it.message ?: ""
+                errorMessage = errorMessage
             )
         }
-
-        return CheckResult.Success
     }
 }

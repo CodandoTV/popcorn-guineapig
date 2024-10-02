@@ -2,35 +2,41 @@ package com.gabrielbmoro.popcorn.domain
 
 import com.gabrielbmoro.popcorn.domain.entity.*
 
-class ArchitectureRuleVisitorImpl(
+internal class ArchitectureRuleVisitor(
     private val targetModule: TargetModule,
     private val sortedInternalProjectDependencies: List<InternalDependenciesMetadata>
 ) {
-    fun doForDoNotWithRule(notWithRule: PopcornDoNotWithRule) {
+    fun doForDoNotWithRule(notWithRule: PopcornDoNotWithRule): ArchitectureViolationError? {
         println("Checking $notWithRule")
 
         notWithRule.notWith.forEach { notWithRuleItem ->
             sortedInternalProjectDependencies.forEach { internalDependencyItem ->
                 if (notWithRuleItem.toRegex().matches(internalDependencyItem.moduleName)) {
-                    error(
-                        "${targetModule.moduleName} has a not allowed dependency: ${internalDependencyItem.moduleName}"
+                    return ArchitectureViolationError(
+                        targetModule = targetModule,
+                        rule = notWithRule
                     )
                 }
             }
         }
+
+        return null
     }
 
-    fun doNoRelationshipRule(noRelationShipRule: PopcornNoRelationShipRule) {
+    fun doNoRelationshipRule(noRelationShipRule: PopcornNoRelationShipRule): ArchitectureViolationError? {
         println("Checking $noRelationShipRule")
 
         if (sortedInternalProjectDependencies.isNotEmpty()) {
-            error(
-                "${targetModule.moduleName} should not have deps"
+            return ArchitectureViolationError(
+                targetModule = targetModule,
+                rule = noRelationShipRule
             )
         }
+
+        return null
     }
 
-    fun doJustWithRule(justWithRule: PopcornJustWithRule) {
+    fun doJustWithRule(justWithRule: PopcornJustWithRule): ArchitectureViolationError? {
         println("Checking $justWithRule")
 
         val sortedInternalProjectDependencyModuleNames = sortedInternalProjectDependencies.map {
@@ -39,10 +45,12 @@ class ArchitectureRuleVisitorImpl(
 
         val sortedTargetRuleAllowedDep = justWithRule.with.sorted()
         if (sortedInternalProjectDependencyModuleNames != sortedTargetRuleAllowedDep) {
-            error(
-                "${targetModule.moduleName} should only have deps " +
-                        "with ${justWithRule.with}"
+            return ArchitectureViolationError(
+                targetModule = targetModule,
+                rule = justWithRule
             )
         }
+
+        return null
     }
 }
