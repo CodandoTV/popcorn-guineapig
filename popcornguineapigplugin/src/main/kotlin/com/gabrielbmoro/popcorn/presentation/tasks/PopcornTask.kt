@@ -7,6 +7,7 @@ import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
@@ -41,7 +42,8 @@ open class PopcornTask : DefaultTask() {
         logger.log(LogLevel.INFO, "PopcornGp: Result of checking $targetModule --> $result")
 
         if (result is CheckResult.Failure) {
-            throw IllegalStateException(result.errorMessage)
+            logger.error(result.errorMessage)
+            throw GradleException(result.errorMessage)
         }
 
         logger.log(LogLevel.INFO, "$targetModule")
