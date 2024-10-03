@@ -16,6 +16,7 @@ dependencies {
 }
 
 popcornGuineapigConfig {
+    skippedRules = listOf(PopcornDoNotWithRule::class)
     configuration = PopcornConfiguration(
         project = PopcornProject(
             type = ProjectType.JAVA

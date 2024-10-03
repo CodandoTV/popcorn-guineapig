@@ -39,12 +39,8 @@ internal class CheckArchitectureUseCase {
         if (errors.isEmpty()) {
             return CheckResult.Success
         } else {
-            val errorMessage = errors
-                .map { it.toString() }
-                .reduce { acc, s -> "$acc\n$s" }
-
             return CheckResult.Failure(
-                errorMessage = errorMessage
+                errors = errors
             )
         }
     }
