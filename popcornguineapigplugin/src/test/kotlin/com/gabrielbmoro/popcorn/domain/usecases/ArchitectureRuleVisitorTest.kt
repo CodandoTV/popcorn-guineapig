@@ -147,7 +147,7 @@ class ArchitectureRuleVisitorTest {
     }
 
     @Test
-    fun `Given a presentation layer + some relations when just with rule is checked then passes`() {
+    fun `Given a presentation layer + some relations when just with rule is checked then returns null`() {
         // Arrange
         val architectureRuleVisitor = ArchitectureRuleVisitor(
             targetModule = TargetModule(
@@ -176,7 +176,7 @@ class ArchitectureRuleVisitorTest {
     }
 
     @Test
-    fun `Given a presentation layer + some relations + 2 domains when just with rule is checked then passes`() {
+    fun `Given a presentation layer + some relations + 2 domains when just with rule is checked then returns null`() {
         // Arrange
         val architectureRuleVisitor = ArchitectureRuleVisitor(
             targetModule = TargetModule(
@@ -207,7 +207,7 @@ class ArchitectureRuleVisitorTest {
     }
 
     @Test
-    fun `Given a presentation layer + missing relation when just with rule is checked then fails`() {
+    fun `Given a presentation layer + missing relation when just with rule is checked then returns not null`() {
         // Arrange
         val architectureRuleVisitor = ArchitectureRuleVisitor(
             targetModule = TargetModule(
@@ -236,7 +236,7 @@ class ArchitectureRuleVisitorTest {
     }
 
     @Test
-    fun `Given a presentation layer + missing relation + regex rule when just with rule is checked then fails`() {
+    fun `Given a presentation layer + missing relation + regex rule when just with rule is checked then returns not null`() {
         // Arrange
         val architectureRuleVisitor = ArchitectureRuleVisitor(
             targetModule = TargetModule(
