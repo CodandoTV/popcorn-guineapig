@@ -17,6 +17,7 @@ class CheckArchitectureUseCaseTest {
 
     @Test
     fun `Given a data layer + invalid relation when do not with rule is checked then fails`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "data",
             internalDependencies = listOf(
@@ -24,6 +25,8 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -38,17 +41,21 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Failure>(result)
     }
 
     @Test
     fun `Given a data layer + invalid relation + regex when do not with rule is checked then fails`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "user-data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "user-presentation"),
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -63,17 +70,21 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Failure>(result)
     }
 
     @Test
     fun `Given a data layer + valid relation when do not with rule is checked then passes`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "domain")
             ),
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -88,15 +99,19 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Success>(result)
     }
 
     @Test
     fun `Given a domain layer + no relationship when no relationship rule is checked then passes`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "domain",
             internalDependencies = emptyList(),
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -110,11 +125,13 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Success>(result)
     }
 
     @Test
     fun `Given a domain layer + some relationship when no relationship rule is checked then fails`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "domain",
             internalDependencies = listOf(
@@ -124,6 +141,8 @@ class CheckArchitectureUseCaseTest {
                 )
             ),
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -137,11 +156,13 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Failure>(result)
     }
 
     @Test
     fun `Given a presentation layer + some relations when just with rule is checked then passes`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "presentation",
             internalDependencies = listOf(
@@ -149,6 +170,8 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -163,11 +186,13 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Success>(result)
     }
 
     @Test
     fun `Given a presentation layer + some relations + 2 domains when just with rule is checked then passes`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "presentation",
             internalDependencies = listOf(
@@ -176,6 +201,8 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -190,11 +217,13 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Success>(result)
     }
 
     @Test
     fun `Given a presentation layer + some relations (not sorted) when just with rule is checked then passes`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "presentation",
             internalDependencies = listOf(
@@ -202,6 +231,8 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, moduleName = "resources")
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -216,11 +247,13 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Success>(result)
     }
 
     @Test
     fun `Given a presentation layer + missing relation when just with rule is checked then fails`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "presentation",
             internalDependencies = listOf(
@@ -228,6 +261,8 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -242,11 +277,13 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Failure>(result)
     }
 
     @Test
     fun `Given a presentation layer + missing relation + regex rule when just with rule is checked then fails`() {
+        // Arrange
         val targetModule = TargetModule(
             moduleName = "referral-presentation",
             internalDependencies = listOf(
@@ -254,6 +291,8 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
             )
         )
+
+        // Act
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
@@ -268,6 +307,7 @@ class CheckArchitectureUseCaseTest {
             )
         )
 
+        // Assert
         assertIs<CheckResult.Failure>(result)
     }
 }
