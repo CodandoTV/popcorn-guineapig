@@ -6,8 +6,8 @@ import com.gabrielbmoro.popcorn.domain.entity.CheckResult
 import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
+import com.gabrielbmoro.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
@@ -56,11 +56,9 @@ open class PopcornTask : DefaultTask() {
                 logger.error(it.toString())
             }
 
-            val errorMessage = errors
-                .map { it.toString() }
-                .reduce { acc, s -> "$acc\n$s" }
-            
-            throw GradleException(errorMessage)
+            errors.toErrorMessage()?.let {
+                error(it)
+            }
         }
 
         logger.log(LogLevel.INFO, "$targetModule")

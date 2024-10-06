@@ -1,6 +1,6 @@
 package com.gabrielbmoro.popcorn.domain.entity
 
-internal data class ArchitectureViolationError(
+data class ArchitectureViolationError(
     val targetModule: TargetModule,
     val rule: BaseArcRule,
 ) {
