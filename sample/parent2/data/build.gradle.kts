@@ -12,27 +12,22 @@ java {
 }
 
 dependencies {
-    implementation(projects.sample.sampleData)
+    implementation(projects.sample.samplePresentation)
 }
 
 popcornGuineapigConfig {
-    skippedRules = listOf(PopcornDoNotWithRule::class)
     configuration = PopcornConfiguration(
         project = PopcornProject(
             type = ProjectType.JAVA
         ),
         rules = PopcornRules(
-            noRelationship = listOf(
-                PopcornNoRelationShipRule(
-                    target = "[a-z]+-presentation"
-                )
-            ),
+            noRelationship = emptyList(),
             justWith = emptyList(),
             doNotWith = listOf(
                 PopcornDoNotWithRule(
-                    target = "[a-z]+-presentation",
+                    target = "platform",
                     notWith = listOf(
-                        "[a-z]+-data"
+                        "sample-presentation"
                     )
                 )
             )

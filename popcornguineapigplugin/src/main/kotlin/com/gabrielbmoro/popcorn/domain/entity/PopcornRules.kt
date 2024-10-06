@@ -11,18 +11,32 @@ data class PopcornRules(
 
 interface BaseArcRule {
     val target: String
+
+    fun message(): String
 }
 
 data class PopcornNoRelationShipRule(
     override val target: String
-) : BaseArcRule
+) : BaseArcRule {
+    override fun message(): String {
+        return "Rule enforces you should not have relationships"
+    }
+}
 
 data class PopcornJustWithRule(
     override val target: String,
     val with: List<String>
-) : BaseArcRule
+) : BaseArcRule {
+    override fun message(): String {
+        return "Rule enforces you should depends on $with"
+    }
+}
 
 data class PopcornDoNotWithRule(
     override val target: String,
     val notWith: List<String>
-) : BaseArcRule
+) : BaseArcRule {
+    override fun message(): String {
+        return "Rule enforces you should not depends on $notWith"
+    }
+}

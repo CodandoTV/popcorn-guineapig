@@ -7,9 +7,11 @@ import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
 import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
+import kotlin.reflect.KClass
 
 open class PopcornTask : DefaultTask() {
 
@@ -18,6 +20,9 @@ open class PopcornTask : DefaultTask() {
 
     @Input
     lateinit var configuration: PopcornConfiguration
+
+    @Input
+    lateinit var skippedRules: List<KClass<*>>
 
     @TaskAction
     fun process() {
@@ -35,13 +40,27 @@ open class PopcornTask : DefaultTask() {
 
         val result = checkArcUseCase.execute(
             configuration = configuration,
-            targetModule = targetModule
+            targetModule = targetModule,
         )
 
         logger.log(LogLevel.INFO, "PopcornGp: Result of checking $targetModule --> $result")
 
         if (result is CheckResult.Failure) {
-            throw IllegalStateException(result.errorMessage)
+            val (skippedErrors, errors) = result.errors.partition { skippedRules.contains(it.rule::class) }
+
+            skippedErrors.forEach {
+                logger.warn("Skipped --> $it")
+            }
+
+            errors.forEach {
+                logger.error(it.toString())
+            }
+
+            val errorMessage = errors
+                .map { it.toString() }
+                .reduce { acc, s -> "$acc\n$s" }
+            
+            throw GradleException(errorMessage)
         }
 
         logger.log(LogLevel.INFO, "$targetModule")

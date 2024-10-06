@@ -1,6 +1,6 @@
 package com.gabrielbmoro.popcorn.domain.entity
 
-data class TargetModule(
+internal data class TargetModule(
     val moduleName: String,
     val internalDependencies: List<InternalDependenciesMetadata>
 ) {
