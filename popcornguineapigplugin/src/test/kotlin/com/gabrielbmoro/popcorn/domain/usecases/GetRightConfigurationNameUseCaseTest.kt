@@ -1,8 +1,8 @@
 package com.gabrielbmoro.popcorn.domain.usecases
 
 import com.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
+import com.gabrielbmoro.popcorn.domain.entity.ProjectType
 import org.junit.Test
-import com.gabrielbmoro.popcorn.domain.entity.*
 import org.junit.Before
 import kotlin.test.assertEquals
 

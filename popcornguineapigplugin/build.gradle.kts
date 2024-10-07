@@ -5,6 +5,7 @@ plugins {
     `kotlin-dsl-precompiled-script-plugins`
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.vanniktech.maven.publish)
+    alias(libs.plugins.detekt)
 }
 
 repositories {
@@ -17,7 +18,6 @@ repositories {
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.gradle)
-
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
 }

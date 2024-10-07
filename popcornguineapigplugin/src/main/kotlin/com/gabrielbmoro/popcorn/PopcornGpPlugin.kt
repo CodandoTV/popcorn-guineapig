@@ -13,7 +13,7 @@ class PopcornGpPlugin : Plugin<Project> {
 
         target.tasks.register<PopcornTask>("popcorn") {
             configuration = extension.configuration
-                ?: throw IllegalStateException("It is required to specify some configuration")
+                ?: error("It is required to specify some configuration")
             skippedRules = extension.skippedRules ?: emptyList()
         }
     }

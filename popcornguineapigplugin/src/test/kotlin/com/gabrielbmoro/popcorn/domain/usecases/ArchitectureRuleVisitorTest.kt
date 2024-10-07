@@ -1,9 +1,11 @@
 package com.gabrielbmoro.popcorn.domain.usecases
 
 import com.gabrielbmoro.popcorn.domain.ArchitectureRuleVisitor
-import com.gabrielbmoro.popcorn.domain.entity.*
-import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
 import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
+import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
 import junit.framework.TestCase.assertNull
 import org.junit.Test
 import kotlin.test.assertNotNull
@@ -236,7 +238,7 @@ class ArchitectureRuleVisitorTest {
     }
 
     @Test
-    fun `Given a presentation layer + missing relation + regex rule when just with rule is checked then returns not null`() {
+    fun `Given a presentation layer + missing relation + regex rule when just with is checked then returns not null`() {
         // Arrange
         val architectureRuleVisitor = ArchitectureRuleVisitor(
             targetModule = TargetModule(
