@@ -1,6 +1,11 @@
 package com.gabrielbmoro.popcorn.domain
 
-import com.gabrielbmoro.popcorn.domain.entity.*
+import com.gabrielbmoro.popcorn.domain.entity.ArchitectureViolationError
+import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
+import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
 
 internal class ArchitectureRuleVisitor(
     private val targetModule: TargetModule,

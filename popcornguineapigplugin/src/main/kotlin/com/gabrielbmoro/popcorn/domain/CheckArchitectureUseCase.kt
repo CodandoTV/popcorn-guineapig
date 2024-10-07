@@ -1,6 +1,12 @@
 package com.gabrielbmoro.popcorn.domain
 
-import com.gabrielbmoro.popcorn.domain.entity.*
+import com.gabrielbmoro.popcorn.domain.entity.ArchitectureViolationError
+import com.gabrielbmoro.popcorn.domain.entity.CheckResult
+import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
+import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
+import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
 
 internal class CheckArchitectureUseCase {
 
