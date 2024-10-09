@@ -1,4 +1,4 @@
-package com.gabrielbmoro.popcorn.domain.entity
+package com.gabrielbmoro.popcorn.domain.input
 
 data class PopcornProject(
     val type: ProjectType,

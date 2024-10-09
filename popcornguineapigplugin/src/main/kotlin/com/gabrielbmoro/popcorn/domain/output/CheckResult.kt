@@ -1,4 +1,4 @@
-package com.gabrielbmoro.popcorn.domain.entity
+package com.gabrielbmoro.popcorn.domain.output
 
 internal sealed class CheckResult {
     object Success : CheckResult()

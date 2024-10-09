@@ -1,12 +1,11 @@
 package com.gabrielbmoro.popcorn.domain.usecases
 
-import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
-import com.gabrielbmoro.popcorn.domain.entity.CheckResult
-import com.gabrielbmoro.popcorn.domain.entity.TargetModule
-import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
-import com.gabrielbmoro.popcorn.domain.entity.PopcornDoNotWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornJustWithRule
-import com.gabrielbmoro.popcorn.domain.entity.PopcornNoRelationShipRule
+import com.gabrielbmoro.popcorn.domain.output.CheckResult
+import com.gabrielbmoro.popcorn.domain.metadata.TargetModule
+import com.gabrielbmoro.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.gabrielbmoro.popcorn.domain.rules.DoNotWithRule
+import com.gabrielbmoro.popcorn.domain.rules.JustWithRule
+import com.gabrielbmoro.popcorn.domain.rules.NoDependencyRule
 import org.junit.Test
 import org.junit.Before
 import kotlin.test.assertIs
@@ -35,14 +34,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    doNotWith = listOf(
-                        PopcornDoNotWithRule(
-                            notWith = listOf("resources"),
-                            target = "data"
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(DoNotWithRule(notWith = listOf("resources")))
+                }
             )
         )
 
@@ -64,14 +58,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    doNotWith = listOf(
-                        PopcornDoNotWithRule(
-                            notWith = listOf("[a-z]+-presentation"),
-                            target = "[a-z]+-data"
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(DoNotWithRule(listOf("[a-z]+-presentation")))
+                }
             )
         )
 
@@ -93,14 +82,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    doNotWith = listOf(
-                        PopcornDoNotWithRule(
-                            notWith = listOf("resources"),
-                            target = "data"
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(DoNotWithRule(notWith = listOf("resources")))
+                }
             )
         )
 
@@ -120,13 +104,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    noRelationship = listOf(
-                        PopcornNoRelationShipRule(
-                            target = "domain"
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(NoDependencyRule())
+                }
             )
         )
 
@@ -151,13 +131,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    noRelationship = listOf(
-                        PopcornNoRelationShipRule(
-                            target = "domain"
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(NoDependencyRule())
+                }
             )
         )
 
@@ -180,14 +156,11 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    justWith = listOf(
-                        PopcornJustWithRule(
-                            target = "presentation",
-                            with = listOf("domain", "resources")
-                        )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    JustWithRule(
+                        justWith = listOf("domain", "resources")
                     )
-                )
+                }
             )
         )
 
@@ -211,14 +184,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    justWith = listOf(
-                        PopcornJustWithRule(
-                            target = "presentation",
-                            with = listOf("domain", "resources")
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(JustWithRule(justWith = listOf("domain", "resources")))
+                }
             )
         )
 
@@ -241,14 +209,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    justWith = listOf(
-                        PopcornJustWithRule(
-                            target = "presentation",
-                            with = listOf("resources", "domain")
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(JustWithRule(justWith = listOf("resources", "domain")))
+                }
             )
         )
 
@@ -271,14 +234,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    justWith = listOf(
-                        PopcornJustWithRule(
-                            target = "presentation",
-                            with = listOf("domain")
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(JustWithRule(justWith = listOf("domain")))
+                }
             )
         )
 
@@ -301,14 +259,9 @@ class CheckArchitectureUseCaseTest {
         val result = checkArchitectureUseCase.execute(
             targetModule = targetModule,
             configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.copy(
-                    justWith = listOf(
-                        PopcornJustWithRule(
-                            target = "[a-z]*-presentation",
-                            with = listOf("domain")
-                        )
-                    )
-                )
+                rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                    add(JustWithRule(listOf("domain")))
+                }
             )
         )
 

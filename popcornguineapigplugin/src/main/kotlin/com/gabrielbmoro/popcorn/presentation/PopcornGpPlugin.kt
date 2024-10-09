@@ -1,6 +1,6 @@
-package com.gabrielbmoro.popcorn
+package com.gabrielbmoro.popcorn.presentation
 
-import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
+import com.gabrielbmoro.popcorn.domain.input.PopcornConfiguration
 import com.gabrielbmoro.popcorn.presentation.tasks.PopcornTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
