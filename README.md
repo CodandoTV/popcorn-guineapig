@@ -40,31 +40,39 @@ After apply the plugin, you can sync and define the architecture rules:
 
 ```kotlin
 popcornGuineapigConfig {
+    // You also can skip rules to help duing migration
+    skippedRules = listOf(DoNotWithRule::class)
+    
     configuration = PopcornConfiguration(
         project = PopcornProject(
-            type = ProjectType.KMP
+            type = ProjectType.JAVA
         ),
-        rules = PopcornRules(
-            noRelationship = listOf(
-                PopcornNoRelationShipRule("domain"),
-                PopcornNoRelationShipRule("resources"),
-                PopcornNoRelationShipRule("platform")
-            ),
-            justWith = listOf(
-                PopcornJustWithRule(
-                    target = "data",
-                    with = listOf(
-                        "domain"
-                    )
-                ),
-                PopcornJustWithRule(
-                    target = "designsystem",
-                    with = listOf(
-                        "resources"
-                    )
-                )
-            ),
-            doNotWith = emptyList()
+        rules = listOf(
+            NoDependencyRule(),
+            DoNotWithRule(
+                notWith = listOf("[a-z]+-data")
+            )
+        )
+    )
+}
+```
+
+You also can create custom rules, you just need to do:
+
+```kotlin
+class MyRule : PopcornGuineaPigRule {
+    override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
+        return null
+    }
+}
+
+popcornGuineapigConfig {
+    configuration = PopcornConfiguration(
+        project = PopcornProject(
+            type = ProjectType.JAVA
+        ),
+        rules = listOf(
+            MyRule(),
         )
     )
 }

@@ -1,6 +1,7 @@
-package com.gabrielbmoro.popcorn.domain
+package com.gabrielbmoro.popcorn.domain.usecases
 
-import com.gabrielbmoro.popcorn.domain.entity.ProjectType
+import com.gabrielbmoro.popcorn.domain.input.ProjectType
+
 
 internal class GetRightConfigurationNameUseCase {
 

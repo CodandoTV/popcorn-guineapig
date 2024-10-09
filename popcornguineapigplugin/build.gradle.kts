@@ -28,13 +28,13 @@ tasks.test {
     }
 }
 
-val popcornGpVersion = "1.0.14"
+val popcornGpVersion = "1.1.0"
 
 gradlePlugin {
     plugins {
         create("popcorngp") {
             id = "io.github.gabrielbmoro.popcorngp"
-            implementationClass = "com.gabrielbmoro.popcorn.PopcornGpPlugin"
+            implementationClass = "com.gabrielbmoro.popcorn.presentation.PopcornGpPlugin"
             version = popcornGpVersion
         }
     }

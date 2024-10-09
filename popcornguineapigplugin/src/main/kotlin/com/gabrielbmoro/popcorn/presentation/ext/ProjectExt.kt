@@ -1,6 +1,6 @@
 package com.gabrielbmoro.popcorn.presentation.ext
 
-import com.gabrielbmoro.popcorn.domain.entity.InternalDependenciesMetadata
+import com.gabrielbmoro.popcorn.domain.metadata.InternalDependenciesMetadata
 import org.gradle.api.Project
 import org.gradle.api.logging.LogLevel
 

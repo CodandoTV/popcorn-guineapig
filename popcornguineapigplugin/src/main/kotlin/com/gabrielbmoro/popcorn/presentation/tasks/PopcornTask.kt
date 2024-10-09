@@ -1,10 +1,10 @@
 package com.gabrielbmoro.popcorn.presentation.tasks
 
-import com.gabrielbmoro.popcorn.domain.CheckArchitectureUseCase
-import com.gabrielbmoro.popcorn.domain.GetRightConfigurationNameUseCase
-import com.gabrielbmoro.popcorn.domain.entity.CheckResult
-import com.gabrielbmoro.popcorn.domain.entity.PopcornConfiguration
-import com.gabrielbmoro.popcorn.domain.entity.TargetModule
+import com.gabrielbmoro.popcorn.domain.usecases.CheckArchitectureUseCase
+import com.gabrielbmoro.popcorn.domain.usecases.GetRightConfigurationNameUseCase
+import com.gabrielbmoro.popcorn.domain.output.CheckResult
+import com.gabrielbmoro.popcorn.domain.metadata.TargetModule
+import com.gabrielbmoro.popcorn.domain.input.PopcornConfiguration
 import com.gabrielbmoro.popcorn.presentation.ext.internalProjectDependencies
 import com.gabrielbmoro.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask

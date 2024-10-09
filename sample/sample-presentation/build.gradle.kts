@@ -1,4 +1,9 @@
-import com.gabrielbmoro.popcorn.domain.entity.*
+
+import com.gabrielbmoro.popcorn.domain.input.PopcornConfiguration
+import com.gabrielbmoro.popcorn.domain.input.PopcornProject
+import com.gabrielbmoro.popcorn.domain.input.ProjectType
+import com.gabrielbmoro.popcorn.domain.rules.DoNotWithRule
+import com.gabrielbmoro.popcorn.domain.rules.NoDependencyRule
 
 plugins {
     id("java-library")
@@ -16,25 +21,15 @@ dependencies {
 }
 
 popcornGuineapigConfig {
-    skippedRules = listOf(PopcornDoNotWithRule::class, PopcornNoRelationShipRule::class)
+    skippedRules = listOf(DoNotWithRule::class, NoDependencyRule::class)
     configuration = PopcornConfiguration(
         project = PopcornProject(
             type = ProjectType.JAVA
         ),
-        rules = PopcornRules(
-            noRelationship = listOf(
-                PopcornNoRelationShipRule(
-                    target = "[a-z]+-presentation"
-                )
-            ),
-            justWith = emptyList(),
-            doNotWith = listOf(
-                PopcornDoNotWithRule(
-                    target = "[a-z]+-presentation",
-                    notWith = listOf(
-                        "[a-z]+-data"
-                    )
-                )
+        rules = listOf(
+            NoDependencyRule(),
+            DoNotWithRule(
+                notWith = listOf("[a-z]+-data")
             )
         )
     )

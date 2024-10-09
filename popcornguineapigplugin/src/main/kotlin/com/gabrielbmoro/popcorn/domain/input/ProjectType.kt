@@ -1,4 +1,4 @@
-package com.gabrielbmoro.popcorn.domain.entity
+package com.gabrielbmoro.popcorn.domain.input
 
 enum class ProjectType {
     JAVA,

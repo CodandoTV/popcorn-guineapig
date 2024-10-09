@@ -1,4 +1,4 @@
-package com.gabrielbmoro.popcorn.domain.entity
+package com.gabrielbmoro.popcorn.domain.metadata
 
 data class InternalDependenciesMetadata(
     val group: String?,
