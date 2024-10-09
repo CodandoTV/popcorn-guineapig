@@ -28,7 +28,7 @@ tasks.test {
     }
 }
 
-val popcornGpVersion = "1.1.0"
+val popcornGpVersion = "1.1.1"
 
 gradlePlugin {
     plugins {

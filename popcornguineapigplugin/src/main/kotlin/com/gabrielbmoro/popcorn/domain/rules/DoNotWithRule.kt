@@ -12,7 +12,7 @@ class DoNotWithRule(
                 if (notWithRuleItem.toRegex().matches(internalDependencyItem.moduleName)) {
                     return ArchitectureViolationError(
                         rule = this,
-                        message = "DoNotWithRule: This module should not depends on [$deps]"
+                        message = "DoNotWithRule: This module should not depends on [$notWith]"
                     )
                 }
             }
