@@ -1,14 +1,14 @@
 
-import com.gabrielbmoro.popcorn.domain.input.PopcornConfiguration
-import com.gabrielbmoro.popcorn.domain.input.PopcornProject
-import com.gabrielbmoro.popcorn.domain.input.ProjectType
-import com.gabrielbmoro.popcorn.domain.rules.DoNotWithRule
-import com.gabrielbmoro.popcorn.domain.rules.NoDependencyRule
+import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.domain.input.PopcornProject
+import com.github.codandotv.popcorn.domain.input.ProjectType
+import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
+import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
-    id("io.github.gabrielbmoro.popcorngp")
+    id("io.github.codandotv.popcorngp")
 }
 
 java {

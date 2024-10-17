@@ -33,8 +33,8 @@ val popcornGpVersion = "1.1.1"
 gradlePlugin {
     plugins {
         create("popcorngp") {
-            id = "io.github.gabrielbmoro.popcorngp"
-            implementationClass = "com.gabrielbmoro.popcorn.presentation.PopcornGpPlugin"
+            id = "io.github.codandotv.popcorngp"
+            implementationClass = "com.github.codandotv.popcorn.presentation.PopcornGpPlugin"
             version = popcornGpVersion
         }
     }
