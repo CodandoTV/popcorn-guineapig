@@ -6,7 +6,7 @@
 
 Welcome to the **Popcorn Gradle Plugin**!
 
-This project is currently under development 🛠️
+<img src="img/popcorngp-logo.webp" />
 
 The goal of this plugin is to help enforce architectural rules in your project. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
