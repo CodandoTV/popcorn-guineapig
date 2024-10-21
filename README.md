@@ -1,5 +1,5 @@
 [![Kotlin](https://img.shields.io/badge/kotlin-1.9.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
-[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.gabrielbmoro/popcornguineapig)](https://central.sonatype.com/artifact/io.github.gabrielbmoro/popcornguineapig)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.codandotv/popcornguineapig)](https://central.sonatype.com/artifact/io.github.codandotv/popcornguineapig)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
 # Welcome! 👋
@@ -17,7 +17,7 @@ The goal of this plugin is to help enforce architectural rules in your project. 
 Go to your build-logic folder, in the `build-logic/build.gradle.kts`, add the following dependency:
 
 ```
-implementation("io.github.gabrielbmoro:popcornguineapig:<version>")
+implementation("io.github.codandotv:popcornguineapig:<version>")
 ```
 
 ### 2. Apply the Plugin
@@ -30,7 +30,7 @@ For example, I have a gradle plugin applied to all modules `kmp-library-setup.gr
 ```kotlin
 plugins {
   ...
-  id("io.github.gabrielbmoro.popcorngp")
+  id("io.github.codandotv.popcorngp")
 }
 ```
 

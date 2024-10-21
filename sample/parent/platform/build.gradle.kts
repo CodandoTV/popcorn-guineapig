@@ -1,9 +1,9 @@
-import com.gabrielbmoro.popcorn.domain.entity.*
+import com.codandotv.popcorn.domain.entity.*
 
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
-    id("io.github.gabrielbmoro.popcorngp")
+    id("io.github.codandotv.popcorngp")
 }
 
 java {
