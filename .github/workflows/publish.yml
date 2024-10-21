@@ -1,4 +1,4 @@
-name: Publish Android to Maven Central
+name: Publish to Maven Central
 
 on:
   workflow_dispatch:
