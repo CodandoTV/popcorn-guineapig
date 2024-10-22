@@ -1,0 +1,25 @@
+site_name: Popcorn Guineapig
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  features:
+  - navigation.footer
+  - content.code.annotations # (1)!
+  palette:
+      # Dark Mode
+      - scheme: slate
+        toggle:
+          icon: material/weather-sunny
+          name: Dark mode
+        primary: green
+        accent: deep purple
+
+      # Light Mode
+      - scheme: default
+        toggle:
+          icon: material/weather-night
+          name: Light mode
+        primary: blue
+        accent: deep orange
