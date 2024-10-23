@@ -1,19 +1,27 @@
-# Welcome to MkDocs
+[![Kotlin](https://img.shields.io/badge/kotlin-1.9.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.codandotv/popcornguineapig)](https://central.sonatype.com/artifact/io.github.codandotv/popcornguineapig)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# Welcome to the Popcorn Guineapig documentation! 👋
 
-CodandoTV is the best YouTube channel about tech.
+<img height="150px" width="100px" src="img/popcorngp-logo.webp" />
 
-## Commands
+The goal of this plugin is to help enforce architectural rules in your **multi-module project**. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+The Popcorn Gradle Plugin supports:
 
-## Project layout
+- Kotlin Multiplatform Projects (KMP)
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+- Java Projects
+
+- Android Projects
+
+⚠️ Popcorn Guineapig plugin is designed for Gradle multi-module projects.
+
+## Summary
+
+### 1. [How to use?](./1-how-to-use.md)
+
+### 2. [Contributions](./2-contributions.md)
+
+### 3. [Samples](./3-samples.md)
