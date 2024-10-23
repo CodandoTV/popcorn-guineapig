@@ -4,7 +4,7 @@
 
 # Welcome to the Popcorn Guineapig documentation! 👋
 
-<img height="150px" width="100px" src="../img/popcorngp-logo.webp" />
+![Popcorn Guineapig Logo](./assets/img/popcorngp-logo.webp){ align=left }
 
 The goal of this plugin is to help enforce architectural rules in your **multi-module project**. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
