@@ -1,4 +1,4 @@
-# How to use? 🤔
+# Getting started 🚀
 
 ## 1. Add the Plugin Dependency
 
@@ -44,27 +44,6 @@ popcornGuineapigConfig {
 }
 ```
 
-You also can create custom rules, you just need to do:
-
-```kotlin
-class MyRule : PopcornGuineaPigRule {
-    override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
-        return null
-    }
-}
-
-popcornGuineapigConfig {
-    configuration = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA
-        ),
-        rules = listOf(
-            MyRule(),
-        )
-    )
-}
-```
-
 ## 4. **Run the task**
 
 ```sh
@@ -72,3 +51,11 @@ popcornGuineapigConfig {
 ```
 
 It is simple as a popcorn 🍿 + 🐹
+
+If you want to know more details about the task, you can run:
+
+```sh
+./gradlew popcorn --info
+```
+
+Any problems you are facing, any suggestions you want to add, please feel free to [reach us out](mailto:gabrielbronzattimoro.es@gmail.com).

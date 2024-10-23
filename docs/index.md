@@ -4,7 +4,7 @@
 
 # Welcome to the Popcorn Guineapig documentation! 👋
 
-![Popcorn Guineapig Logo](./assets/img/popcorngp-logo.webp){ align=left }
+![Popcorn Guineapig Logo](./assets/img/popcorn_guineapig.png)
 
 The goal of this plugin is to help enforce architectural rules in your **multi-module project**. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
@@ -20,8 +20,12 @@ The Popcorn Gradle Plugin supports:
 
 ## Summary
 
-### 1. [How to use?](./1-how-to-use.md)
+### 1. [Getting started](./1-getting-started.md)
 
-### 2. [Contributions](./2-contributions.md)
+### 2. [Existing rules](./2-custom-rules.md)
 
-### 3. [Samples](./3-samples.md)
+### 3. [Custom rules](./3-custom-rules.md)
+
+### 4. [Samples](./4-samples.md)
+
+### 5. [Contributions](./5-contributions.md)
