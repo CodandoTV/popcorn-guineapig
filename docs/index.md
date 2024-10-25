@@ -18,6 +18,8 @@ The Popcorn Gradle Plugin supports:
 
 ⚠️ Popcorn Guineapig plugin is designed for Gradle multi-module projects.
 
+Take a look at our [repository](https://github.com/CodandoTV/popcorn-guineapig).
+
 ## Summary
 
 ### 1. [Getting started](./1-getting-started.md)
