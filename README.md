@@ -10,6 +10,8 @@ Welcome to the **Popcorn Gradle Plugin**!
 
 The goal of this plugin is to help enforce architectural rules in your project. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
+📚 Take a look at our [documentation](https://codandotv.github.io/popcorn-guineapig)
+
 ## 🚀 Getting Started
 
 ## 1. Add the Plugin Dependency
@@ -95,14 +97,3 @@ The Popcorn Gradle Plugin supports:
 - Java Projects
 
 - Android Projects
-
-## 🧩 Prerequisites:
-
-Multi-module structure: Ensure your project is structured into multiple modules, as the plugin is designed to work with multi-module architecture.
-
-## 🤝 Contributions Welcome!
-
-We encourage contributions of all types! Whether it's reporting issues, suggesting new features, or submitting pull requests, you're welcome to help improve the plugin.
-
-- Check out the [issues](https://github.com/CodandoTV/popcorn-guineapig/issues) page for ideas.
-- Feel free to submit [pull requests](https://github.com/CodandoTV/popcorn-guineapig/pulls).
