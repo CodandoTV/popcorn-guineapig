@@ -11,7 +11,7 @@ class PopcornGpPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val extension = target.extensions.create("popcornGuineapigConfig", PopcornGpPluginExtension::class.java)
 
-        target.tasks.register<com.github.codandotv.popcorn.presentation.tasks.PopcornTask>("popcorn") {
+        target.tasks.register<PopcornTask>("popcorn") {
             configuration = extension.configuration
                 ?: error("It is required to specify some configuration")
             skippedRules = extension.skippedRules ?: emptyList()

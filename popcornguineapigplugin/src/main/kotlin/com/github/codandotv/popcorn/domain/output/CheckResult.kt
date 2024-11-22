@@ -4,6 +4,6 @@ internal sealed class CheckResult {
     object Success : CheckResult()
 
     data class Failure(
-        val errors: List<com.github.codandotv.popcorn.domain.output.ArchitectureViolationError>
+        val errors: List<ArchitectureViolationError>
     ) : CheckResult()
 }

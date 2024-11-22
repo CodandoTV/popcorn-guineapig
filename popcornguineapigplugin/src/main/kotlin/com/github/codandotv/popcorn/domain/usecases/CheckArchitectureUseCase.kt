@@ -1,9 +1,9 @@
 package com.github.codandotv.popcorn.domain.usecases
 
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 
 internal class CheckArchitectureUseCase {
 
@@ -14,7 +14,7 @@ internal class CheckArchitectureUseCase {
                 it.moduleName
             }
 
-        val errors = mutableListOf<com.github.codandotv.popcorn.domain.output.ArchitectureViolationError>()
+        val errors = mutableListOf<ArchitectureViolationError>()
 
         configuration.rules.forEach { rule ->
             rule.check(sortedInternalProjectDependencies)?.let { error ->
