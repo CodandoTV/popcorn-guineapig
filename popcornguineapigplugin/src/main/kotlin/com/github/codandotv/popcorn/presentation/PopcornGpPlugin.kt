@@ -1,5 +1,7 @@
 package com.github.codandotv.popcorn.presentation
 
+import com.github.codandotv.popcorn.data.di.REPORT_PATH_KEY
+import com.github.codandotv.popcorn.data.di.dataModule
 import com.github.codandotv.popcorn.domain.di.domainModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
@@ -8,6 +10,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
 import org.koin.core.KoinApplication
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import kotlin.reflect.KClass
 
 class PopcornGpPlugin : Plugin<Project> {
@@ -16,6 +20,11 @@ class PopcornGpPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         val extension = target.extensions.create("popcornGuineapigConfig", PopcornGpPluginExtension::class.java)
+        val platformModule = module {
+            single<String>(named(REPORT_PATH_KEY)) {
+                target.project.layout.buildDirectory.asFile.get().path
+            }
+        }
 
         target.tasks.register<PopcornTask>("popcorn") {
             configuration = extension.configuration
@@ -26,7 +35,7 @@ class PopcornGpPlugin : Plugin<Project> {
             logger.popcornLoggerLifecycle("Checking ${target.name}, configuration ${configuration.project.type.name}, hasReportEnabled $hasReportEnabled")
 
             doFirst {
-                koinApp.modules(domainModule)
+                koinApp.modules(platformModule + domainModule + dataModule)
                 start(koin = koinApp.koin)
 
                 logger.popcornLoggerLifecycle("Start checking ${target.name} module")
