@@ -97,4 +97,16 @@ class ReportDtoExtTest {
         val result = table.toMarkdownTable()
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `Given some list of items when toEnumeratedMarkdownList is called then check the markdown text`() {
+        val input = listOf("Chuck Norris", "Bruce lee", "Popo Freitas")
+
+        val result = input.toEnumeratedMarkdownList()
+
+        assertEquals(
+            "1. Chuck Norris\n2. Bruce lee\n3. Popo Freitas",
+            result
+        )
+    }
 }

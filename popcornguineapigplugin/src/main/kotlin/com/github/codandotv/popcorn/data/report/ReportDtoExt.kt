@@ -29,10 +29,9 @@ internal fun ReportDto.toMarkDownFormat(): String {
 
 internal fun List<String>.toSimpleMarkdownList(): String = reduce { acc, s -> "$acc- $s\n" }
 
-internal fun List<String>.toEnumeratedMarkdownList(): String = reduceIndexed { index, acc, s ->
-    val dependencyNumber = index + 1
-    "$acc$dependencyNumber. $s\n"
-}
+internal fun List<String>.toEnumeratedMarkdownList(): String = mapIndexed { index: Int, s: String ->
+    "${index + 1}. $s"
+}.reduce { acc, s -> "$acc\n$s" }
 
 internal fun List<HowCanIFixThisItemDto>.toMarkdownSection(): String = map {
     "- ${it.violatedRule}: ${it.message}"
