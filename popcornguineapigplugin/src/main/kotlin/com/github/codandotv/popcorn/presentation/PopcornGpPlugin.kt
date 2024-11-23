@@ -1,6 +1,7 @@
 package com.github.codandotv.popcorn.presentation
 
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
 import com.github.codandotv.popcorn.presentation.tasks.PopcornTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,17 @@ class PopcornGpPlugin : Plugin<Project> {
             configuration = extension.configuration
                 ?: error("It is required to specify some configuration")
             skippedRules = extension.skippedRules ?: emptyList()
+
+
+            logger.popcornLoggerLifecycle("Checking ${target.name} \uD83D\uDC40")
+
+            doFirst {
+                logger.popcornLoggerLifecycle("Start checking ${target.name} module")
+            }
+
+            doLast {
+                logger.popcornLoggerLifecycle("Finishing the analysis over ${target.name} module")
+            }
         }
     }
 }

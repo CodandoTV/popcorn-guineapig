@@ -5,11 +5,10 @@ import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUse
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.presentation.ext.*
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
-import com.github.codandotv.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import kotlin.reflect.KClass
 
@@ -26,7 +25,7 @@ open class PopcornTask : DefaultTask() {
 
     @TaskAction
     fun process() {
-        logger.log(LogLevel.INFO, "PopcornGp: Checking ${project.name}")
+        logger.popcornLoggerInfo("Process popcorn task over ${project.name.orEmpty()}")
 
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
@@ -43,17 +42,17 @@ open class PopcornTask : DefaultTask() {
             targetModule = targetModule,
         )
 
-        logger.log(LogLevel.INFO, "PopcornGp: Result of checking $targetModule --> $result")
+        logger.popcornLoggerInfo(targetModule.logMessage())
 
         if (result is CheckResult.Failure) {
             val (skippedErrors, errors) = result.errors.partition { skippedRules.contains(it.rule::class) }
 
             skippedErrors.forEach {
-                logger.warn("Skipped --> $it")
+                logger.popcornLoggerWarn("Skipped --> $it")
             }
 
-            errors.forEach {
-                logger.error(it.toString())
+            errors.forEach { error ->
+                logger.popcornLoggerError("The ${targetModule.moduleName} is violating the rule " + error.toString())
             }
 
             errors.toErrorMessage()?.let {
@@ -61,6 +60,6 @@ open class PopcornTask : DefaultTask() {
             }
         }
 
-        logger.log(LogLevel.INFO, "$targetModule")
+        logger.popcornLoggerInfo("$targetModule")
     }
 }

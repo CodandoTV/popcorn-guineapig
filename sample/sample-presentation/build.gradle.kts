@@ -21,13 +21,13 @@ dependencies {
 }
 
 popcornGuineapigConfig {
-    skippedRules = listOf(DoNotWithRule::class, NoDependencyRule::class)
+    skippedRules = listOf(NoDependencyRule::class)
     configuration = PopcornConfiguration(
         project = PopcornProject(
             type = ProjectType.JAVA
         ),
         rules = listOf(
-            NoDependencyRule(),
+            /*NoDependencyRule(),*/
             DoNotWithRule(
                 notWith = listOf("[a-z]+-data")
             )
