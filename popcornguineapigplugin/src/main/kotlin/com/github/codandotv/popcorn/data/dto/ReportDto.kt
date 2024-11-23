@@ -5,5 +5,6 @@ data class ReportDto(
     val internalDependenciesItems: List<String>,
     val skippedRules: List<String>,
     val notSkippedRules: List<String>,
-    val analysisTable: List<AnalysisTableItemDto>
+    val analysisTable: List<AnalysisTableItemDto>,
+    val howCanIFixThis: List<HowCanIFixThisItemDto>
 )

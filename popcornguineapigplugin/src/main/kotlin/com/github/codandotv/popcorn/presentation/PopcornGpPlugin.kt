@@ -32,7 +32,11 @@ class PopcornGpPlugin : Plugin<Project> {
             skippedRules = extension.skippedRules ?: emptyList()
             hasReportEnabled = extension.hasReportEnabled
 
-            logger.popcornLoggerLifecycle("Checking ${target.name}, configuration ${configuration.project.type.name}, hasReportEnabled $hasReportEnabled")
+            logger.popcornLoggerLifecycle(
+                "Checking ${target.name}, " +
+                        "configuration ${configuration.project.type.name}, " +
+                        "hasReportEnabled $hasReportEnabled"
+            )
 
             doFirst {
                 koinApp.modules(platformModule + domainModule + dataModule)
