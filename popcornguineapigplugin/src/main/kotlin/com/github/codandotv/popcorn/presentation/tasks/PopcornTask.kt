@@ -27,6 +27,9 @@ open class PopcornTask : DefaultTask() {
     @Input
     lateinit var skippedRules: List<KClass<*>>
 
+    @Input
+    var hasReportEnabled: Boolean = false
+
     @TaskAction
     fun process() {
         logger.popcornLoggerInfo("Process popcorn task over ${project.name.orEmpty()}")

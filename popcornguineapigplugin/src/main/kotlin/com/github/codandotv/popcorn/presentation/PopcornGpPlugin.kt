@@ -16,9 +16,9 @@ class PopcornGpPlugin : Plugin<Project> {
             configuration = extension.configuration
                 ?: error("It is required to specify some configuration")
             skippedRules = extension.skippedRules ?: emptyList()
+            hasReportEnabled = extension.hasReportEnabled
 
-
-            logger.popcornLoggerLifecycle("Checking ${target.name} \uD83D\uDC40")
+            logger.popcornLoggerLifecycle("Checking ${target.name}, configuration ${configuration.project.type.name}, hasReportEnabled $hasReportEnabled")
 
             doFirst {
                 logger.popcornLoggerLifecycle("Start checking ${target.name} module")
@@ -34,4 +34,5 @@ class PopcornGpPlugin : Plugin<Project> {
 open class PopcornGpPluginExtension {
     var configuration: PopcornConfiguration? = null
     var skippedRules: List<KClass<*>>? = null
+    var hasReportEnabled: Boolean = false
 }
