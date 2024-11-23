@@ -5,8 +5,12 @@ import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUse
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
-import com.github.codandotv.popcorn.presentation.ext.*
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
+import com.github.codandotv.popcorn.presentation.ext.logMessage
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerError
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerInfo
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerWarn
+import com.github.codandotv.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
@@ -45,10 +49,15 @@ open class PopcornTask : DefaultTask() {
         logger.popcornLoggerInfo(targetModule.logMessage())
 
         if (result is CheckResult.Failure) {
-            val (skippedErrors, errors) = result.errors.partition { skippedRules.contains(it.rule::class) }
+            val (skippedErrors, errors) = result.errors.partition {
+                skippedRules.contains(it.rule::class)
+            }
 
             skippedErrors.forEach { skippedRule ->
-                logger.popcornLoggerWarn("${targetModule.moduleName} has bypassed rule ${skippedRule.rule::class.simpleName}")
+                logger.popcornLoggerWarn(
+                    "${targetModule.moduleName} " +
+                            "has bypassed rule ${skippedRule.rule::class.simpleName}"
+                )
             }
 
             errors.forEach { error ->
