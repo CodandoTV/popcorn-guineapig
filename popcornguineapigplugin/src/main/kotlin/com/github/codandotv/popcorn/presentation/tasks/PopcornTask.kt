@@ -47,12 +47,15 @@ open class PopcornTask : DefaultTask() {
         if (result is CheckResult.Failure) {
             val (skippedErrors, errors) = result.errors.partition { skippedRules.contains(it.rule::class) }
 
-            skippedErrors.forEach {
-                logger.popcornLoggerWarn("Skipped --> $it")
+            skippedErrors.forEach { skippedRule ->
+                logger.popcornLoggerWarn("${targetModule.moduleName} has bypassed rule ${skippedRule.rule::class.simpleName}")
             }
 
             errors.forEach { error ->
-                logger.popcornLoggerError("The ${targetModule.moduleName} is violating the rule " + error.toString())
+                logger.popcornLoggerError("${targetModule.moduleName} is violating the rule " +
+                        error.rule::class.simpleName
+                        + "(${error.message})"
+                )
             }
 
             errors.toErrorMessage()?.let {

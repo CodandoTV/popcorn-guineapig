@@ -7,7 +7,7 @@ class NoDependencyRule : PopcornGuineaPigRule {
     override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
         if (deps.isNotEmpty()) {
             return ArchitectureViolationError(
-                message = "NoDependencyRule: This module should not have dependencies",
+                message = "This module should not have dependencies",
                 rule = this
             )
         }

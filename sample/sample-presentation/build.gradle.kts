@@ -27,7 +27,7 @@ popcornGuineapigConfig {
             type = ProjectType.JAVA
         ),
         rules = listOf(
-            /*NoDependencyRule(),*/
+            NoDependencyRule(),
             DoNotWithRule(
                 notWith = listOf("[a-z]+-data")
             )
