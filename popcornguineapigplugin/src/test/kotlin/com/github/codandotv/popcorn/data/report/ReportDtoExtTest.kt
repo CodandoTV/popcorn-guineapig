@@ -109,4 +109,16 @@ class ReportDtoExtTest {
             result
         )
     }
+
+    @Test
+    fun `Given some list of items when toSimpleMarkdownList is called then check the markdown text`() {
+        val input = listOf("Chuck Norris", "Bruce lee", "Popo Freitas")
+
+        val result = input.toSimpleMarkdownList()
+
+        assertEquals(
+            "- Chuck Norris\n- Bruce lee\n- Popo Freitas",
+            result
+        )
+    }
 }
