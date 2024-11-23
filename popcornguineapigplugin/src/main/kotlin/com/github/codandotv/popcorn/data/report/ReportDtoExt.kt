@@ -1,30 +1,9 @@
-package com.github.codandotv.popcorn.data
+package com.github.codandotv.popcorn.data.report
 
 import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
-import java.io.File
-
-internal class ReportDataSource {
-    fun export(fullPath: String, reportDto: ReportDto) {
-        val reportPath = fullPath + File.separator + "popcornguineapig" + File.separator + System.currentTimeMillis()
-
-        val reportDir = File(reportPath)
-
-        if (!reportDir.exists()) {
-            reportDir.mkdirs()
-        }
-
-        val reportFile = File(reportPath + File.separator + "report.md")
-
-        val reportContent = reportDto.toMarkDownFormat()
-
-        reportFile.bufferedWriter().use {
-            it.write(reportContent)
-        }
-    }
-}
 
 internal fun ReportDto.toMarkDownFormat(): String {
     "# $title\n" +
@@ -48,18 +27,18 @@ internal fun ReportDto.toMarkDownFormat(): String {
     return ""
 }
 
-private fun List<String>.toSimpleMarkdownList(): String = reduce { acc, s -> "$acc- $s\n" }
+internal fun List<String>.toSimpleMarkdownList(): String = reduce { acc, s -> "$acc- $s\n" }
 
-private fun List<String>.toEnumeratedMarkdownList(): String = reduceIndexed { index, acc, s ->
+internal fun List<String>.toEnumeratedMarkdownList(): String = reduceIndexed { index, acc, s ->
     val dependencyNumber = index + 1
     "$acc$dependencyNumber. $s\n"
 }
 
-private fun List<HowCanIFixThisItemDto>.toMarkdownSection(): String = map {
+internal fun List<HowCanIFixThisItemDto>.toMarkdownSection(): String = map {
     "${it.violatedRule}: ${it.message}"
 }.reduce { acc, s -> "$acc- $s\n" }
 
-private fun List<AnalysisTableItemDto>.toMarkdownTable() =
+internal fun List<AnalysisTableItemDto>.toMarkdownTable() =
     "| Dependency    | Rule           | Result         |\n" +
             "| ------------- |:--------------:|:--------------:|\n" +
             map { tableLine -> tableLine.toMarkdownTableLine() }
@@ -67,10 +46,10 @@ private fun List<AnalysisTableItemDto>.toMarkdownTable() =
                     "$acc$s"
                 }
 
-private fun AnalysisTableItemDto.toMarkdownTableLine() =
+internal fun AnalysisTableItemDto.toMarkdownTableLine() =
     "| $internalDependencyName   | $ruleChecked  | ${result.toMarkdownStatus()}|\n"
 
-private fun AnalysisTableResultEnumDto.toMarkdownStatus() = when (this) {
+internal fun AnalysisTableResultEnumDto.toMarkdownStatus() = when (this) {
     AnalysisTableResultEnumDto.PASSED -> "Passed ✅"
     AnalysisTableResultEnumDto.FAILED -> "Failed ❌"
     AnalysisTableResultEnumDto.SKIPPED -> "Skipped ⚠️"

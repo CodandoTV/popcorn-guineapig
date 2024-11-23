@@ -16,7 +16,7 @@ class CheckArchitectureUseCaseTest {
 
     @Before
     fun before() {
-        checkArchitectureUseCase = CheckArchitectureUseCase()
+        checkArchitectureUseCase = CheckArchitectureUseCaseImpl()
     }
 
     @Test

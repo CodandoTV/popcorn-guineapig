@@ -1,6 +1,7 @@
 package com.github.codandotv.popcorn.data
 
 import com.github.codandotv.popcorn.data.dto.ReportDto
+import com.github.codandotv.popcorn.data.report.ReportDataSource
 
 interface PopcornGuineapigRepository {
     fun exportReport(report: ReportDto): String?

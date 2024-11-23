@@ -2,7 +2,7 @@ package com.github.codandotv.popcorn.data.di
 
 import com.github.codandotv.popcorn.data.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.data.PopcornGuineapigRepositoryImpl
-import com.github.codandotv.popcorn.data.ReportDataSource
+import com.github.codandotv.popcorn.data.report.ReportDataSource
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
