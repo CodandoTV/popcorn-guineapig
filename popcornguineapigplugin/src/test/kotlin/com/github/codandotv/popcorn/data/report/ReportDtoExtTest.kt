@@ -1,5 +1,6 @@
 package com.github.codandotv.popcorn.data.report
 
+import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -34,5 +35,19 @@ class ReportDtoExtTest {
         assertEquals("Passed ✅", status)
     }
     // endregion
+
+    @Test
+    fun `Given some table item when toMarkdownTableLine occurs then check the markdown text`() {
+        // arrange
+        val tableItem = AnalysisTableItemDto(
+            internalDependencyName = "chuck-norris",
+            ruleChecked = "DoNotWith",
+            result = AnalysisTableResultEnumDto.PASSED
+        )
+
+        // act
+        val result = tableItem.toMarkdownTableLine()
+        assertEquals("| chuck-norris  | DoNotWith  | Passed ✅|\n", result)
+    }
 
 }
