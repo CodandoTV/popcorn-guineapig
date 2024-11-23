@@ -35,8 +35,8 @@ internal fun List<String>.toEnumeratedMarkdownList(): String = reduceIndexed { i
 }
 
 internal fun List<HowCanIFixThisItemDto>.toMarkdownSection(): String = map {
-    "${it.violatedRule}: ${it.message}"
-}.reduce { acc, s -> "$acc- $s\n" }
+    "- ${it.violatedRule}: ${it.message}"
+}.reduce { acc, s -> "$acc\n$s" }
 
 internal fun List<AnalysisTableItemDto>.toMarkdownTable() =
     "| Dependency    | Rule           | Result         |\n" +

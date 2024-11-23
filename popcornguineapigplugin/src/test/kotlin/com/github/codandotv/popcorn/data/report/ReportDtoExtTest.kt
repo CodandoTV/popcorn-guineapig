@@ -2,6 +2,7 @@ package com.github.codandotv.popcorn.data.report
 
 import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
+import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -51,6 +52,27 @@ class ReportDtoExtTest {
     }
 
     @Test
+    fun `Given a how to fix section object x when toMarkdownSection is invoked then check markdown result`() {
+        // arrange
+        val howCanIFixThisItemDto = listOf(
+            HowCanIFixThisItemDto(
+                "DoNotWith", "You should not depends on x, and, y"
+            ),
+            HowCanIFixThisItemDto("JustWith", "You should depends only on x")
+        )
+
+        // act
+        val result = howCanIFixThisItemDto.toMarkdownSection()
+
+        // assert
+        assertEquals(
+            "- DoNotWith: You should not depends on x, and, y\n" +
+                    "- JustWith: You should depends only on x",
+            result
+        )
+    }
+
+    @Test
     fun `Given some table when toMarkdownTable occurs then check the markdown text`() {
         // arrange
         val expected = "| Dependency    | Rule           | Result         |\n" +
@@ -73,6 +95,6 @@ class ReportDtoExtTest {
 
         // act
         val result = table.toMarkdownTable()
-        assertEquals(expected,result)
+        assertEquals(expected, result)
     }
 }
