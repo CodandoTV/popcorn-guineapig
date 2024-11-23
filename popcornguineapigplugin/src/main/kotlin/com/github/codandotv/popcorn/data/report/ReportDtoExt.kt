@@ -43,11 +43,11 @@ internal fun List<AnalysisTableItemDto>.toMarkdownTable() =
             "| ------------- |:--------------:|:--------------:|\n" +
             map { tableLine -> tableLine.toMarkdownTableLine() }
                 .reduce { acc, s ->
-                    "$acc$s"
+                    acc + "\n" + s
                 }
 
 internal fun AnalysisTableItemDto.toMarkdownTableLine() =
-    "| $internalDependencyName  | $ruleChecked  | ${result.toMarkdownStatus()}|\n"
+    "| $internalDependencyName  | $ruleChecked  | ${result.toMarkdownStatus()}|"
 
 internal fun AnalysisTableResultEnumDto.toMarkdownStatus() = when (this) {
     AnalysisTableResultEnumDto.PASSED -> "Passed ✅"

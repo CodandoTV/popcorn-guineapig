@@ -47,7 +47,32 @@ class ReportDtoExtTest {
 
         // act
         val result = tableItem.toMarkdownTableLine()
-        assertEquals("| chuck-norris  | DoNotWith  | Passed ✅|\n", result)
+        assertEquals("| chuck-norris  | DoNotWith  | Passed ✅|", result)
     }
 
+    @Test
+    fun `Given some table when toMarkdownTable occurs then check the markdown text`() {
+        // arrange
+        val expected = "| Dependency    | Rule           | Result         |\n" +
+                "| ------------- |:--------------:|:--------------:|\n" +
+                "| chuck-norris  | DoNotWith  | Passed ✅|\n" +
+                "| bruce-lee  | JustWith  | Failed ❌|"
+
+        val table = listOf(
+            AnalysisTableItemDto(
+                internalDependencyName = "chuck-norris",
+                ruleChecked = "DoNotWith",
+                result = AnalysisTableResultEnumDto.PASSED
+            ),
+            AnalysisTableItemDto(
+                internalDependencyName = "bruce-lee",
+                ruleChecked = "JustWith",
+                result = AnalysisTableResultEnumDto.FAILED
+            )
+        )
+
+        // act
+        val result = table.toMarkdownTable()
+        assertEquals(expected,result)
+    }
 }
