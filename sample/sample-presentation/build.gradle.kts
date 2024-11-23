@@ -33,4 +33,5 @@ popcornGuineapigConfig {
             )
         )
     )
+    hasReportEnabled = true
 }
