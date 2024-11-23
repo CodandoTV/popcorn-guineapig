@@ -1,6 +1,6 @@
 package com.github.codandotv.popcorn.domain.output
 
-internal sealed class CheckResult {
+sealed class CheckResult {
     object Success : CheckResult()
 
     data class Failure(

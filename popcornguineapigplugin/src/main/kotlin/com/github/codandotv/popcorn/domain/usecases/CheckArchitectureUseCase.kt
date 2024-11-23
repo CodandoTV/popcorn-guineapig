@@ -5,9 +5,13 @@ import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 
-internal class CheckArchitectureUseCase {
+public interface CheckArchitectureUseCase {
+    public fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult
+}
 
-    fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult {
+internal class CheckArchitectureUseCaseImpl : CheckArchitectureUseCase {
+
+    override fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult {
         val sortedInternalProjectDependencies = targetModule.internalDependencies
             .distinct()
             .sortedBy {

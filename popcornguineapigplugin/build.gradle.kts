@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.gradle)
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
+    implementation(libs.koin.core)
 }
 
 tasks.test {

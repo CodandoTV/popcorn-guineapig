@@ -1,14 +1,19 @@
 package com.github.codandotv.popcorn.presentation
 
+import com.github.codandotv.popcorn.domain.di.domainModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
 import com.github.codandotv.popcorn.presentation.tasks.PopcornTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
+import org.koin.core.KoinApplication
 import kotlin.reflect.KClass
 
 class PopcornGpPlugin : Plugin<Project> {
+
+    private val koinApp = KoinApplication.init()
+
     override fun apply(target: Project) {
         val extension = target.extensions.create("popcornGuineapigConfig", PopcornGpPluginExtension::class.java)
 
@@ -21,11 +26,16 @@ class PopcornGpPlugin : Plugin<Project> {
             logger.popcornLoggerLifecycle("Checking ${target.name}, configuration ${configuration.project.type.name}, hasReportEnabled $hasReportEnabled")
 
             doFirst {
+                koinApp.modules(domainModule)
+                start(koin = koinApp.koin)
+
                 logger.popcornLoggerLifecycle("Start checking ${target.name} module")
             }
 
             doLast {
                 logger.popcornLoggerLifecycle("Finishing the analysis over ${target.name} module")
+
+                koinApp.close()
             }
         }
     }
