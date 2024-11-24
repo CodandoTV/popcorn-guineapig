@@ -3,7 +3,9 @@ package com.github.codandotv.popcorn.data.report
 import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
+import com.github.codandotv.popcorn.data.dto.ReportDto
 import org.junit.Test
+import kotlin.math.exp
 import kotlin.test.assertEquals
 
 class ReportDtoExtTest {
@@ -120,5 +122,49 @@ class ReportDtoExtTest {
             "- Chuck Norris\n- Bruce lee\n- Popo Freitas",
             result
         )
+    }
+
+    @Test
+    fun `Given a ReportDto object when toMarkDownFormat is called then check the markdown text`() {
+        // arrange
+        val expected = "# dependency module\n" +
+                "## Internal dependencies\n" +
+                "1. dependency\n" +
+                "**Total** internal dependencies of this module is **1**\n" +
+                "## Defined rules\n" +
+                "### Skipped\n" +
+                "- Rule4\n" +
+                "### Rules\n" +
+                "- Rule2\n" +
+                "## Module analysis\n" +
+                "| Dependency    | Rule           | Result         |\n" +
+                "| ------------- |:--------------:|:--------------:|\n" +
+                "| dependency  | Rule2  | Failed ❌|\n" +
+                "## How can I fix it?\n" +
+                "- Rule2: You should do something about that"
+
+        val input = ReportDto(
+            howCanIFixThis = listOf(
+                HowCanIFixThisItemDto(
+                    violatedRule = "Rule2",
+                    message = "You should do something about that"
+                )
+            ),
+            analysisTable = listOf(
+                AnalysisTableItemDto(
+                    "dependency", "Rule2", AnalysisTableResultEnumDto.FAILED
+                )
+            ),
+            skippedRules = listOf("Rule4"),
+            notSkippedRules = listOf("Rule2"),
+            internalDependenciesItems = listOf("dependency"),
+            title = "dependency module"
+        )
+
+        // act
+        val result = input.toMarkDownFormat()
+
+        // assert
+        assertEquals(expected, result)
     }
 }

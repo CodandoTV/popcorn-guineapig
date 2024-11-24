@@ -5,27 +5,19 @@ import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 
-internal fun ReportDto.toMarkDownFormat(): String {
-    "# $title\n" +
-            "## Internal dependencies\n" +
-            internalDependenciesItems.toEnumeratedMarkdownList() +
-            "**Total** internal dependencies of this module is **${internalDependenciesItems.size}**\n" +
-
-            "## Defined rules\n" +
-
-            "### Skipped\n" +
-            skippedRules.toSimpleMarkdownList() +
-
-            "### Rules\n" +
-            notSkippedRules.toSimpleMarkdownList() +
-
-            "## Module analysis\n" +
-            analysisTable.toMarkdownTable() +
-
-            "## How can I fix it?\n" +
-            howCanIFixThis.toMarkdownSection()
-    return ""
-}
+internal fun ReportDto.toMarkDownFormat() = "# $title\n" +
+        "## Internal dependencies\n" +
+        internalDependenciesItems.toEnumeratedMarkdownList() + "\n" +
+        "**Total** internal dependencies of this module is **${internalDependenciesItems.size}**\n" +
+        "## Defined rules\n" +
+        "### Skipped\n" +
+        skippedRules.toSimpleMarkdownList() +"\n" +
+        "### Rules\n" +
+        notSkippedRules.toSimpleMarkdownList() + "\n" +
+        "## Module analysis\n" +
+        analysisTable.toMarkdownTable() + "\n" +
+        "## How can I fix it?\n" +
+        howCanIFixThis.toMarkdownSection()
 
 internal fun List<String>.toSimpleMarkdownList(): String = map { "- $it" }.reduce { acc, s -> "$acc\n$s" }
 
