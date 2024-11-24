@@ -11,7 +11,6 @@ import com.github.codandotv.popcorn.domain.report.ReportInfo
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepository
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepositoryWithError
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertFails
 
@@ -41,7 +40,7 @@ class GenerateReportUseCaseTest {
     )
 
     @Test
-    fun `Given a report object when generate report is called then checks if all flow runs`() = runTest {
+    fun `Given a report object when generate report is called then checks if all flow runs`() {
         // arrange
         generateReportUseCase = GenerateReportUseCaseImpl(fakePopcornGuineapigRepository)
 
@@ -57,21 +56,20 @@ class GenerateReportUseCaseTest {
     }
 
     @Test
-    fun `Given a report object + an exception in the repository when generate report is called then checks if the exception is being triggered`() =
-        runTest {
-            // arrange
-            generateReportUseCase = GenerateReportUseCaseImpl(fakePopcornGuineapigRepositoryWithError)
+    fun `Given a report object + an exception in the repository when generate report is called then checks if the exception is being triggered`() {
+        // arrange
+        generateReportUseCase = GenerateReportUseCaseImpl(fakePopcornGuineapigRepositoryWithError)
 
-            // act, assert
-            assertFails {
-                generateReportUseCase.execute(
-                    ReportInfo(
-                        targetModule = fakeTargetModule,
-                        checkResult = fakeCheckResult,
-                        skippedRules = emptyList(),
-                        configuration = fakeConfig
-                    )
+        // act, assert
+        assertFails {
+            generateReportUseCase.execute(
+                ReportInfo(
+                    targetModule = fakeTargetModule,
+                    checkResult = fakeCheckResult,
+                    skippedRules = emptyList(),
+                    configuration = fakeConfig
                 )
-            }
+            )
         }
+    }
 }

@@ -7,10 +7,9 @@ import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.report.ReportInfo
-import org.jetbrains.kotlin.gradle.utils.`is`
 
 interface GenerateReportUseCase {
-    suspend fun execute(
+    fun execute(
         reportInfo: ReportInfo
     )
 }
@@ -19,7 +18,7 @@ internal class GenerateReportUseCaseImpl(
     private val repository: PopcornGuineapigRepository,
 ) : GenerateReportUseCase {
 
-    override suspend fun execute(
+    override fun execute(
         reportInfo: ReportInfo,
     ) {
         val reportDto = reportInfo.toReportDTO()

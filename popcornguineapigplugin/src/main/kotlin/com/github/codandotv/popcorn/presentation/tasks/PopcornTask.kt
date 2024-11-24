@@ -5,6 +5,9 @@ import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUse
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.report.ReportInfo
+import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
 import com.github.codandotv.popcorn.presentation.ext.logMessage
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerError
@@ -21,6 +24,7 @@ open class PopcornTask : DefaultTask() {
 
     private lateinit var checkArcUseCase: CheckArchitectureUseCase
     private lateinit var getRightConfigurationNameUseCase: GetRightConfigurationNameUseCase
+    private lateinit var generateReportUseCase: GenerateReportUseCase
 
     @Input
     lateinit var configuration: PopcornConfiguration
@@ -34,6 +38,7 @@ open class PopcornTask : DefaultTask() {
     fun start(koin: Koin) {
         checkArcUseCase = koin.get<CheckArchitectureUseCase>()
         getRightConfigurationNameUseCase = koin.get<GetRightConfigurationNameUseCase>()
+        generateReportUseCase = koin.get<GenerateReportUseCase>()
     }
 
     @TaskAction
@@ -62,26 +67,63 @@ open class PopcornTask : DefaultTask() {
                 skippedRules.contains(it.rule::class)
             }
 
-            skippedErrors.forEach { skippedRule ->
-                logger.popcornLoggerWarn(
-                    "${targetModule.moduleName} " +
-                            "has bypassed rule ${skippedRule.rule::class.simpleName}"
-                )
-            }
+            logSkippedErrors(skippedErrors, targetModule)
 
-            errors.forEach { error ->
-                logger.popcornLoggerError(
-                    "${targetModule.moduleName} is violating the rule " +
-                            error.rule::class.simpleName
-                            + "(${error.message})"
-                )
-            }
+            logErrors(errors, targetModule)
 
-            errors.toErrorMessage()?.let {
-                error(it)
-            }
+            generateReportIfNecessary(targetModule, result)
+
+            triggerErrorIfNecessary(errors)
         }
 
         logger.popcornLoggerInfo("$targetModule")
+    }
+
+    private fun logSkippedErrors(
+        skippedErrors: List<ArchitectureViolationError>,
+        targetModule: TargetModule
+    ) {
+        skippedErrors.forEach { skippedRule ->
+            logger.popcornLoggerWarn(
+                "${targetModule.moduleName} " +
+                        "has bypassed rule ${skippedRule.rule::class.simpleName}"
+            )
+        }
+    }
+
+    private fun triggerErrorIfNecessary(errors: List<ArchitectureViolationError>) {
+        errors.toErrorMessage()?.let {
+            error(it)
+        }
+    }
+
+    private fun logErrors(
+        errors: List<ArchitectureViolationError>,
+        targetModule: TargetModule
+    ) {
+        errors.forEach { error ->
+            logger.popcornLoggerError(
+                "${targetModule.moduleName} is violating the rule " +
+                        error.rule::class.simpleName
+                        + "(${error.message})"
+            )
+        }
+    }
+
+    private fun generateReportIfNecessary(
+        targetModule: TargetModule,
+        result: CheckResult
+    ) {
+        if (hasReportEnabled) {
+            logger.popcornLoggerInfo("Generating the report...")
+            generateReportUseCase.execute(
+                reportInfo = ReportInfo(
+                    targetModule = targetModule,
+                    configuration = configuration,
+                    skippedRules = skippedRules,
+                    checkResult = result
+                )
+            )
+        }
     }
 }
