@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.usecases
+package com.github.codandotv.popcorn.fakes
 
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.domain.input.PopcornProject

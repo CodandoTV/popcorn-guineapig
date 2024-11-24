@@ -21,6 +21,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
     implementation(libs.koin.core)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 tasks.test {
