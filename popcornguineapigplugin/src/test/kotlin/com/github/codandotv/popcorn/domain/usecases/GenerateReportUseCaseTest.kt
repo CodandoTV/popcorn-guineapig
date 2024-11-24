@@ -55,6 +55,7 @@ class GenerateReportUseCaseTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `Given a report object + an exception in the repository when generate report is called then checks if the exception is being triggered`() {
         // arrange

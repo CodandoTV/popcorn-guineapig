@@ -7,6 +7,7 @@ import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.report.ReportInfo
+import kotlin.reflect.KClass
 
 interface GenerateReportUseCase {
     fun execute(
@@ -27,7 +28,6 @@ internal class GenerateReportUseCaseImpl(
 }
 
 internal fun ReportInfo.toReportDTO(): ReportDto {
-    val title = "${targetModule.moduleName} module"
     val howCanIFixThisItemDto = if (checkResult is CheckResult.Failure) {
         checkResult.errors.mapNotNull { error ->
             if (skippedRules?.contains(error.rule::class) == true) {
@@ -56,7 +56,7 @@ internal fun ReportInfo.toReportDTO(): ReportDto {
                     ruleChecked = rule::class.simpleName.toString(),
                     result = if (skippedRules?.contains(rule::class) == true) {
                         AnalysisTableResultEnumDto.SKIPPED
-                    } else if (checkResult is CheckResult.Failure && checkResult.errors.any { it.rule::class == rule::class }) {
+                    } else if (checkResult.isRuleFailing(rule::class)) {
                         AnalysisTableResultEnumDto.FAILED
                     } else {
                         AnalysisTableResultEnumDto.PASSED
@@ -69,11 +69,16 @@ internal fun ReportInfo.toReportDTO(): ReportDto {
     val skippedRulesFormatted = skippedRules?.map { it.simpleName.toString() } ?: emptyList()
 
     return ReportDto(
-        title = title,
+        moduleName = targetModule.moduleName,
         analysisTable = analysisTable,
         howCanIFixThis = howCanIFixThisItemDto,
         internalDependenciesItems = internalDependenciesFormatted,
         notSkippedRules = notSkippedRulesFormatted,
         skippedRules = skippedRulesFormatted
     )
+}
+
+
+private infix fun CheckResult.isRuleFailing(rule: KClass<*>): Boolean {
+    return this is CheckResult.Failure && errors.any { it.rule::class == rule }
 }

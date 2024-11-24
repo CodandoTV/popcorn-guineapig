@@ -1,3 +1,5 @@
+@file:Suppress("WildcardImport")
+
 package com.github.codandotv.popcorn.domain.di
 
 import com.github.codandotv.popcorn.domain.usecases.*

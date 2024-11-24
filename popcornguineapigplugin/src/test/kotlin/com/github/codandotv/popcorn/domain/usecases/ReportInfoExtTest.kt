@@ -42,7 +42,7 @@ class ReportInfoExtTest {
     fun `Given an execution when toReportDTO is called then check if the errors are well described`() {
         // arrange
         val expected = ReportDto(
-            title = "chuck norris module",
+            moduleName = "chuck norris",
             internalDependenciesItems = listOf("bruce lee", "van diesel"),
             howCanIFixThis = emptyList(),
             notSkippedRules = listOf("JustWithRule"),
@@ -76,7 +76,7 @@ class ReportInfoExtTest {
     fun `Given an execution with some errors when toReportDTO is called then check if the errors are well described`() {
         // arrange
         val expected = ReportDto(
-            title = "chuck norris module",
+            moduleName = "chuck norris",
             internalDependenciesItems = listOf("bruce lee", "van diesel"),
             howCanIFixThis = listOf(
                 HowCanIFixThisItemDto(
@@ -138,11 +138,12 @@ class ReportInfoExtTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `Given an execution with some skipped rules when toReportDTO is called then check if the errors are well described`() {
         // arrange
         val expected = ReportDto(
-            title = "chuck norris module",
+            moduleName = "chuck norris",
             internalDependenciesItems = listOf("bruce lee", "van diesel"),
             howCanIFixThis = emptyList(),
             notSkippedRules = listOf(

@@ -157,7 +157,7 @@ class ReportDtoExtTest {
             skippedRules = listOf("Rule4"),
             notSkippedRules = listOf("Rule2"),
             internalDependenciesItems = listOf("dependency"),
-            title = "dependency module"
+            moduleName = "dependency"
         )
 
         // act

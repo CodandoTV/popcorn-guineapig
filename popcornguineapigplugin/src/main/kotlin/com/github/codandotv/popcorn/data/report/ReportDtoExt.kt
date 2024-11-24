@@ -5,7 +5,7 @@ import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 
-internal fun ReportDto.toMarkDownFormat() = "# $title\n\n" +
+internal fun ReportDto.toMarkDownFormat() = "# $moduleName module\n\n" +
         "## Internal dependencies\n\n" +
         internalDependenciesItems.toEnumeratedMarkdownList() + "\n\n" +
         "**Total** internal dependencies of this module is **${internalDependenciesItems.size}**\n\n" +
