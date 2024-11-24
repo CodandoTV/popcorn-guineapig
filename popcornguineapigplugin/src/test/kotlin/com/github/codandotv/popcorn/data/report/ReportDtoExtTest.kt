@@ -5,7 +5,6 @@ import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 import org.junit.Test
-import kotlin.math.exp
 import kotlin.test.assertEquals
 
 class ReportDtoExtTest {
@@ -127,20 +126,20 @@ class ReportDtoExtTest {
     @Test
     fun `Given a ReportDto object when toMarkDownFormat is called then check the markdown text`() {
         // arrange
-        val expected = "# dependency module\n" +
-                "## Internal dependencies\n" +
-                "1. dependency\n" +
-                "**Total** internal dependencies of this module is **1**\n" +
-                "## Defined rules\n" +
-                "### Skipped\n" +
-                "- Rule4\n" +
-                "### Rules\n" +
-                "- Rule2\n" +
-                "## Module analysis\n" +
+        val expected = "# dependency module\n\n" +
+                "## Internal dependencies\n\n" +
+                "1. dependency\n\n" +
+                "**Total** internal dependencies of this module is **1**\n\n" +
+                "## Defined rules\n\n" +
+                "### Skipped\n\n" +
+                "- Rule4\n\n" +
+                "### Rules\n\n" +
+                "- Rule2\n\n" +
+                "## Module analysis\n\n" +
                 "| Dependency    | Rule           | Result         |\n" +
                 "| ------------- |:--------------:|:--------------:|\n" +
-                "| dependency  | Rule2  | Failed ❌|\n" +
-                "## How can I fix it?\n" +
+                "| dependency  | Rule2  | Failed ❌|\n\n" +
+                "## How can I fix it?\n\n" +
                 "- Rule2: You should do something about that"
 
         val input = ReportDto(
