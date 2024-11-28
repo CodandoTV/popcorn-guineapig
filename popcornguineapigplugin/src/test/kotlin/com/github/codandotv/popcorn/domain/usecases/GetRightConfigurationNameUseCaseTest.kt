@@ -11,7 +11,7 @@ class GetRightConfigurationNameUseCaseTest {
 
     @Before
     fun before() {
-        getRightConfigurationNameUseCase = GetRightConfigurationNameUseCase()
+        getRightConfigurationNameUseCase = GetRightConfigurationNameUseCaseImpl()
     }
 
     @Test

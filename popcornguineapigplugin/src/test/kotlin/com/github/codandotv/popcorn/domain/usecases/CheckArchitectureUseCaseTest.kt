@@ -6,6 +6,7 @@ import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.JustWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
+import com.github.codandotv.popcorn.fakes.fakePopcornConfiguration
 import org.junit.Test
 import org.junit.Before
 import kotlin.test.assertIs
@@ -16,7 +17,7 @@ class CheckArchitectureUseCaseTest {
 
     @Before
     fun before() {
-        checkArchitectureUseCase = CheckArchitectureUseCase()
+        checkArchitectureUseCase = CheckArchitectureUseCaseImpl()
     }
 
     @Test

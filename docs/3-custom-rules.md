@@ -1,4 +1,4 @@
-# Custom rules
+# Custom rules 📝
 
 ## Create your rule
 

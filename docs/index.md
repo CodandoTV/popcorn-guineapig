@@ -28,6 +28,6 @@ Take a look at our [repository](https://github.com/CodandoTV/popcorn-guineapig).
 
 ### 3. [Custom rules](./3-custom-rules.md)
 
-### 4. [Samples](./4-samples.md)
+### 4. [Reports](./4-reports.md)
 
 ### 5. [Contributions](./5-contributions.md)

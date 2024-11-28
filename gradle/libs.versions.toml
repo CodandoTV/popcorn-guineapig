@@ -8,6 +8,7 @@ jetbrains-kotlin-jvm = "1.9.20"
 kotlinx-serialization-json = "1.6.0"
 vanniktech = "0.28.0"
 detekt = "1.23.6"
+koin = "3.5.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +17,7 @@ kotlin_test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 kotlin_test_common = { group = "org.jetbrains.kotlin", name = "kotlin-test-common", version.ref = "kotlin" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 detekt-gradle-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }

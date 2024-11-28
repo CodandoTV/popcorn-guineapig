@@ -21,7 +21,7 @@ dependencies {
 }
 
 popcornGuineapigConfig {
-    skippedRules = listOf(DoNotWithRule::class, NoDependencyRule::class)
+    skippedRules = listOf(NoDependencyRule::class)
     configuration = PopcornConfiguration(
         project = PopcornProject(
             type = ProjectType.JAVA
@@ -33,4 +33,5 @@ popcornGuineapigConfig {
             )
         )
     )
+    hasReportEnabled = true
 }

@@ -14,7 +14,7 @@ class JustWithRule(
         val sortedTargetRuleAllowedDep = justWith.sorted()
         if (sortedInternalProjectDependencyModuleNames != sortedTargetRuleAllowedDep) {
             return ArchitectureViolationError(
-                message = "JustWithRule: This module should depends on $justWith",
+                message = "This module should depends on $justWith",
                 rule = this
             )
         }
