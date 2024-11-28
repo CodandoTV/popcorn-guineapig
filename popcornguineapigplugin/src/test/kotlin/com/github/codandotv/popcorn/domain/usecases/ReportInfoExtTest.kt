@@ -35,7 +35,8 @@ class ReportInfoExtTest {
             ),
             rules = listOf(JustWithRule(listOf("bruce lee", "van diesel")))
         ),
-        skippedRules = emptyList()
+        skippedRules = emptyList(),
+        dateTimestamp = "dateTimestamp"
     )
 
     @Test
@@ -47,6 +48,7 @@ class ReportInfoExtTest {
             howCanIFixThis = emptyList(),
             notSkippedRules = listOf("JustWithRule"),
             skippedRules = emptyList(),
+            dateTimestamp = "dateTimestamp",
             analysisTable = listOf(
                 AnalysisTableItemDto(
                     internalDependencyName = "bruce lee",
@@ -72,6 +74,7 @@ class ReportInfoExtTest {
         )
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `Given an execution with some errors when toReportDTO is called then check if the errors are well described`() {
         // arrange
@@ -89,6 +92,7 @@ class ReportInfoExtTest {
                 "NoDependencyRule"
             ),
             skippedRules = emptyList(),
+            dateTimestamp = "dateTimestamp",
             analysisTable = listOf(
                 AnalysisTableItemDto(
                     internalDependencyName = "bruce lee",
@@ -152,6 +156,7 @@ class ReportInfoExtTest {
             skippedRules = listOf(
                 "NoDependencyRule"
             ),
+            dateTimestamp = "dateTimestamp",
             analysisTable = listOf(
                 AnalysisTableItemDto(
                     internalDependencyName = "bruce lee",

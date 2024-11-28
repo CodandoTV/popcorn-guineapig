@@ -8,6 +8,7 @@ import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.report.ReportInfo
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
+import com.github.codandotv.popcorn.presentation.ext.dateTimestamp
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
 import com.github.codandotv.popcorn.presentation.ext.logMessage
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerError
@@ -18,6 +19,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
 import org.koin.core.Koin
+import java.util.Calendar
 import kotlin.reflect.KClass
 
 open class PopcornTask : DefaultTask() {
@@ -121,7 +123,8 @@ open class PopcornTask : DefaultTask() {
                     targetModule = targetModule,
                     configuration = configuration,
                     skippedRules = skippedRules,
-                    checkResult = result
+                    checkResult = result,
+                    dateTimestamp = Calendar.getInstance().dateTimestamp()
                 )
             )
         }

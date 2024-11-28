@@ -8,15 +8,15 @@ import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUse
 import org.koin.dsl.module
 
 internal val domainModule = module {
-    factory<CheckArchitectureUseCase> {
+    single<CheckArchitectureUseCase> {
         CheckArchitectureUseCaseImpl()
     }
 
-    factory<GetRightConfigurationNameUseCase> {
+    single<GetRightConfigurationNameUseCase> {
         GetRightConfigurationNameUseCaseImpl()
     }
 
-    factory<GenerateReportUseCase> {
+    single<GenerateReportUseCase> {
         GenerateReportUseCaseImpl(
             repository = get()
         )

@@ -9,5 +9,6 @@ data class ReportInfo(
     val targetModule: TargetModule,
     val configuration: PopcornConfiguration,
     val checkResult: CheckResult,
-    val skippedRules: List<KClass<*>>?
+    val skippedRules: List<KClass<*>>?,
+    val dateTimestamp: String,
 )

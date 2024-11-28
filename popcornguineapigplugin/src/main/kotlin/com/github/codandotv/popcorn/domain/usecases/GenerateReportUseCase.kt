@@ -74,7 +74,8 @@ internal fun ReportInfo.toReportDTO(): ReportDto {
         howCanIFixThis = howCanIFixThisItemDto,
         internalDependenciesItems = internalDependenciesFormatted,
         notSkippedRules = notSkippedRulesFormatted,
-        skippedRules = skippedRulesFormatted
+        skippedRules = skippedRulesFormatted,
+        dateTimestamp = dateTimestamp
     )
 }
 
