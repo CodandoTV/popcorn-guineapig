@@ -30,6 +30,8 @@ lane :update_tag do
 
     File.write(version_properties_file, "VERSION=#{new_version}\n".delete('"'))
 
+    sh("git config user.name 'Rods'")
+    sh("git config user.email 'rodrigo.vianna.oliveira@gmail.com'"
     sh("git add #{version_properties_file}")
     sh("git commit -m 'Update version to #{new_version}'")
     sh("git tag #{new_tag}")
