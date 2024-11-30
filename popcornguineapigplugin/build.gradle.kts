@@ -29,14 +29,13 @@ tasks.test {
     }
 }
 
-val popcornGpVersion = "2.0.0"
 
 gradlePlugin {
     plugins {
         create("popcorngp") {
             id = "io.github.codandotv.popcorngp"
             implementationClass = "com.github.codandotv.popcorn.presentation.PopcornGpPlugin"
-            version = popcornGpVersion
+            version = project.property("VERSION") as String
         }
     }
 }

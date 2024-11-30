@@ -1,5 +1,11 @@
 lane :update_tag do
   prefix = ENV['PREFIX']
+  version_properties_file = "../popcornguineapigplugin/version.properties"
+
+  UI.message(">>>>prefix #{prefix}")
+
+  version_line = File.readlines(version_properties_file).find { |line| line.start_with?("VERSION=") }
+  version_static = version_line.split("=").last.strip
 
   last_tag = sh("git tag --list '#{prefix}*' --sort=-v:refname | head -n 1").strip
 
@@ -13,21 +19,20 @@ lane :update_tag do
     stripped_tag = last_tag.gsub(prefix, '')
     version_match = stripped_tag.match(/(\d+)\.(\d+)\.(\d+)/)
 
-    if version_match
-      major = version_match[1].to_i
-      minor = version_match[2].to_i
-      patch = version_match[3].to_i
+    minor = stripped_tag[1].to_i + 1
+    newVersion = "\"#{stripped_tag[0]}.#{minor}.0\""
 
-      minor += 1
-      new_version = "#{major}.#{minor}.0"
-      new_tag = "#{prefix}#{new_version}"
-
-      sh("git tag #{new_tag}")
-      sh("git push origin #{new_tag}")
-
-      UI.success("New tag created: #{new_tag}")
-    else
-      UI.error("Invalid tag format: #{last_tag}")
+    if (Gem::Version.new("#{stripped_tag}") <= Gem::Version.new("#{version_static}"))
+        newVersion = version_static
     end
+
+    new_tag = "#{prefix}#{newVersion}"
+
+    sh("git add #{version_properties_file}")
+    sh("git commit -m 'Update version to #{newVersion}'")
+    sh("git tag #{new_tag}")
+    sh("git push origin #{new_tag}")
+
+    UI.success("New tag created: #{new_tag}")
   end
 end
