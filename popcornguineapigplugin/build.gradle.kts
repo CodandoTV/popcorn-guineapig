@@ -54,7 +54,7 @@ mavenPublishing {
     coordinates(
         project.property("GROUP_ID") as String,
         project.property("ARTIFACT_ID") as String,
-        project.property("VERSION") as String
+        versionPublish
     )
 
     pom {
