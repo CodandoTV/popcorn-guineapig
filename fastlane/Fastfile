@@ -20,13 +20,15 @@ lane :update_tag do
     version_match = stripped_tag.match(/(\d+)\.(\d+)\.(\d+)/)
 
     minor = stripped_tag[1].to_i + 1
-    newVersion = "\"#{stripped_tag[0]}.#{minor}.0\""
+    new_version = "\"#{stripped_tag[0]}.#{minor}.0\""
 
     if (Gem::Version.new("#{stripped_tag}") <= Gem::Version.new("#{version_static}"))
-        newVersion = version_static
+        new_version = version_static
     end
 
-    new_tag = "#{prefix}#{newVersion}"
+    new_tag = "#{prefix}#{new_version}"
+
+    File.write(version_properties_file, "VERSION=#{new_version}\n".delete('"'))
 
     sh("git add #{version_properties_file}")
     sh("git commit -m 'Update version to #{newVersion}'")
