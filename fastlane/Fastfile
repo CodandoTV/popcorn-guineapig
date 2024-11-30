@@ -31,7 +31,7 @@ lane :update_tag do
     File.write(version_properties_file, "VERSION=#{new_version}\n".delete('"'))
 
     sh("git add #{version_properties_file}")
-    sh("git commit -m 'Update version to #{newVersion}'")
+    sh("git commit -m 'Update version to #{new_version}'")
     sh("git tag #{new_tag}")
     sh("git push origin #{new_tag}")
 
