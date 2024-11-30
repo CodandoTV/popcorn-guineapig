@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import java.util.Properties
 
 plugins {
     `kotlin-dsl`
@@ -29,13 +30,19 @@ tasks.test {
     }
 }
 
+val versionPropertiesFile = file("../popcornguineapigplugin/version.properties")
+val versionProperties = Properties().apply {
+    load(versionPropertiesFile.inputStream())
+}
+
+val versionPublish = versionProperties.getProperty("VERSION")
 
 gradlePlugin {
     plugins {
         create("popcorngp") {
             id = "io.github.codandotv.popcorngp"
             implementationClass = "com.github.codandotv.popcorn.presentation.PopcornGpPlugin"
-            version = project.property("VERSION") as String
+            version =  versionPublish
         }
     }
 }
