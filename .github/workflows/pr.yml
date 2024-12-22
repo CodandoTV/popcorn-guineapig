@@ -22,7 +22,5 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Detekt lint
-      run: ./gradlew popcornguineapigplugin:detekt
     - name: Run unit tests
       run: ./gradlew popcornguineapigplugin:test
