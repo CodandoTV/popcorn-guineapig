@@ -1,0 +1,1 @@
+detekt --input . -c config/detekt/detekt.yml -ex "**/build/**, **/sample/**" --debug
