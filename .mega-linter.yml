@@ -14,10 +14,8 @@ APPLY_FIXES: all
 # default
 ENABLE_LINTERS:
   - YAML_PRETTIER
-  - JAVASCRIPT_STANDARD
   - MARKDOWN_MARKDOWN_TABLE_FORMATTER
   - KOTLIN_DETEKT
-  - HTML_HTMLHINT
 
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes
@@ -29,4 +27,3 @@ FILEIO_REPORTER: false
 # Uncomment if you want MegaLinter to detect errors but not block CI to pass
 # DISABLE_ERRORS: true
 KOTLIN_DETEKT_ARGUMENTS: -c config/detekt/detekt.yml
-JAVASCRIPT_STANDARD_DISABLE_ERRORS: true
