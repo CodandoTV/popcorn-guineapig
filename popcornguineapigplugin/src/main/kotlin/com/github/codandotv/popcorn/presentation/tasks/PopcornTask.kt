@@ -45,7 +45,7 @@ open class PopcornTask : DefaultTask() {
 
     @TaskAction
     fun process() {
-        logger.popcornLoggerInfo("Process popcorn task over ${project.name.orEmpty()}")
+        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName.orEmpty()}")
 
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
@@ -53,7 +53,7 @@ open class PopcornTask : DefaultTask() {
         )
 
         val targetModule = TargetModule(
-            moduleName = project.name,
+            moduleName = project.displayName,
             internalDependencies = internalProjectDependencies
         )
 
