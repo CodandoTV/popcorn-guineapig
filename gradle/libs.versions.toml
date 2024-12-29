@@ -1,29 +1,19 @@
 [versions]
-gradle-test-kit-version = "7.6"
 kotlin = "1.9.20"
 junit = "4.13.2"
-coroutines = "1.8.1"
 gradle = "8.2.1"
-jetbrains-kotlin-jvm = "1.9.20"
-kotlinx-serialization-json = "1.6.0"
 vanniktech = "0.28.0"
 koin = "3.5.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-kotlinx_coroutines_test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlin_test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
-kotlin_test_common = { group = "org.jetbrains.kotlin", name = "kotlin-test-common", version.ref = "kotlin" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
-[bundles]
-test_multiplatform = ["kotlin_test", "kotlin_test_common", "kotlinx_coroutines_test"]
-
 [plugins]
-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech"}
