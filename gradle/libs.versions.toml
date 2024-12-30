@@ -4,6 +4,7 @@ junit = "4.13.2"
 gradle = "8.2.2"
 vanniktech = "0.28.0"
 koin = "3.5.6"
+kover = "0.8.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -17,3 +18,4 @@ kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech"}
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
