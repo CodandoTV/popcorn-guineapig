@@ -6,6 +6,7 @@ plugins {
     `kotlin-dsl-precompiled-script-plugins`
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.vanniktech.maven.publish)
+    alias(libs.plugins.kover)
 }
 
 repositories {
@@ -80,4 +81,8 @@ mavenPublishing {
             }
         }
     }
+}
+
+tasks.koverHtmlReport {
+    dependsOn("test") // Ensure tests are run before generating the report
 }

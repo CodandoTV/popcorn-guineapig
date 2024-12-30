@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
 
 class PopcornGpPlugin : Plugin<Project> {
 
-    private val koinApp = KoinApplication.init()
+    private lateinit var koinApp : KoinApplication
 
     override fun apply(target: Project) {
         val extension = target.extensions.create("popcornGuineapigConfig", PopcornGpPluginExtension::class.java)
@@ -33,12 +33,13 @@ class PopcornGpPlugin : Plugin<Project> {
             hasReportEnabled = extension.hasReportEnabled
 
             logger.popcornLoggerLifecycle(
-                "Checking ${target.name}, " +
+                "Register popcorn at ${target.name}: " +
                         "configuration ${configuration.project.type.name}, " +
                         "hasReportEnabled $hasReportEnabled"
             )
 
             doFirst {
+                koinApp = KoinApplication.init()
                 koinApp.modules(platformModule + domainModule + dataModule)
                 start(koin = koinApp.koin)
 

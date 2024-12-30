@@ -3,8 +3,6 @@ name: Unit tests
 on:
   pull_request:
     branches: [ "main" ]
-    paths:
-      - '**.kt'
 
 jobs:
   build:
@@ -23,4 +21,4 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Run unit tests
-      run: ./gradlew popcornguineapigplugin:test
+      run: ./gradlew popcornguineapigplugin:koverHtmlReport
