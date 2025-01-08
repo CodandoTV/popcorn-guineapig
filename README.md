@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.0.21-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.codandotv/popcornguineapig)](https://central.sonatype.com/artifact/io.github.codandotv/popcornguineapig)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
