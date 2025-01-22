@@ -1,5 +1,6 @@
 package com.github.codandotv.popcorn.presentation.tasks
 
+import com.github.codandotv.popcorn.DependencyFactory
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
 import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUseCase
 import com.github.codandotv.popcorn.domain.output.CheckResult
@@ -18,7 +19,6 @@ import com.github.codandotv.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
-import org.koin.core.Koin
 import java.util.Calendar
 import kotlin.reflect.KClass
 
@@ -37,10 +37,10 @@ open class PopcornTask : DefaultTask() {
     @Input
     var hasReportEnabled: Boolean = false
 
-    fun start(koin: Koin) {
-        checkArcUseCase = koin.get<CheckArchitectureUseCase>()
-        getRightConfigurationNameUseCase = koin.get<GetRightConfigurationNameUseCase>()
-        generateReportUseCase = koin.get<GenerateReportUseCase>()
+    fun start(dependencyFactory: DependencyFactory) {
+        checkArcUseCase = dependencyFactory.provideCheckArchitectureUseCase()
+        getRightConfigurationNameUseCase = dependencyFactory.provideGetRightConfigurationNameUseCase()
+        generateReportUseCase = dependencyFactory.provideGenerateReportUseCase()
     }
 
     @TaskAction
