@@ -5,8 +5,8 @@ import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 
-public interface CheckArchitectureUseCase {
-    public fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult
+interface CheckArchitectureUseCase {
+    fun execute(configuration: PopcornConfiguration, targetModule: TargetModule): CheckResult
 }
 
 internal class CheckArchitectureUseCaseImpl : CheckArchitectureUseCase {
