@@ -6,8 +6,8 @@ Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots 
 --
 
 ## Issues 🔖
-- Issue 01 -> https://issues/here
-- Issue 02 -> https://issues/here2
+- Closes https://issues/here
+- Closes https://issues/here2
 
 --
 

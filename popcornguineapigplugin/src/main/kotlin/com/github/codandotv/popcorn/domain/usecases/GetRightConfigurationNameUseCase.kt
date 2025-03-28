@@ -2,7 +2,7 @@ package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.domain.input.ProjectType
 
-public interface GetRightConfigurationNameUseCase {
+interface GetRightConfigurationNameUseCase {
     fun execute(projectType: ProjectType): String
 }
 
