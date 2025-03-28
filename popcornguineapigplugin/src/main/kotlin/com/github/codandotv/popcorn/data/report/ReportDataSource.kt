@@ -13,12 +13,6 @@ internal class ReportDataSource {
                     File.separator +
                     "popcornguineapig"
 
-            val reportDir = File(reportPath)
-
-            if (!reportDir.exists()) {
-                reportDir.mkdirs()
-            }
-
             val reportFile = File(
                 reportPath +
                         File.separator +
