@@ -28,6 +28,10 @@ internal class ReportDataSource {
                         ".md"
             )
 
+            if (!reportFile.exists()) {
+                reportFile.createNewFile()
+            }
+
             val reportContent = reportDto.toMarkDownFormat()
 
             reportFile.bufferedWriter().use {
