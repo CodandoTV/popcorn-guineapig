@@ -9,7 +9,7 @@ import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUseCase
 import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUseCaseImpl
 
-internal class DependencyFactory {
+class DependencyFactory {
 
     private val repository = PopcornGuineapigRepositoryImpl(
         reportDataSource = ReportDataSource()
