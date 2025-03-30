@@ -7,11 +7,13 @@ import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.report.ReportInfo
+import java.io.File
 import kotlin.reflect.KClass
 
 interface GenerateReportUseCase {
     fun execute(
-        reportInfo: ReportInfo
+        reportInfo: ReportInfo,
+        reportFile: File,
     )
 }
 
@@ -21,9 +23,10 @@ internal class GenerateReportUseCaseImpl(
 
     override fun execute(
         reportInfo: ReportInfo,
+        reportFile: File
     ) {
         val reportDto = reportInfo.toReportDTO()
-        repository.exportReport(reportDto)
+        repository.exportReport(reportDto, reportFile)
     }
 }
 
@@ -75,7 +78,6 @@ internal fun ReportInfo.toReportDTO(): ReportDto {
         internalDependenciesItems = internalDependenciesFormatted,
         notSkippedRules = notSkippedRulesFormatted,
         skippedRules = skippedRulesFormatted,
-        dateTimestamp = dateTimestamp
     )
 }
 

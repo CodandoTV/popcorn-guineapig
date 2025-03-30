@@ -12,6 +12,7 @@ import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepository
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepositoryWithError
 import org.junit.Test
+import java.io.File
 import kotlin.test.assertFails
 
 class GenerateReportUseCaseTest {
@@ -38,7 +39,6 @@ class GenerateReportUseCaseTest {
         ),
         rules = listOf(NoDependencyRule())
     )
-    private val fakeDateTime = "2024-03-15_08-30-00"
 
     @Test
     fun `Given a report object when generate report is called then checks if all flow runs`() {
@@ -52,8 +52,8 @@ class GenerateReportUseCaseTest {
                 checkResult = fakeCheckResult,
                 skippedRules = emptyList(),
                 configuration = fakeConfig,
-                dateTimestamp = fakeDateTime
-            )
+            ),
+            reportFile = File("")
         )
     }
 
@@ -71,8 +71,8 @@ class GenerateReportUseCaseTest {
                     checkResult = fakeCheckResult,
                     skippedRules = emptyList(),
                     configuration = fakeConfig,
-                    dateTimestamp = fakeDateTime
-                )
+                ),
+                reportFile = File("")
             )
         }
     }

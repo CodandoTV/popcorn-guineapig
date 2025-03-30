@@ -14,9 +14,7 @@ class PopcornGpPlugin : Plugin<Project> {
     private lateinit var dependencyFactory: DependencyFactory
 
     override fun apply(target: Project) {
-        dependencyFactory = DependencyFactory(
-            reportPath = target.project.layout.buildDirectory.asFile.get().path
-        )
+        dependencyFactory = DependencyFactory()
 
         val extension = target.extensions.create("popcornGuineapigConfig", PopcornGpPluginExtension::class.java)
 

@@ -2,20 +2,19 @@ package com.github.codandotv.popcorn.data
 
 import com.github.codandotv.popcorn.data.dto.ReportDto
 import com.github.codandotv.popcorn.data.report.ReportDataSource
+import java.io.File
 
 interface PopcornGuineapigRepository {
-    fun exportReport(report: ReportDto)
+    fun exportReport(report: ReportDto, reportFile: File)
 }
 
 internal class PopcornGuineapigRepositoryImpl(
-    private val reportPath: String,
     private val reportDataSource: ReportDataSource
 ) : PopcornGuineapigRepository {
-    override fun exportReport(report: ReportDto) {
+    override fun exportReport(report: ReportDto, reportFile: File) {
         reportDataSource.export(
-            fullPath = reportPath,
-            reportDto = report
+            reportDto = report,
+            reportFile = reportFile
         )
-        reportPath
     }
 }

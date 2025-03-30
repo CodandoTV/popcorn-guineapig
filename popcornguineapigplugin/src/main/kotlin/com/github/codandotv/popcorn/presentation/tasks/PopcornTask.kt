@@ -19,6 +19,7 @@ import com.github.codandotv.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
+import java.io.File
 import java.util.Calendar
 import kotlin.reflect.KClass
 
@@ -45,7 +46,7 @@ open class PopcornTask : DefaultTask() {
 
     @TaskAction
     fun process() {
-        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName.orEmpty()}")
+        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName}")
 
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
@@ -114,17 +115,26 @@ open class PopcornTask : DefaultTask() {
 
     private fun generateReportIfNecessary(
         targetModule: TargetModule,
-        result: CheckResult
+        result: CheckResult,
     ) {
         if (hasReportEnabled) {
+            val datetimestamp = Calendar.getInstance().dateTimestamp()
+            val reportFile = project.layout.buildDirectory.file(
+                "reports".plus(File.separator)
+                    .plus("popcornguineapig").plus(datetimestamp)
+                    .plus("_")
+                    .plus(targetModule.moduleName)
+                    .plus(".md")
+            ).get().asFile
+
             logger.popcornLoggerInfo("Generating the report...")
             generateReportUseCase.execute(
+                reportFile =reportFile ,
                 reportInfo = ReportInfo(
-                    targetModule = targetModule,
                     configuration = configuration,
                     skippedRules = skippedRules,
+                    targetModule = targetModule,
                     checkResult = result,
-                    dateTimestamp = Calendar.getInstance().dateTimestamp()
                 )
             )
         }

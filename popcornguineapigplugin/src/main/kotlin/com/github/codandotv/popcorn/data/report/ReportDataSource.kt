@@ -5,23 +5,8 @@ import java.io.File
 
 internal class ReportDataSource {
 
-    fun export(fullPath: String, reportDto: ReportDto) {
+    fun export(reportFile: File, reportDto: ReportDto) {
         val result = runCatching {
-            val reportPath = fullPath +
-                    File.separator +
-                    "reports" +
-                    File.separator +
-                    "popcornguineapig"
-
-            val reportFile = File(
-                reportPath +
-                        File.separator +
-                        reportDto.dateTimestamp +
-                        "_" +
-                        reportDto.moduleName +
-                        ".md"
-            )
-
             if (!reportFile.exists()) {
                 reportFile.createNewFile()
             }
@@ -34,7 +19,7 @@ internal class ReportDataSource {
         }
 
         if (result.isFailure) {
-            throw PopcornGuineapigReportException(fullPath = fullPath)
+            throw PopcornGuineapigReportException(fullPath = reportFile.path)
         }
     }
 }
