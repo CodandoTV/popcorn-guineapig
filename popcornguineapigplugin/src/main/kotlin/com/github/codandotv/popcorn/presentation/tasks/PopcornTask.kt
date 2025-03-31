@@ -19,7 +19,6 @@ import com.github.codandotv.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
-import org.jetbrains.kotlin.gradle.utils.`is`
 import java.util.Calendar
 import kotlin.reflect.KClass
 
@@ -47,7 +46,7 @@ open class PopcornTask : DefaultTask() {
 
     @TaskAction
     fun process() {
-        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName.orEmpty()}")
+        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName}")
 
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
