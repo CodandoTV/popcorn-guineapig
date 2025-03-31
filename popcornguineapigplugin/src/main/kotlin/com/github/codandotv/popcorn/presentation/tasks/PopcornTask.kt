@@ -39,13 +39,14 @@ open class PopcornTask : DefaultTask() {
 
     fun start(dependencyFactory: DependencyFactory) {
         checkArcUseCase = dependencyFactory.provideCheckArchitectureUseCase()
-        getRightConfigurationNameUseCase = dependencyFactory.provideGetRightConfigurationNameUseCase()
+        getRightConfigurationNameUseCase =
+            dependencyFactory.provideGetRightConfigurationNameUseCase()
         generateReportUseCase = dependencyFactory.provideGenerateReportUseCase()
     }
 
     @TaskAction
     fun process() {
-        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName.orEmpty()}")
+        logger.popcornLoggerInfo("Process popcorn task over ${project.displayName}")
 
         val internalProjectDependencies = project.internalProjectDependencies(
             configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
@@ -118,15 +119,21 @@ open class PopcornTask : DefaultTask() {
     ) {
         if (hasReportEnabled) {
             logger.popcornLoggerInfo("Generating the report...")
-            generateReportUseCase.execute(
-                reportInfo = ReportInfo(
-                    targetModule = targetModule,
-                    configuration = configuration,
-                    skippedRules = skippedRules,
-                    checkResult = result,
-                    dateTimestamp = Calendar.getInstance().dateTimestamp()
+            val result = runCatching {
+                generateReportUseCase.execute(
+                    reportInfo = ReportInfo(
+                        targetModule = targetModule,
+                        configuration = configuration,
+                        skippedRules = skippedRules,
+                        checkResult = result,
+                        dateTimestamp = Calendar.getInstance().dateTimestamp()
+                    )
                 )
-            )
+            }
+
+            if (result.isFailure) {
+                logger.popcornLoggerError("Something went wrong trying to generate the report.")
+            }
         }
     }
 }

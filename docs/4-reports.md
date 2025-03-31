@@ -14,7 +14,7 @@ popcornGuineapigConfig {
 ```
 
 After you run the task, you can see a new report at 
-`/yourproject/yourmodule/build/reports/popcornguineapig/YYYY-MM-DD_HH-MM-SS_moduleName.md`.
+`/yourproject/yourmodule/build/reports/popcornguineapig/YYYY-MM-DD_HH-MM-SS.md`.
 
 This report provides detailed insights into the module analyzed by PopcornGuineapig Check, including its 
 internal dependencies and the results of evaluating their relationships.
