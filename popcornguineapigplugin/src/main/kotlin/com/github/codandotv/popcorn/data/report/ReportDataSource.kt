@@ -8,11 +8,10 @@ internal class ReportDataSource {
     fun export(fullPath: String, reportDto: ReportDto) {
         val result = runCatching {
             val reportPath = File(
-                fullPath +
-                        File.separator +
-                        "reports" +
-                        File.separator +
-                        "popcornguineapig"
+                fullPath.plus(File.separator)
+                    .plus("reports")
+                    .plus(File.separator)
+                    .plus("popcornguineapig")
             )
             if (!reportPath.exists()) {
                 reportPath.mkdirs()
