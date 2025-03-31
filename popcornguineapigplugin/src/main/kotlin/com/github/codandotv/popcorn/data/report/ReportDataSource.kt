@@ -7,19 +7,22 @@ internal class ReportDataSource {
 
     fun export(fullPath: String, reportDto: ReportDto) {
         val result = runCatching {
-            val reportPath = fullPath +
-                    File.separator +
-                    "reports" +
-                    File.separator +
-                    "popcornguineapig"
+            val reportPath = File(
+                fullPath +
+                        File.separator +
+                        "reports" +
+                        File.separator +
+                        "popcornguineapig"
+            )
+            if (!reportPath.exists()) {
+                reportPath.mkdirs()
+            }
 
             val reportFile = File(
-                reportPath +
-                        File.separator +
-                        reportDto.dateTimestamp +
-                        "_" +
-                        reportDto.moduleName +
-                        ".md"
+                reportPath.path
+                    .plus(File.separator)
+                    .plus(reportDto.dateTimestamp)
+                    .plus(".md")
             )
 
             if (!reportFile.exists()) {
