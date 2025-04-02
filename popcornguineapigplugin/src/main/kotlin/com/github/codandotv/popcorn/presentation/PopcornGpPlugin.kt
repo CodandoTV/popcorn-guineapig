@@ -18,7 +18,10 @@ class PopcornGpPlugin : Plugin<Project> {
             reportPath = target.project.layout.buildDirectory.asFile.get().path
         )
 
-        val extension = target.extensions.create("popcornGuineapigConfig", PopcornGpPluginExtension::class.java)
+        val extension = target.extensions.create(
+            "popcornGuineapigConfig",
+            PopcornGpPluginExtension::class.java
+        )
 
         target.tasks.register<PopcornTask>("popcorn") {
             configuration = extension.configuration
@@ -27,7 +30,7 @@ class PopcornGpPlugin : Plugin<Project> {
             hasReportEnabled = extension.hasReportEnabled
 
             logger.popcornLoggerLifecycle(
-                "Register popcorn at ${target.name}: " +
+                "Register popcorn at ${project.name}: " +
                         "configuration ${configuration.project.type.name}, " +
                         "hasReportEnabled $hasReportEnabled"
             )
@@ -35,11 +38,11 @@ class PopcornGpPlugin : Plugin<Project> {
             doFirst {
                 start(dependencyFactory = dependencyFactory)
 
-                logger.popcornLoggerLifecycle("Start checking ${target.name} module")
+                logger.popcornLoggerLifecycle("Start checking ${project.name} module")
             }
 
             doLast {
-                logger.popcornLoggerLifecycle("Finishing the analysis over ${target.name} module")
+                logger.popcornLoggerLifecycle("Finishing the analysis over ${project.name} module")
             }
         }
     }
