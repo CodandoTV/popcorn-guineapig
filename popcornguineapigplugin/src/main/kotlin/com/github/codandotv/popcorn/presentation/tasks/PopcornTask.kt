@@ -65,19 +65,29 @@ open class PopcornTask : DefaultTask() {
 
         logger.popcornLoggerInfo(targetModule.logMessage())
 
+        var errors: List<ArchitectureViolationError>? = null
+
         if (result is CheckResult.Failure) {
-            val (skippedErrors, errors) = result.errors.partition {
+            val (skippedErrors, internalErrors) = result.errors.partition {
                 skippedRules.contains(it.rule::class)
             }
 
-            logSkippedErrors(skippedErrors, targetModule)
+            logSkippedErrors(
+                skippedErrors = skippedErrors,
+                targetModule = targetModule
+            )
 
-            logErrors(errors, targetModule)
+            logErrors(
+                errors = internalErrors,
+                targetModule = targetModule,
+            )
 
-            generateReportIfNecessary(targetModule, result)
-
-            triggerErrorIfNecessary(errors)
+            errors = internalErrors
         }
+
+        generateReportIfNecessary(targetModule, result)
+
+        triggerErrorIfNecessary(errors ?: emptyList())
 
         logger.popcornLoggerInfo("$targetModule")
     }

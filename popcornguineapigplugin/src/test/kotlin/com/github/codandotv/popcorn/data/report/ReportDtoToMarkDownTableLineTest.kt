@@ -7,37 +7,7 @@ import com.github.codandotv.popcorn.data.dto.ReportDto
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ReportDtoExtTest {
-
-    // region toMarkdownStatus
-    @Test
-    fun `Given a failed status when toMarkdownStatus occurs then check the markdown text`() {
-        // arrange, act
-        val status = AnalysisTableResultEnumDto.FAILED.toMarkdownStatus()
-
-        // assert
-        assertEquals("Failed ❌", status)
-    }
-
-    @Test
-    fun `Given a skipped status when toMarkdownStatus occurs then check the markdown text`() {
-        // arrange, act
-        val status = AnalysisTableResultEnumDto.SKIPPED.toMarkdownStatus()
-
-        // assert
-        assertEquals("Skipped ⚠️", status)
-    }
-
-    @Test
-    fun `Given a passed status when toMarkdownStatus occurs then check the markdown text`() {
-        // arrange, act
-        val status = AnalysisTableResultEnumDto.PASSED.toMarkdownStatus()
-
-        // assert
-        assertEquals("Passed ✅", status)
-    }
-    // endregion
-
+class ReportDtoToMarkDownTableLineTest {
     @Test
     fun `Given some table item when toMarkdownTableLine occurs then check the markdown text`() {
         // arrange
@@ -50,27 +20,6 @@ class ReportDtoExtTest {
         // act
         val result = tableItem.toMarkdownTableLine()
         assertEquals("| chuck-norris  | DoNotWith  | Passed ✅|", result)
-    }
-
-    @Test
-    fun `Given a how to fix section object x when toMarkdownSection is invoked then check markdown result`() {
-        // arrange
-        val howCanIFixThisItemDto = listOf(
-            HowCanIFixThisItemDto(
-                "DoNotWith", "You should not depends on x, and, y"
-            ),
-            HowCanIFixThisItemDto("JustWith", "You should depends only on x")
-        )
-
-        // act
-        val result = howCanIFixThisItemDto.toMarkdownSection()
-
-        // assert
-        assertEquals(
-            "- DoNotWith: You should not depends on x, and, y\n" +
-                    "- JustWith: You should depends only on x",
-            result
-        )
     }
 
     @Test
@@ -100,27 +49,16 @@ class ReportDtoExtTest {
     }
 
     @Test
-    fun `Given some list of items when toEnumeratedMarkdownList is called then check the markdown text`() {
-        val input = listOf("Chuck Norris", "Bruce lee", "Popo Freitas")
+    fun `Given an empty table when toMarkdownTable occurs then check the markdown text`() {
+        // arrange
+        val expected = "| Dependency    | Rule           | Result         |\n" +
+                "| ------------- |:--------------:|:--------------:|\n"
 
-        val result = input.toEnumeratedMarkdownList()
+        val table = emptyList<AnalysisTableItemDto>()
 
-        assertEquals(
-            "1. Chuck Norris\n2. Bruce lee\n3. Popo Freitas",
-            result
-        )
-    }
-
-    @Test
-    fun `Given some list of items when toSimpleMarkdownList is called then check the markdown text`() {
-        val input = listOf("Chuck Norris", "Bruce lee", "Popo Freitas")
-
-        val result = input.toSimpleMarkdownList()
-
-        assertEquals(
-            "- Chuck Norris\n- Bruce lee\n- Popo Freitas",
-            result
-        )
+        // act
+        val result = table.toMarkdownTable()
+        assertEquals(expected, result)
     }
 
     @Test
