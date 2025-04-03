@@ -10,5 +10,4 @@ data class ReportInfo(
     val configuration: PopcornConfiguration,
     val checkResult: CheckResult,
     val skippedRules: List<KClass<*>>?,
-    val dateTimestamp: String,
 )

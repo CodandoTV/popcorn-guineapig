@@ -96,7 +96,6 @@ class ReportDtoToMarkDownTableLineTest {
             notSkippedRules = listOf("Rule2"),
             internalDependenciesItems = listOf("dependency"),
             moduleName = "dependency",
-            dateTimestamp = "dateTimestamp"
         )
 
         // act

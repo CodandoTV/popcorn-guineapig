@@ -20,13 +20,15 @@ internal class ReportDataSource {
             val reportFile = File(
                 reportPath.path
                     .plus(File.separator)
-                    .plus(reportDto.dateTimestamp)
-                    .plus(".md")
+                    .plus("errorReport.md")
             )
 
-            if (!reportFile.exists()) {
-                reportFile.createNewFile()
+            // If exists replace it
+            if (reportFile.exists()) {
+                reportFile.delete()
             }
+
+            reportFile.createNewFile()
 
             val reportContent = reportDto.toMarkDownFormat()
 
