@@ -7,5 +7,4 @@ data class ReportDto(
     val notSkippedRules: List<String>,
     val analysisTable: List<AnalysisTableItemDto>,
     val howCanIFixThis: List<HowCanIFixThisItemDto>,
-    val dateTimestamp: String,
 )

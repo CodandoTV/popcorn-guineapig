@@ -9,7 +9,6 @@ import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.report.ReportInfo
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
-import com.github.codandotv.popcorn.presentation.ext.dateTimestamp
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
 import com.github.codandotv.popcorn.presentation.ext.logMessage
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerError
@@ -19,7 +18,6 @@ import com.github.codandotv.popcorn.presentation.ext.toErrorMessage
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
-import java.util.Calendar
 import kotlin.reflect.KClass
 
 open class PopcornTask : DefaultTask() {
@@ -34,10 +32,13 @@ open class PopcornTask : DefaultTask() {
     @Input
     lateinit var skippedRules: List<KClass<*>>
 
-    @Input
-    var hasReportEnabled: Boolean = false
+    private var _errorReportEnabled: Boolean = false
 
-    fun start(dependencyFactory: DependencyFactory) {
+    fun start(
+        errorReportEnabled: Boolean,
+        dependencyFactory: DependencyFactory
+    ) {
+        _errorReportEnabled = errorReportEnabled
         checkArcUseCase = dependencyFactory.provideCheckArchitectureUseCase()
         getRightConfigurationNameUseCase =
             dependencyFactory.provideGetRightConfigurationNameUseCase()
@@ -65,8 +66,6 @@ open class PopcornTask : DefaultTask() {
 
         logger.popcornLoggerInfo(targetModule.logMessage())
 
-        var errors: List<ArchitectureViolationError>? = null
-
         if (result is CheckResult.Failure) {
             val (skippedErrors, internalErrors) = result.errors.partition {
                 skippedRules.contains(it.rule::class)
@@ -82,12 +81,14 @@ open class PopcornTask : DefaultTask() {
                 targetModule = targetModule,
             )
 
-            errors = internalErrors
+            generateReportIfNecessary(
+                errorReportEnabled = _errorReportEnabled,
+                targetModule = targetModule,
+                result = result
+            )
+
+            triggerErrorIfNecessary(internalErrors)
         }
-
-        generateReportIfNecessary(targetModule, result)
-
-        triggerErrorIfNecessary(errors ?: emptyList())
 
         logger.popcornLoggerInfo("$targetModule")
     }
@@ -124,11 +125,12 @@ open class PopcornTask : DefaultTask() {
     }
 
     private fun generateReportIfNecessary(
+        errorReportEnabled: Boolean,
         targetModule: TargetModule,
         result: CheckResult
     ) {
-        if (hasReportEnabled) {
-            logger.popcornLoggerInfo("Generating the report...")
+        if (errorReportEnabled) {
+            logger.popcornLoggerInfo("Generating the error report...")
             val result = runCatching {
                 generateReportUseCase.execute(
                     reportInfo = ReportInfo(
@@ -136,13 +138,12 @@ open class PopcornTask : DefaultTask() {
                         configuration = configuration,
                         skippedRules = skippedRules,
                         checkResult = result,
-                        dateTimestamp = Calendar.getInstance().dateTimestamp()
                     )
                 )
             }
 
             if (result.isFailure) {
-                logger.popcornLoggerError("Something went wrong trying to generate the report.")
+                logger.popcornLoggerError("Something went wrong trying to generate the error report.")
             }
         }
     }
