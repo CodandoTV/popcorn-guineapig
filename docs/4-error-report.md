@@ -1,4 +1,4 @@
-# Reports 📃
+# Error reports 📃
 
 Starting from version `3.0.0`, you can enable error report generation in your project.
 
