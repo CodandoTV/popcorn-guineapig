@@ -36,7 +36,6 @@ class ReportInfoExtTest {
             rules = listOf(JustWithRule(listOf("bruce lee", "van diesel")))
         ),
         skippedRules = emptyList(),
-        dateTimestamp = "dateTimestamp"
     )
 
     @Test
@@ -48,7 +47,6 @@ class ReportInfoExtTest {
             howCanIFixThis = emptyList(),
             notSkippedRules = listOf("JustWithRule"),
             skippedRules = emptyList(),
-            dateTimestamp = "dateTimestamp",
             analysisTable = listOf(
                 AnalysisTableItemDto(
                     internalDependencyName = "bruce lee",
@@ -92,7 +90,6 @@ class ReportInfoExtTest {
                 "NoDependencyRule"
             ),
             skippedRules = emptyList(),
-            dateTimestamp = "dateTimestamp",
             analysisTable = listOf(
                 AnalysisTableItemDto(
                     internalDependencyName = "bruce lee",
@@ -156,7 +153,6 @@ class ReportInfoExtTest {
             skippedRules = listOf(
                 "NoDependencyRule"
             ),
-            dateTimestamp = "dateTimestamp",
             analysisTable = listOf(
                 AnalysisTableItemDto(
                     internalDependencyName = "bruce lee",

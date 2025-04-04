@@ -38,7 +38,6 @@ class GenerateReportUseCaseTest {
         ),
         rules = listOf(NoDependencyRule())
     )
-    private val fakeDateTime = "2024-03-15_08-30-00"
 
     @Test
     fun `Given a report object when generate report is called then checks if all flow runs`() {
@@ -52,7 +51,6 @@ class GenerateReportUseCaseTest {
                 checkResult = fakeCheckResult,
                 skippedRules = emptyList(),
                 configuration = fakeConfig,
-                dateTimestamp = fakeDateTime
             )
         )
     }
@@ -71,7 +69,6 @@ class GenerateReportUseCaseTest {
                     checkResult = fakeCheckResult,
                     skippedRules = emptyList(),
                     configuration = fakeConfig,
-                    dateTimestamp = fakeDateTime
                 )
             )
         }

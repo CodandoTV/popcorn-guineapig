@@ -24,10 +24,10 @@ Take a look at our [repository](https://github.com/CodandoTV/popcorn-guineapig).
 
 ### 1. [Getting started](./1-getting-started.md)
 
-### 2. [Existing rules](./2-custom-rules.md)
+### 2. [Existing rules](./2-existing-rules.md)
 
 ### 3. [Custom rules](./3-custom-rules.md)
 
-### 4. [Reports](./4-reports.md)
+### 4. [Error report](./4-error-report.md)
 
 ### 5. [Contributions](./5-contributions.md)

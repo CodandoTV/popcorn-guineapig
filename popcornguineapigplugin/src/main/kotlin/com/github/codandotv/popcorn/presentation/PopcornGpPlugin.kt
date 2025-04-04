@@ -27,16 +27,24 @@ class PopcornGpPlugin : Plugin<Project> {
             configuration = extension.configuration
                 ?: error("It is required to specify some configuration")
             skippedRules = extension.skippedRules ?: emptyList()
-            hasReportEnabled = extension.hasReportEnabled
 
             logger.popcornLoggerLifecycle(
                 "Register popcorn at ${project.name}: " +
-                        "configuration ${configuration.project.type.name}, " +
-                        "hasReportEnabled $hasReportEnabled"
+                        "configuration ${configuration.project.type.name}"
             )
 
             doFirst {
-                start(dependencyFactory = dependencyFactory)
+                val errorReportEnabled = project.hasProperty("errorReportEnabled")
+
+                logger.popcornLoggerLifecycle(
+                    "Running popcorn at ${project.name}: " +
+                            "configuration ${configuration.project.type.name}, " +
+                            "errorReportEnabled $errorReportEnabled"
+                )
+                start(
+                    errorReportEnabled = errorReportEnabled,
+                    dependencyFactory = dependencyFactory
+                )
 
                 logger.popcornLoggerLifecycle("Start checking ${project.name} module")
             }
@@ -51,5 +59,4 @@ class PopcornGpPlugin : Plugin<Project> {
 open class PopcornGpPluginExtension {
     var configuration: PopcornConfiguration? = null
     var skippedRules: List<KClass<*>>? = null
-    var hasReportEnabled: Boolean = false
 }
