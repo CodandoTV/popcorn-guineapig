@@ -82,7 +82,7 @@ open class PopcornTask : DefaultTask() {
             )
 
             generateReportIfNecessary(
-                errorReportEnabled = _errorReportEnabled,
+                shouldGenerateErrorReport = _errorReportEnabled && internalErrors.isNotEmpty(),
                 targetModule = targetModule,
                 result = result
             )
@@ -125,12 +125,11 @@ open class PopcornTask : DefaultTask() {
     }
 
     private fun generateReportIfNecessary(
-        errorReportEnabled: Boolean,
+        shouldGenerateErrorReport: Boolean,
         targetModule: TargetModule,
         result: CheckResult
     ) {
-        val hasErrors = (result is CheckResult.Failure && result.errors.isNotEmpty())
-        if (errorReportEnabled && hasErrors) {
+        if (shouldGenerateErrorReport) {
             logger.popcornLoggerInfo("Generating the error report...")
             val result = runCatching {
                 generateReportUseCase.execute(
