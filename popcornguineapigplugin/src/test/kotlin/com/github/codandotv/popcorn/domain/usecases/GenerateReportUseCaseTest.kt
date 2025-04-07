@@ -27,7 +27,8 @@ class GenerateReportUseCaseTest {
         errors = listOf(
             ArchitectureViolationError(
                 message = "no dependency rule",
-                rule = NoDependencyRule()
+                affectedRelationship = null,
+                rule = NoDependencyRule(),
             )
         )
     )

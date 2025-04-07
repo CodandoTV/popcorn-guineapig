@@ -3,202 +3,170 @@ package com.github.codandotv.popcorn.domain.usecases
 import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.HowCanIFixThisItemDto
-import com.github.codandotv.popcorn.data.dto.ReportDto
-import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
-import com.github.codandotv.popcorn.domain.input.PopcornProject
-import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.output.CheckResult
-import com.github.codandotv.popcorn.domain.report.ReportInfo
-import com.github.codandotv.popcorn.domain.rules.JustWithRule
+import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
+import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ReportInfoExtTest {
 
-    private val fakeReportInfo = ReportInfo(
-        targetModule = TargetModule(
-            moduleName = "chuck norris",
-            internalDependencies = listOf(
-                InternalDependenciesMetadata(group = null, "bruce lee"),
-                InternalDependenciesMetadata(group = null, "van diesel")
-            ),
-        ),
-        checkResult = CheckResult.Success,
-        configuration = PopcornConfiguration(
-            project = PopcornProject(
-                type = ProjectType.KMP,
-                groupName = null
-            ),
-            rules = listOf(JustWithRule(listOf("bruce lee", "van diesel")))
-        ),
-        skippedRules = emptyList(),
-    )
-
     @Test
-    fun `Given an execution when toReportDTO is called then check if the errors are well described`() {
-        // arrange
-        val expected = ReportDto(
-            moduleName = "chuck norris",
-            internalDependenciesItems = listOf("bruce lee", "van diesel"),
-            howCanIFixThis = emptyList(),
-            notSkippedRules = listOf("JustWithRule"),
-            skippedRules = emptyList(),
-            analysisTable = listOf(
-                AnalysisTableItemDto(
-                    internalDependencyName = "bruce lee",
-                    ruleChecked = "JustWithRule",
-                    result = AnalysisTableResultEnumDto.PASSED
+    fun `test howCanIFixThisItemDto when skipped rule exists`() {
+        val errors = listOf(
+            ArchitectureViolationError(
+                message = "error",
+                affectedRelationship = InternalDependenciesMetadata(
+                    group = null,
+                    moduleName = "chuckNorris"
                 ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "van diesel",
-                    ruleChecked = "JustWithRule",
-                    result = AnalysisTableResultEnumDto.PASSED
+                rule = DoNotWithRule(
+                    notWith = listOf("chuckNorris")
                 )
             )
         )
-        val input = fakeReportInfo
 
-        // act
-        val result = input.toReportDTO()
+        val result = errors.toHowCanIFixThisItemDTO(skippedRules = listOf(DoNotWithRule::class))
 
-        // assert
         assertEquals(
-            expected,
+            emptyList<HowCanIFixThisItemDto>(),
             result
         )
     }
 
-    @Suppress("LongMethod")
     @Test
-    fun `Given an execution with some errors when toReportDTO is called then check if the errors are well described`() {
-        // arrange
-        val expected = ReportDto(
-            moduleName = "chuck norris",
-            internalDependenciesItems = listOf("bruce lee", "van diesel"),
-            howCanIFixThis = listOf(
-                HowCanIFixThisItemDto(
-                    violatedRule = "NoDependencyRule",
-                    message = "This module should not have dependencies"
-                )
-            ),
-            notSkippedRules = listOf(
-                "JustWithRule",
-                "NoDependencyRule"
-            ),
-            skippedRules = emptyList(),
-            analysisTable = listOf(
-                AnalysisTableItemDto(
-                    internalDependencyName = "bruce lee",
-                    ruleChecked = "JustWithRule",
-                    result = AnalysisTableResultEnumDto.PASSED
+    fun `test howCanIFixThisItemDto when there is no skipped rule exists`() {
+        val errors = listOf(
+            ArchitectureViolationError(
+                message = "error",
+                affectedRelationship = InternalDependenciesMetadata(
+                    group = null,
+                    moduleName = "chuckNorris"
                 ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "bruce lee",
-                    ruleChecked = "NoDependencyRule",
-                    result = AnalysisTableResultEnumDto.FAILED
-                ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "van diesel",
-                    ruleChecked = "JustWithRule",
-                    result = AnalysisTableResultEnumDto.PASSED
-                ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "van diesel",
-                    ruleChecked = "NoDependencyRule",
-                    result = AnalysisTableResultEnumDto.FAILED
-                )
-            )
-        )
-        val input = fakeReportInfo.copy(
-            configuration = fakeReportInfo.configuration.copy(
-                rules = fakeReportInfo.configuration.rules.toMutableList().apply {
-                    add(NoDependencyRule())
-                },
-            ),
-            checkResult = CheckResult.Failure(
-                errors = listOf(
-                    ArchitectureViolationError(
-                        "This module should not have dependencies",
-                        NoDependencyRule()
-                    )
+                rule = DoNotWithRule(
+                    notWith = listOf("chuckNorris")
                 )
             )
         )
 
-        // act
-        val result = input.toReportDTO()
+        val result = errors.toHowCanIFixThisItemDTO(skippedRules = emptyList())
+            .firstOrNull()
+            ?.violatedRule
 
-        // assert
         assertEquals(
-            expected,
+            "DoNotWithRule",
             result
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `Given an execution with some skipped rules when toReportDTO is called then check if the errors are well described`() {
-        // arrange
-        val expected = ReportDto(
-            moduleName = "chuck norris",
-            internalDependenciesItems = listOf("bruce lee", "van diesel"),
-            howCanIFixThis = emptyList(),
-            notSkippedRules = listOf(
-                "JustWithRule",
-            ),
-            skippedRules = listOf(
-                "NoDependencyRule"
-            ),
-            analysisTable = listOf(
-                AnalysisTableItemDto(
-                    internalDependencyName = "bruce lee",
-                    ruleChecked = "JustWithRule",
-                    result = AnalysisTableResultEnumDto.PASSED
-                ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "bruce lee",
-                    ruleChecked = "NoDependencyRule",
-                    result = AnalysisTableResultEnumDto.SKIPPED
-                ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "van diesel",
-                    ruleChecked = "JustWithRule",
-                    result = AnalysisTableResultEnumDto.PASSED
-                ),
-                AnalysisTableItemDto(
-                    internalDependencyName = "van diesel",
-                    ruleChecked = "NoDependencyRule",
-                    result = AnalysisTableResultEnumDto.SKIPPED
-                )
-            )
+    fun `test toNotSkippedAndSkipped when there are skipped rules and errors`() {
+        val result = listOf<PopcornGuineaPigRule>(
+            DoNotWithRule(notWith = listOf("chuckNorris", "bruceLee")),
+            NoDependencyRule()
+        ).toNotSkippedAndSkipped(
+            skippedRules = listOf(NoDependencyRule::class)
         )
-        val input = fakeReportInfo.copy(
-            configuration = fakeReportInfo.configuration.copy(
-                rules = fakeReportInfo.configuration.rules.toMutableList().apply {
-                    add(NoDependencyRule())
-                },
-            ),
-            skippedRules = listOf(NoDependencyRule::class),
-            checkResult = CheckResult.Failure(
-                errors = listOf(
-                    ArchitectureViolationError(
-                        "This module should not have dependencies",
-                        NoDependencyRule()
+
+        assertEquals(listOf("DoNotWithRule"), result.first)
+        assertEquals(listOf("NoDependencyRule"), result.second)
+    }
+
+    @Test
+    fun `test toNotSkippedAndSkipped when there are skipped rules`() {
+        val result = listOf<PopcornGuineaPigRule>(
+            NoDependencyRule()
+        ).toNotSkippedAndSkipped(
+            skippedRules = listOf(NoDependencyRule::class)
+        )
+
+        assertEquals(emptyList(), result.first)
+        assertEquals(listOf("NoDependencyRule"), result.second)
+    }
+
+    @Test
+    fun `test toNotSkippedAndSkipped when there are errors`() {
+        val result = listOf<PopcornGuineaPigRule>(
+            NoDependencyRule(),
+            DoNotWithRule(notWith = listOf("x", "y"))
+        ).toNotSkippedAndSkipped(
+            skippedRules = emptyList()
+        )
+
+        assertEquals(listOf("NoDependencyRule", "DoNotWithRule"), result.first)
+        assertEquals(emptyList(), result.second)
+    }
+
+    @Test
+    fun `test toAnalysisTableList when there is NoDependencyRule violation`() {
+        val result = CheckResult.Failure(
+            errors = listOf(
+                ArchitectureViolationError(
+                    message = "",
+                    rule = NoDependencyRule(),
+                    affectedRelationship = InternalDependenciesMetadata(
+                        group = null,
+                        moduleName = "chuckNorris"
                     )
                 )
             )
+        ).toAnalysisTableList(
+            skippedRules = emptyList()
         )
 
-        // act
-        val result = input.toReportDTO()
-
-        // assert
         assertEquals(
-            expected,
+            listOf(
+                AnalysisTableItemDto(
+                    internalDependencyName = "chuckNorris",
+                    ruleChecked = "NoDependencyRule",
+                    result = AnalysisTableResultEnumDto.FAILED
+                )
+            ),
+            result
+        )
+    }
+
+    @Test
+    fun `test toAnalysisTableList when there is a NoDependencyRule and a DoNotWith rule skipped`() {
+        val result = CheckResult.Failure(
+            errors = listOf(
+                ArchitectureViolationError(
+                    message = "",
+                    rule = NoDependencyRule(),
+                    affectedRelationship = InternalDependenciesMetadata(
+                        group = null,
+                        moduleName = "chuckNorris"
+                    )
+                ),
+                ArchitectureViolationError(
+                    message = "",
+                    rule = DoNotWithRule(listOf("bruceLee")),
+                    affectedRelationship = InternalDependenciesMetadata(
+                        group = null,
+                        moduleName = "bruceLee"
+                    )
+                )
+            )
+        ).toAnalysisTableList(
+            skippedRules = listOf(DoNotWithRule::class)
+        )
+
+        assertEquals(
+            listOf(
+                AnalysisTableItemDto(
+                    internalDependencyName = "chuckNorris",
+                    ruleChecked = "NoDependencyRule",
+                    result = AnalysisTableResultEnumDto.FAILED
+                ),
+                AnalysisTableItemDto(
+                    internalDependencyName = "bruceLee",
+                    ruleChecked = "DoNotWithRule",
+                    result = AnalysisTableResultEnumDto.SKIPPED
+                )
+            ),
             result
         )
     }

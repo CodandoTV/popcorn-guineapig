@@ -8,7 +8,8 @@ class NoDependencyRule : PopcornGuineaPigRule {
         if (deps.isNotEmpty()) {
             return ArchitectureViolationError(
                 message = "This module should not have dependencies",
-                rule = this
+                rule = this,
+                affectedRelationship = deps.firstOrNull(),
             )
         }
 
