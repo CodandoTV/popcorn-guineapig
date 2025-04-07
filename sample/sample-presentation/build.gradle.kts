@@ -17,6 +17,8 @@ java {
 }
 
 dependencies {
+    implementation(projects.sample.sampleMain)
+    implementation(projects.sample.sampleDomain)
     implementation(projects.sample.sampleData)
 }
 

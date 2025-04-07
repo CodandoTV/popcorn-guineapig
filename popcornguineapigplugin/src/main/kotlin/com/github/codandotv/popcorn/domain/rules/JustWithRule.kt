@@ -13,9 +13,17 @@ class JustWithRule(
 
         val sortedTargetRuleAllowedDep = justWith.sorted()
         if (sortedInternalProjectDependencyModuleNames != sortedTargetRuleAllowedDep) {
+
+            val affectedRelationshipName = sortedTargetRuleAllowedDep.toMutableList().apply {
+                removeAll(sortedTargetRuleAllowedDep)
+            }.firstOrNull()
+
+            val affectedRelationship = deps.firstOrNull { affectedRelationshipName == it.moduleName }
+
             return ArchitectureViolationError(
                 message = "This module should depends on $justWith",
-                rule = this
+                rule = this,
+                affectedRelationship = affectedRelationship
             )
         }
 

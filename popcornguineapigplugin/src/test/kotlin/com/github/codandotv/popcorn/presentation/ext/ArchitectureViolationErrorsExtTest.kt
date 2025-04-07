@@ -15,15 +15,18 @@ class ArchitectureViolationErrorsExtTest {
         val listOfErrors = listOf(
             ArchitectureViolationError(
                 message = "sample-data should not depends on presentation layer",
-                rule = DoNotWithRule(listOf("presentation"))
+                rule = DoNotWithRule(listOf("presentation")),
+                affectedRelationship = null
             ),
             ArchitectureViolationError(
                 message = "sample-domain should not have deps",
-                rule = NoDependencyRule()
+                rule = NoDependencyRule(),
+                affectedRelationship = null
             ),
             ArchitectureViolationError(
                 message = "sample-presentation",
-                rule = JustWithRule(justWith = listOf("domain", "presentation"))
+                rule = JustWithRule(justWith = listOf("domain", "presentation")),
+                affectedRelationship = null
             )
         )
 
