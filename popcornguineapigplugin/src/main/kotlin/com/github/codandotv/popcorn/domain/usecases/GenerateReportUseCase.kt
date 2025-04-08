@@ -48,6 +48,7 @@ internal fun CheckResult.Failure.toAnalysisTableList(
         AnalysisTableItemDto(
             internalDependencyName = arcViolation.affectedRelationship?.toName().orEmpty(),
             ruleChecked = arcViolation.rule::class.simpleName.toString(),
+            ruleDescription = arcViolation.message,
             result = if (skippedRules?.contains(arcViolation.rule::class) == true) {
                 AnalysisTableResultEnumDto.SKIPPED
             } else {

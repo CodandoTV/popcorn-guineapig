@@ -17,7 +17,7 @@ class ReportInfoExtTest {
         val result = CheckResult.Failure(
             errors = listOf(
                 ArchitectureViolationError(
-                    message = "",
+                    message = "This module should not have dependencies",
                     rule = NoDependencyRule(),
                     affectedRelationship = InternalDependenciesMetadata(
                         group = null,
@@ -34,6 +34,7 @@ class ReportInfoExtTest {
                 AnalysisTableItemDto(
                     internalDependencyName = "chuckNorris",
                     ruleChecked = "NoDependencyRule",
+                    ruleDescription = "This module should not have dependencies",
                     result = AnalysisTableResultEnumDto.FAILED
                 )
             ),
@@ -46,7 +47,7 @@ class ReportInfoExtTest {
         val result = CheckResult.Failure(
             errors = listOf(
                 ArchitectureViolationError(
-                    message = "",
+                    message = "This module should not have dependencies",
                     rule = NoDependencyRule(),
                     affectedRelationship = InternalDependenciesMetadata(
                         group = null,
@@ -54,7 +55,7 @@ class ReportInfoExtTest {
                     )
                 ),
                 ArchitectureViolationError(
-                    message = "",
+                    message = "This module should not depends on [[bruceLee]]",
                     rule = DoNotWithRule(listOf("bruceLee")),
                     affectedRelationship = InternalDependenciesMetadata(
                         group = null,
@@ -71,11 +72,13 @@ class ReportInfoExtTest {
                 AnalysisTableItemDto(
                     internalDependencyName = "chuckNorris",
                     ruleChecked = "NoDependencyRule",
+                    ruleDescription = "This module should not have dependencies",
                     result = AnalysisTableResultEnumDto.FAILED
                 ),
                 AnalysisTableItemDto(
                     internalDependencyName = "bruceLee",
                     ruleChecked = "DoNotWithRule",
+                    ruleDescription = "This module should not depends on [[bruceLee]]",
                     result = AnalysisTableResultEnumDto.SKIPPED
                 )
             ),

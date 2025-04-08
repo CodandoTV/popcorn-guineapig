@@ -13,31 +13,35 @@ class ReportDtoToMarkDownTableLineTest {
         val tableItem = AnalysisTableItemDto(
             internalDependencyName = "chuck-norris",
             ruleChecked = "DoNotWith",
+            ruleDescription = "DoNotWith desc",
             result = AnalysisTableResultEnumDto.PASSED
         )
 
         // act
         val result = tableItem.toMarkdownTableLine()
-        assertEquals("| chuck-norris  | DoNotWith  | Passed ✅|", result)
+        assertEquals("| chuck-norris  | DoNotWith  | DoNotWith desc | Passed ✅|", result)
     }
 
     @Test
     fun `Given some table when toMarkdownTable occurs then check the markdown text`() {
         // arrange
-        val expected = "| Dependency    | Rule           | Result         |\n" +
-                "| ------------- |:--------------:|:--------------:|\n" +
-                "| chuck-norris  | DoNotWith  | Passed ✅|\n" +
-                "| bruce-lee  | JustWith  | Failed ❌|"
+        val expected =
+            "| Dependency    | Rule           | Rule Description           | Result         |\n" +
+                    "| ------------- |:--------------:|:--------------:|:--------------:|\n" +
+                    "| chuck-norris  | DoNotWith  | DoNotWith desc | Passed ✅|\n" +
+                    "| bruce-lee  | JustWith  | JustWith desc | Failed ❌|"
 
         val table = listOf(
             AnalysisTableItemDto(
                 internalDependencyName = "chuck-norris",
                 ruleChecked = "DoNotWith",
+                ruleDescription = "DoNotWith desc",
                 result = AnalysisTableResultEnumDto.PASSED
             ),
             AnalysisTableItemDto(
                 internalDependencyName = "bruce-lee",
                 ruleChecked = "JustWith",
+                ruleDescription = "JustWith desc",
                 result = AnalysisTableResultEnumDto.FAILED
             )
         )
@@ -62,19 +66,21 @@ class ReportDtoToMarkDownTableLineTest {
     @Test
     fun `Given a ReportDto object when toMarkDownFormat is called then check the markdown text`() {
         // arrange
-        val expected = "# dependency module\n\n" +
-                "## Module analysis\n\n" +
-                "| Dependency    | Rule           | Result         |\n" +
-                "| ------------- |:--------------:|:--------------:|\n" +
-                "| dependency  | Rule2  | Failed ❌|\n"
+        val expected = "# Analysis -> moduleName\n\n" +
+                "| Dependency    | Rule           | Rule Description           | Result         |\n" +
+                "| ------------- |:--------------:|:--------------:|:--------------:|\n" +
+                "| dependency  | Rule2  | Rule description | Failed ❌|\n"
 
         val input = ReportDto(
             analysisTable = listOf(
                 AnalysisTableItemDto(
-                    "dependency", "Rule2", AnalysisTableResultEnumDto.FAILED
+                    "dependency",
+                    "Rule2",
+                    "Rule description",
+                    AnalysisTableResultEnumDto.FAILED
                 )
             ),
-            moduleName = "dependency",
+            moduleName = "moduleName",
         )
 
         // act

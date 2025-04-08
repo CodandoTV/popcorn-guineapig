@@ -4,13 +4,16 @@ import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 
-internal fun ReportDto.toMarkDownFormat() = "# $moduleName module\n\n" +
-        "## Module analysis\n\n" +
+private fun String.normalizedModuleName() = this.replace(
+    Regex("project|'|\\s"), ""
+)
+
+internal fun ReportDto.toMarkDownFormat() = "# Analysis -> ${moduleName.normalizedModuleName()}\n\n" +
         analysisTable.toMarkdownTable() + "\n"
 
 internal fun List<AnalysisTableItemDto>.toMarkdownTable(): String {
-    val header = "| Dependency    | Rule           | Result         |\n" +
-            "| ------------- |:--------------:|:--------------:|\n"
+    val header = "| Dependency    | Rule           | Rule Description           | Result         |\n" +
+            "| ------------- |:--------------:|:--------------:|:--------------:|\n"
 
     val content = map { tableLine -> tableLine.toMarkdownTableLine() }
         .reduceOrNull { acc, s ->
@@ -23,7 +26,7 @@ internal fun List<AnalysisTableItemDto>.toMarkdownTable(): String {
 }
 
 internal fun AnalysisTableItemDto.toMarkdownTableLine() =
-    "| $internalDependencyName  | $ruleChecked  | ${result.toMarkdownStatus()}|"
+    "| $internalDependencyName  | $ruleChecked  | $ruleDescription | ${result.toMarkdownStatus()}|"
 
 internal fun AnalysisTableResultEnumDto.toMarkdownStatus() = when (this) {
     AnalysisTableResultEnumDto.PASSED -> "Passed ✅"
