@@ -66,7 +66,7 @@ class ReportDtoToMarkDownTableLineTest {
     @Test
     fun `Given a ReportDto object when toMarkDownFormat is called then check the markdown text`() {
         // arrange
-        val expected = "# Analysis -> moduleName\n\n" +
+        val expected = "# \uD83C\uDF7F\uD83D\uDC39 Analysis -> moduleName\n\n" +
                 "| Dependency    | Rule           | Rule Description           | Result         |\n" +
                 "| ------------- |:--------------:|:--------------:|:--------------:|\n" +
                 "| dependency  | Rule2  | Rule description | Failed ❌|\n"
