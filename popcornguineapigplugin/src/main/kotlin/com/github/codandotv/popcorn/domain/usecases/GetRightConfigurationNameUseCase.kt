@@ -9,6 +9,6 @@ interface GetRightConfigurationNameUseCase {
 internal class GetRightConfigurationNameUseCaseImpl : GetRightConfigurationNameUseCase {
     override fun execute(projectType: ProjectType) = when (projectType) {
         ProjectType.KMP -> "commonMainImplementation"
-        else -> "implementation"
+        ProjectType.JAVA, ProjectType.ANDROID -> "implementation"
     }
 }
