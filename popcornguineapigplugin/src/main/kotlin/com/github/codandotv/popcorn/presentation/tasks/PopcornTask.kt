@@ -36,10 +36,13 @@ open class PopcornTask : DefaultTask() {
     fun process() {
         PopcornTaskHelper(
             checkArcUseCase = checkArcUseCase,
-            generateReportUseCase = generateReportUseCase
+            generateReportUseCase = generateReportUseCase,
+            logger = logger,
+            groupName = configuration.project.groupName.orEmpty(),
         ).evaluate(
             gradleProject = project,
-            configuration = configuration,
+            projectType = configuration.project.type,
+            rules = configuration.rules,
             skippedRules = skippedRules,
             errorReportEnabled = _errorReportEnabled,
         )

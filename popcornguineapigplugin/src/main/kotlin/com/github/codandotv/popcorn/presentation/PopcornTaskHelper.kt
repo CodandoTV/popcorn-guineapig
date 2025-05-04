@@ -1,11 +1,12 @@
 package com.github.codandotv.popcorn.presentation
 
-import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.input.configurationName
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.report.ReportInfo
+import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
@@ -23,23 +24,21 @@ typealias GradleProject = org.gradle.api.Project
 internal class PopcornTaskHelper(
     private val checkArcUseCase: CheckArchitectureUseCase,
     private val generateReportUseCase: GenerateReportUseCase,
+    private val logger: Logger,
+    private val groupName: String,
 ) {
-
-    lateinit var logger: Logger
-
     fun evaluate(
         gradleProject: GradleProject,
-        configuration: PopcornConfiguration,
+        rules: List<PopcornGuineaPigRule>,
+        projectType: ProjectType,
         errorReportEnabled: Boolean,
         skippedRules: List<KClass<*>>,
     ) {
-        logger = gradleProject.logger
-
         logger.popcornLoggerInfo("Process popcorn task over ${gradleProject.displayName}")
 
         val internalProjectDependencies = gradleProject.internalProjectDependencies(
-            configurationName = configuration.project.type.configurationName(),
-            groupName = configuration.project.groupName
+            configurationName = projectType.configurationName(),
+            groupName = groupName
         )
 
         val targetModule = TargetModule(
@@ -48,7 +47,7 @@ internal class PopcornTaskHelper(
         )
 
         val result = checkArcUseCase.execute(
-            rules = configuration.rules,
+            rules = rules,
             internalDependencies = targetModule.internalDependencies,
         )
 
@@ -73,9 +72,7 @@ internal class PopcornTaskHelper(
                 shouldGenerateErrorReport = errorReportEnabled && internalErrors.isNotEmpty(),
                 targetModule = targetModule,
                 result = result,
-                configuration = configuration,
                 skippedRules = skippedRules,
-                generateReportUseCase = generateReportUseCase
             )
 
             triggerErrorIfNecessary(internalErrors)
@@ -116,9 +113,7 @@ internal class PopcornTaskHelper(
     }
 
     private fun generateReportIfNecessary(
-        generateReportUseCase: GenerateReportUseCase,
         shouldGenerateErrorReport: Boolean,
-        configuration: PopcornConfiguration,
         skippedRules: List<KClass<*>>,
         targetModule: TargetModule,
         result: CheckResult,
@@ -129,7 +124,6 @@ internal class PopcornTaskHelper(
                 generateReportUseCase.execute(
                     reportInfo = ReportInfo(
                         targetModule = targetModule,
-                        configuration = configuration,
                         skippedRules = skippedRules,
                         checkResult = result,
                     )
