@@ -57,7 +57,7 @@ open class PopcornTask : DefaultTask() {
         )
 
         val result = checkArcUseCase.execute(
-            configuration = configuration,
+            rules = configuration.rules,
             targetModule = targetModule,
         )
 
