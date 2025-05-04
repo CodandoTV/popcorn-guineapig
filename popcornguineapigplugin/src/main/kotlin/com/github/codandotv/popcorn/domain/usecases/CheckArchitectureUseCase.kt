@@ -1,18 +1,18 @@
 package com.github.codandotv.popcorn.domain.usecases
 
+import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.output.CheckResult
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 
 interface CheckArchitectureUseCase {
-    fun execute(rules: List<PopcornGuineaPigRule>, targetModule: TargetModule): CheckResult
+    fun execute(internalDependencies: List<InternalDependenciesMetadata>, rules: List<PopcornGuineaPigRule>): CheckResult
 }
 
 internal class CheckArchitectureUseCaseImpl : CheckArchitectureUseCase {
 
-    override fun execute(rules: List<PopcornGuineaPigRule>, targetModule: TargetModule): CheckResult {
-        val sortedInternalProjectDependencies = targetModule.internalDependencies
+    override fun execute(internalDependencies: List<InternalDependenciesMetadata>, rules: List<PopcornGuineaPigRule>): CheckResult {
+        val sortedInternalProjectDependencies = internalDependencies
             .distinct()
             .sortedBy {
                 it.moduleName

@@ -58,7 +58,7 @@ open class PopcornTask : DefaultTask() {
 
         val result = checkArcUseCase.execute(
             rules = configuration.rules,
-            targetModule = targetModule,
+            internalDependencies = targetModule.internalDependencies,
         )
 
         logger.popcornLoggerInfo(targetModule.logMessage())
