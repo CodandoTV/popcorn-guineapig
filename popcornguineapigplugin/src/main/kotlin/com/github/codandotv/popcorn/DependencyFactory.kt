@@ -6,8 +6,6 @@ import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCaseImpl
-import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUseCase
-import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUseCaseImpl
 
 class DependencyFactory(reportPath: String) {
 
@@ -18,10 +16,6 @@ class DependencyFactory(reportPath: String) {
 
     fun provideCheckArchitectureUseCase(): CheckArchitectureUseCase {
         return CheckArchitectureUseCaseImpl()
-    }
-
-    fun provideGetRightConfigurationNameUseCase(): GetRightConfigurationNameUseCase {
-        return GetRightConfigurationNameUseCaseImpl()
     }
 
     fun provideGenerateReportUseCase(): GenerateReportUseCase {

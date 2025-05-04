@@ -2,10 +2,10 @@ package com.github.codandotv.popcorn.presentation.tasks
 
 import com.github.codandotv.popcorn.DependencyFactory
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
-import com.github.codandotv.popcorn.domain.usecases.GetRightConfigurationNameUseCase
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
+import com.github.codandotv.popcorn.domain.input.configurationName
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.report.ReportInfo
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
@@ -23,7 +23,6 @@ import kotlin.reflect.KClass
 open class PopcornTask : DefaultTask() {
 
     private lateinit var checkArcUseCase: CheckArchitectureUseCase
-    private lateinit var getRightConfigurationNameUseCase: GetRightConfigurationNameUseCase
     private lateinit var generateReportUseCase: GenerateReportUseCase
 
     @Input
@@ -40,8 +39,6 @@ open class PopcornTask : DefaultTask() {
     ) {
         _errorReportEnabled = errorReportEnabled
         checkArcUseCase = dependencyFactory.provideCheckArchitectureUseCase()
-        getRightConfigurationNameUseCase =
-            dependencyFactory.provideGetRightConfigurationNameUseCase()
         generateReportUseCase = dependencyFactory.provideGenerateReportUseCase()
     }
 
@@ -50,7 +47,7 @@ open class PopcornTask : DefaultTask() {
         logger.popcornLoggerInfo("Process popcorn task over ${project.displayName}")
 
         val internalProjectDependencies = project.internalProjectDependencies(
-            configurationName = getRightConfigurationNameUseCase.execute(configuration.project.type),
+            configurationName = configuration.project.type.configurationName(),
             groupName = configuration.project.groupName
         )
 
