@@ -38,7 +38,7 @@ open class PopcornTask : DefaultTask() {
             checkArcUseCase = checkArcUseCase,
             generateReportUseCase = generateReportUseCase,
             logger = logger,
-            groupName = configuration.project.groupName.orEmpty(),
+            groupName = configuration.project.groupName,
         ).evaluate(
             gradleProject = project,
             projectType = configuration.project.type,

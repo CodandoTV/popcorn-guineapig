@@ -25,7 +25,7 @@ internal class PopcornTaskHelper(
     private val checkArcUseCase: CheckArchitectureUseCase,
     private val generateReportUseCase: GenerateReportUseCase,
     private val logger: Logger,
-    private val groupName: String,
+    private val groupName: String?,
 ) {
     fun evaluate(
         gradleProject: GradleProject,
