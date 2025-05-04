@@ -6,12 +6,18 @@ import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 
 interface CheckArchitectureUseCase {
-    fun execute(internalDependencies: List<InternalDependenciesMetadata>, rules: List<PopcornGuineaPigRule>): CheckResult
+    fun execute(
+        internalDependencies: List<InternalDependenciesMetadata>,
+        rules: List<PopcornGuineaPigRule>
+    ): CheckResult
 }
 
 internal class CheckArchitectureUseCaseImpl : CheckArchitectureUseCase {
 
-    override fun execute(internalDependencies: List<InternalDependenciesMetadata>, rules: List<PopcornGuineaPigRule>): CheckResult {
+    override fun execute(
+        internalDependencies: List<InternalDependenciesMetadata>,
+        rules: List<PopcornGuineaPigRule>
+    ): CheckResult {
         val sortedInternalProjectDependencies = internalDependencies
             .distinct()
             .sortedBy {

@@ -5,7 +5,6 @@ import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 
-
 plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
@@ -45,19 +44,3 @@ popcornGuineapigParentConfig {
         )
     )
 }
-
-/*popcornGuineapigConfig {
-    skippedRules = listOf(NoDependencyRule::class)
-    configuration = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA
-        ),
-        rules = listOf(
-            NoDependencyRule(),
-            DoNotWithRule(
-                notWith = listOf("[a-z]+-data")
-            )
-        )
-    )
-}
-*/
