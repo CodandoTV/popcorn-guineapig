@@ -44,8 +44,8 @@ gradlePlugin {
             version =  versionPublish
         }
 
-        create("popcornparentgp") {
-            id = "io.github.codandotv.popcorngp.parent"
+        create("popcorngpparent") {
+            id = "io.github.codandotv.popcorngpparent"
             implementationClass = "com.github.codandotv.popcorn.presentation.PopcornGpParentPlugin"
             version =  versionPublish
         }
