@@ -1,15 +1,11 @@
 @file:Suppress("UnstableApiUsage")
 
-import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
-import com.github.codandotv.popcorn.domain.input.ProjectType
-import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
-import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
-
 plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kover) apply false
-    id("io.github.codandotv.popcorngp.parent")
+// 1. Example apply the parent plugin
+//    id("io.github.codandotv.popcorngp.parent")
 }
 
 buildscript {
@@ -28,6 +24,9 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
 }
 
+
+/*
+// 1. Example apply the parent plugin
 popcornGuineapigParentConfig {
     type = ProjectType.JAVA
     groupName = null
@@ -43,4 +42,4 @@ popcornGuineapigParentConfig {
             moduleNameRegex = "[a-z]+-presentation"
         )
     )
-}
+}*/

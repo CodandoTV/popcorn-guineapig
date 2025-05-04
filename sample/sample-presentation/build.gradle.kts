@@ -5,10 +5,11 @@ import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 
+// example applying the plugin individually
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
-//    id("io.github.codandotv.popcorngp")
+    id("io.github.codandotv.popcorngp")
 }
 
 java {
@@ -22,17 +23,17 @@ dependencies {
     implementation(projects.sample.sampleData)
 }
 
-//popcornGuineapigConfig {
-//    skippedRules = listOf(NoDependencyRule::class)
-//    configuration = PopcornConfiguration(
-//        project = PopcornProject(
-//            type = ProjectType.JAVA
-//        ),
-//        rules = listOf(
-//            NoDependencyRule(),
-//            DoNotWithRule(
-//                notWith = listOf("[a-z]+-data")
-//            )
-//        )
-//    )
-//}
+popcornGuineapigConfig {
+    skippedRules = listOf(NoDependencyRule::class)
+    configuration = PopcornConfiguration(
+        project = PopcornProject(
+            type = ProjectType.JAVA
+        ),
+        rules = listOf(
+            NoDependencyRule(),
+            DoNotWithRule(
+                notWith = listOf("[a-z]+-data")
+            )
+        )
+    )
+}
