@@ -5,6 +5,7 @@ import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 
+// example applying the plugin individually
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)

@@ -1,8 +1,5 @@
 package com.github.codandotv.popcorn.domain.usecases
 
-import com.github.codandotv.popcorn.domain.input.PopcornConfiguration
-import com.github.codandotv.popcorn.domain.input.PopcornProject
-import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
@@ -32,13 +29,6 @@ class GenerateReportUseCaseTest {
             )
         )
     )
-    private val fakeConfig = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA,
-            groupName = null
-        ),
-        rules = listOf(NoDependencyRule())
-    )
 
     @Test
     fun `Given a report object when generate report is called then checks if all flow runs`() {
@@ -51,7 +41,6 @@ class GenerateReportUseCaseTest {
                 targetModule = fakeTargetModule,
                 checkResult = fakeCheckResult,
                 skippedRules = emptyList(),
-                configuration = fakeConfig,
             )
         )
     }
@@ -69,7 +58,6 @@ class GenerateReportUseCaseTest {
                     targetModule = fakeTargetModule,
                     checkResult = fakeCheckResult,
                     skippedRules = emptyList(),
-                    configuration = fakeConfig,
                 )
             )
         }

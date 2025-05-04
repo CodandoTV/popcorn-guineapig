@@ -33,12 +33,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(DoNotWithRule(notWith = listOf("resources")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(DoNotWithRule(notWith = listOf("resources")))
+            }
         )
 
         // Assert
@@ -57,12 +55,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(DoNotWithRule(listOf("[a-z]+-presentation")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(DoNotWithRule(listOf("[a-z]+-presentation")))
+            }
         )
 
         // Assert
@@ -81,12 +77,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(DoNotWithRule(notWith = listOf("resources")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(DoNotWithRule(notWith = listOf("resources")))
+            }
         )
 
         // Assert
@@ -103,12 +97,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(NoDependencyRule())
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(NoDependencyRule())
+            }
         )
 
         // Assert
@@ -130,12 +122,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(NoDependencyRule())
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(NoDependencyRule())
+            }
         )
 
         // Assert
@@ -155,14 +145,12 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    JustWithRule(
-                        justWith = listOf("domain", "resources")
-                    )
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                JustWithRule(
+                    justWith = listOf("domain", "resources")
+                )
+            }
         )
 
         // Assert
@@ -183,12 +171,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(JustWithRule(justWith = listOf("domain", "resources")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(JustWithRule(justWith = listOf("domain", "resources")))
+            }
         )
 
         // Assert
@@ -208,12 +194,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(JustWithRule(justWith = listOf("resources", "domain")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(JustWithRule(justWith = listOf("resources", "domain")))
+            }
         )
 
         // Assert
@@ -233,12 +217,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(JustWithRule(justWith = listOf("domain")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(JustWithRule(justWith = listOf("domain")))
+            }
         )
 
         // Assert
@@ -258,12 +240,10 @@ class CheckArchitectureUseCaseTest {
 
         // Act
         val result = checkArchitectureUseCase.execute(
-            targetModule = targetModule,
-            configuration = fakePopcornConfiguration.copy(
-                rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                    add(JustWithRule(listOf("domain")))
-                }
-            )
+            internalDependencies = targetModule.internalDependencies,
+            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+                add(JustWithRule(listOf("domain")))
+            }
         )
 
         // Assert
