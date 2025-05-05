@@ -48,7 +48,7 @@ open class PopcornParentTask : DefaultTask() {
 
         children.forEach { child ->
             gradleProjects.filter { gradleProject ->
-                child.moduleNameRegex.toRegex().matches(gradleProject.name)
+                child.moduleNameRegex.toRegex().matches(gradleProject.path)
             }.forEach { gradleMatchedProject ->
                 popcornTaskHelper.evaluate(
                     gradleProject = gradleMatchedProject,

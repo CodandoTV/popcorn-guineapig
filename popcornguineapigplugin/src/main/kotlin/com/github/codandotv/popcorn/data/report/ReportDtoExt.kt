@@ -4,12 +4,8 @@ import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
 import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
 import com.github.codandotv.popcorn.data.dto.ReportDto
 
-private fun String.normalizedModuleName() = this.replace(
-    Regex("project|'|\\s"), ""
-)
-
 internal fun ReportDto.toMarkDownFormat() = "# \uD83C\uDF7F\uD83D\uDC39 Analysis -> " +
-        "${moduleName.normalizedModuleName()}\n\n" +
+        "${moduleName}\n\n" +
         analysisTable.toMarkdownTable() + "\n"
 
 internal fun List<AnalysisTableItemDto>.toMarkdownTable(): String {

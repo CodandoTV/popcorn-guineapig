@@ -42,7 +42,7 @@ internal class PopcornTaskHelper(
         )
 
         val targetModule = TargetModule(
-            moduleName = gradleProject.displayName,
+            moduleName = gradleProject.path,
             internalDependencies = internalProjectDependencies
         )
 
