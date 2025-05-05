@@ -8,6 +8,12 @@ To enable this feature, you need to run the popcorn task:
 ./gradlew popcorn -PerrorReportEnabled
 ```
 
+or
+
+```shell
+./gradlew popcornParent -PerrorReportEnabled
+```
+
 After you run the task, you can see a new report at
 `/yourproject/yourmodule/build/reports/popcornguineapig/errorReport.md`.
 
