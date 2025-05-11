@@ -14,7 +14,7 @@ The goal of this plugin is to help enforce architectural rules in your project. 
 
 ## 🚀 Getting Started
 
-## 1. Add the Plugin Dependency
+### 1. Add the Plugin Dependency
 
 Go to your build-logic folder, in the `build-logic/build.gradle.kts`, add the following dependency:
 
@@ -22,68 +22,31 @@ Go to your build-logic folder, in the `build-logic/build.gradle.kts`, add the fo
 implementation("io.github.codandotv:popcornguineapig:<version>")
 ```
 
-### 2. Apply the Plugin
+### 2. Apply the Plugin and define your rules
 
-You can chose a conventional gradle plugin to define your rules. 
+Popcorn gives you two options: the 
+[individual plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#21-individual-plugin) or 
+the [parent plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#22-parent-plugin).
 
-For example, I have a gradle plugin applied to all modules `kmp-library-setup.gradle.kts`. In this conventional plugin, you can add:
+The individual plugin lets you set up rules for specific parts of your project. 
+The parent plugin is great if you want to keep everything in one place and define all the rules centrally.
 
-
-```kotlin
-plugins {
-  ...
-  id("io.github.codandotv.popcorngp")
-}
-```
-
-### 3. Configure Your Architecture Rules
-
-After apply the plugin, you can sync and define the architecture rules:
-
-```kotlin
-popcornGuineapigConfig {
-    // You also can skip rules to help duing migration
-    skippedRules = listOf(DoNotWithRule::class)
-    
-    configuration = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA
-        ),
-        rules = listOf(
-            NoDependencyRule(),
-            DoNotWithRule(
-                notWith = listOf("[a-z]+-data")
-            )
-        )
-    )
-}
-```
-
-You also can create custom rules, you just need to do:
-
-```kotlin
-class MyRule : PopcornGuineaPigRule {
-    override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
-        return null
-    }
-}
-
-popcornGuineapigConfig {
-    configuration = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA
-        ),
-        rules = listOf(
-            MyRule(),
-        )
-    )
-}
-```
+As for the rules, you can define things like: "I don't want modules with the word *presentation* 
+in their name to depend on modules that have *data* in the name." This lets you use your module 
+naming conventions to your advantage.
 
 ### 4. **Run the task**
 
+If you are using the individual plugin:
+
 ```sh
 ./gradlew popcorn
+```
+
+or if you are using the parent plugin:
+
+```sh
+./gradlew popcornParent
 ```
 
 It is simple as a popcorn 🍿 + 🐹
