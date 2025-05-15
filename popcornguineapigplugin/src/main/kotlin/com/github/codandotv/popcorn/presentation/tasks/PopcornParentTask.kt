@@ -54,7 +54,7 @@ open class PopcornParentTask : DefaultTask() {
                     gradleProject = gradleMatchedProject,
                     projectType = type,
                     rules = child.rules,
-                    skippedRules = child.skippedRules ?: emptyList(),
+                    skippedRules = emptyList(),
                     errorReportEnabled = _errorReportEnabled,
                 )
             }

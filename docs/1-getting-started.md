@@ -82,14 +82,12 @@ popcornGuineapigParentConfig {
     children = listOf(
         PopcornChildConfiguration(
             moduleNameRegex = ":util:[a-z]+",
-            skippedRules = null,
             rules = listOf(
                 NoDependencyRule(),
             ),
         ),
         PopcornChildConfiguration(
             moduleNameRegex = ":feature:[a-z]+",
-            skippedRules = null,
             rules = listOf(
                 DoNotWithRule(
                     notWith = listOf("data"),
