@@ -1,10 +1,14 @@
 site_name: Popcorn Guineapig
+repo_url: https://github.com/CodandoTV/popcorn-guineapig
+repo_name: Popcorngp
 theme:
   name: material
   logo: assets/img/logo.png
   font:
     text: Merriweather Sans
     code: Red Hat Mono
+  icon:
+    repo: fontawesome/brands/github
   features:
   - navigation.footer
   - content.code.annotations # (1)!
