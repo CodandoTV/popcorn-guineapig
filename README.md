@@ -2,9 +2,11 @@
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.codandotv/popcornguineapig)](https://central.sonatype.com/artifact/io.github.codandotv/popcornguineapig)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
+![Logo do CodandoTV](img/codandotv.png)
+
 # Welcome! 👋
 
-Welcome to the **Popcorn Gradle Plugin**!
+Welcome to the **Popcorn Gradle Plugin**! A CodandoTV library : )
 
 <img height="150px" width="100px" src="img/popcorngp-logo.webp" />
 
