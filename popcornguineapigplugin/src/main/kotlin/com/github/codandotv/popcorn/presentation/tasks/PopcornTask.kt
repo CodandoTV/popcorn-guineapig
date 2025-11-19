@@ -10,6 +10,15 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
 import kotlin.reflect.KClass
 
+@Deprecated(
+    message = """
+        The support for individual plugins will be removed soon, 
+        please replace the current configuration to use popcornGuineaPigParent instead. 
+        More information you can check 
+        [here](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#22-parent-plugin)
+        """,
+    level = DeprecationLevel.WARNING,
+)
 open class PopcornTask : DefaultTask() {
 
     private lateinit var checkArcUseCase: CheckArchitectureUseCase
