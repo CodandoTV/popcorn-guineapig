@@ -38,12 +38,6 @@ val versionPublish = versionProperties.getProperty("VERSION")
 
 gradlePlugin {
     plugins {
-        create("popcorngp") {
-            id = "io.github.codandotv.popcorngp"
-            implementationClass = "com.github.codandotv.popcorn.presentation.PopcornGpPlugin"
-            version =  versionPublish
-        }
-
         create("popcorngpparent") {
             id = "io.github.codandotv.popcorngpparent"
             implementationClass = "com.github.codandotv.popcorn.presentation.PopcornGpParentPlugin"
