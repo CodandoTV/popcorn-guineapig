@@ -12,49 +12,50 @@ implementation("io.github.codandotv:popcornguineapig:<version>")
 
 You have two ways to use PopcornGP in your project. In this section, we will present both options.
 
-### 2.1. Individual plugin
-
-You can chose a conventional gradle plugin to define your rules. 
-
-For example, I have a gradle plugin applied to all data modules `data-setup-plugin.gradle.kts`. In this conventional plugin, you can add:
-
-```kotlin
-// build-logic/data-setup-plugin.gradle.kts
-plugins {
-  ...
-  id("io.github.codandotv.popcorngp")
-}
-```
-
-#### Configure Your Architecture Rules
-
-Considering a data module, I want it to depend only on the domain module. This allows me to define it as follows:
-
-```kotlin
-// build-logic/data-setup-plugin.gradle.kts
-popcornGuineapigConfig {
-    // You also can skip rules to help duing migration
-    skippedRules = listOf(DoNotWithRule::class)
+!!!warning "Deprecated - Please use the parent plugin"
+    ### 2.1. Individual plugin
     
-    configuration = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA
-        ),
-        rules = listOf(
-            NoDependencyRule(),
-            JustWithRule(
-                justWith = listOf("[a-z]+-domain")
+    You can chose a conventional gradle plugin to define your rules. 
+    
+    For example, I have a gradle plugin applied to all data modules `data-setup-plugin.gradle.kts`. In this conventional plugin, you can add:
+    
+    ```kotlin
+    // build-logic/data-setup-plugin.gradle.kts
+    plugins {
+      ...
+      id("io.github.codandotv.popcorngp")
+    }
+    ```
+    
+    #### Configure Your Architecture Rules
+    
+    Considering a data module, I want it to depend only on the domain module. This allows me to define it as follows:
+    
+    ```kotlin
+    // build-logic/data-setup-plugin.gradle.kts
+    popcornGuineapigConfig {
+        // You also can skip rules to help duing migration
+        skippedRules = listOf(DoNotWithRule::class)
+        
+        configuration = PopcornConfiguration(
+            project = PopcornProject(
+                type = ProjectType.JAVA
+            ),
+            rules = listOf(
+                NoDependencyRule(),
+                JustWithRule(
+                    justWith = listOf("[a-z]+-domain")
+                )
             )
         )
-    )
-}
-```
-
-#### **Run the task**
-
-```sh
-./gradlew popcorn
-```
+    }
+    ```
+    
+    #### **Run the task**
+    
+    ```sh
+    ./gradlew popcorn
+    ```
 
 ### 2.2. Parent plugin
 

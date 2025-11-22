@@ -1,12 +1,14 @@
 # Error reports 📃
 
-Starting from version `3.0.0`, you can enable error report generation in your project.
+!!!note "Error reports available >= 3.0.0" 
+    Starting from version `3.0.0`, you can enable error report generation in your project.
 
 To enable this feature, you need to run the popcorn task:
 
-```shell
-./gradlew popcorn -PerrorReportEnabled
-```
+!!!warning "Deprecated - Please use the parent plugin"
+    ```shell
+    ./gradlew popcorn -PerrorReportEnabled
+    ```
 
 or
 
