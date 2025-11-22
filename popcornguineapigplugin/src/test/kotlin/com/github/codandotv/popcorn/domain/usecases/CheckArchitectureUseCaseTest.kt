@@ -6,7 +6,6 @@ import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.JustWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
-import com.github.codandotv.popcorn.fakes.fakePopcornConfiguration
 import org.junit.Test
 import org.junit.Before
 import kotlin.test.assertIs
@@ -34,9 +33,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(DoNotWithRule(notWith = listOf("resources")))
-            }
+            rules = listOf(DoNotWithRule(notWith = listOf("resources")))
         )
 
         // Assert
@@ -56,9 +53,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(DoNotWithRule(listOf("[a-z]+-presentation")))
-            }
+            rules = listOf(DoNotWithRule(listOf("[a-z]+-presentation")))
         )
 
         // Assert
@@ -78,9 +73,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(DoNotWithRule(notWith = listOf("resources")))
-            }
+            rules = listOf(DoNotWithRule(notWith = listOf("resources")))
         )
 
         // Assert
@@ -98,9 +91,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(NoDependencyRule())
-            }
+            rules = listOf(NoDependencyRule())
         )
 
         // Assert
@@ -123,9 +114,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(NoDependencyRule())
-            }
+            rules = listOf(NoDependencyRule())
         )
 
         // Assert
@@ -146,11 +135,11 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
+            rules = listOf(
                 JustWithRule(
                     justWith = listOf("domain", "resources")
                 )
-            }
+            )
         )
 
         // Assert
@@ -172,9 +161,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(JustWithRule(justWith = listOf("domain", "resources")))
-            }
+            rules = listOf(JustWithRule(justWith = listOf("domain", "resources")))
         )
 
         // Assert
@@ -195,9 +182,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(JustWithRule(justWith = listOf("resources", "domain")))
-            }
+            rules = listOf(JustWithRule(justWith = listOf("resources", "domain")))
         )
 
         // Assert
@@ -218,9 +203,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(JustWithRule(justWith = listOf("domain")))
-            }
+            rules = listOf(JustWithRule(justWith = listOf("domain")))
         )
 
         // Assert
@@ -241,9 +224,7 @@ class CheckArchitectureUseCaseTest {
         // Act
         val result = checkArchitectureUseCase.execute(
             internalDependencies = targetModule.internalDependencies,
-            rules = fakePopcornConfiguration.rules.toMutableList().apply {
-                add(JustWithRule(listOf("domain")))
-            }
+            rules = listOf(JustWithRule(listOf("domain")))
         )
 
         // Assert
