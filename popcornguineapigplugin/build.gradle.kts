@@ -47,8 +47,8 @@ gradlePlugin {
 }
 
 mavenPublishing {
-    //publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    //signAllPublications()
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
 
     coordinates(
         project.property("GROUP_ID") as String,
