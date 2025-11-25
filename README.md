@@ -26,26 +26,13 @@ implementation("io.github.codandotv:popcornguineapig:<version>")
 
 ### 2. Apply the Plugin and define your rules
 
-Popcorn gives you two options: the 
-[individual plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#21-individual-plugin) or 
-the [parent plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#22-parent-plugin).
-
-The individual plugin lets you set up rules for specific parts of your project. 
-The parent plugin is great if you want to keep everything in one place and define all the rules centrally.
+Popcorn gives you the option to use a [parent plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#22-parent-plugin).
 
 As for the rules, you can define things like: "I don't want modules with the word *presentation* 
 in their name to depend on modules that have *data* in the name." This lets you use your module 
 naming conventions to your advantage.
 
 ### 4. **Run the task**
-
-If you are using the individual plugin:
-
-```sh
-./gradlew popcorn
-```
-
-or if you are using the parent plugin:
 
 ```sh
 ./gradlew popcornParent

@@ -12,7 +12,9 @@ theme:
     repo: fontawesome/brands/github
   features:
   - navigation.footer
-  - content.code.annotations # (1)!
+  - content.code.annotations
+  - navigation.instant
+  - content.code.copy
   palette:
       # Dark Mode
       - scheme: slate
