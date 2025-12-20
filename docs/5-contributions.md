@@ -62,6 +62,34 @@ dependencies {
 }
 ```
 
+## How to run the documentation locally?
+
+- Create your virtual env:
+
+```shell
+python3 -m venv venv
+```
+
+- Open the new env:
+
+```shell
+source venv/bin/activate
+```
+
+- Install mkdocs-material:
+
+```shell
+pip install mkdocs-material
+```
+
+- Start the local server:
+
+```shell
+mkdocs serve --watch .
+```
+
+Access your documentation at `http://127.0.0.1:8000/`
+
 ## Some tips
 
 - We primarily use IntelliJ IDEA for developing new features and fixing bugs. While it's possible to use Android Studio, IntelliJ IDEA is the more convenient option, especially since we are working on a Gradle plugin;
