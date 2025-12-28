@@ -24,7 +24,7 @@ popcornGuineapigParentConfig {
 }
 ```
 
-In this case, any feature modules (`:feature:feature-dog`, `:feature:feature-guineapig`, and others) should not depend on any module whose name includes 'something-data' (e.g. `dog-data`, `guineapig-data`, and others). A good rule if you are dealing with presentation modules, you can force the developer use a domain module instead of a data module.
+In this case, any feature modules (`:feature:feature-dog`, `:feature:feature-guineapig`, and others) should not depend on any module whose name includes 'something-data' (e.g. `dog-data`, `guineapig-data`, and others).
 
 ## JustWithRule
 
@@ -49,7 +49,7 @@ popcornGuineapigParentConfig {
 }
 ```
 
-In this case, all data modules (e.g. `:car:data`, `:rent:data`, and others) should depend only on a domain module. This rule is useful if you need to enforce that some modules depend only on specific modules.
+In this case, all data modules (e.g. `:car:data`, `:rent:data`, and others) should depend only on a domain module.
 
 ## NoDependencyRule
 
@@ -72,7 +72,7 @@ popcornGuineapigParentConfig {
 }
 ```
 
-In this case, all util modules (e.g. `:util:media`, `:util:camera`, and others) should be free of any dependencies. This rule is useful if you want to make sure your modules are free of any dependencies.
+In this case, all util modules (e.g. `:util:media`, `:util:camera`, and others) should be free of any dependencies.
 
 ## PopcornGuineaPigRule
 
