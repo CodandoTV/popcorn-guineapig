@@ -17,14 +17,16 @@ class MyRule : PopcornGuineaPigRule {
 After that, you just need to register in the set of rules:
 
 ```kotlin
-popcornGuineapigConfig {
-    configuration = PopcornConfiguration(
-        project = PopcornProject(
-            type = ProjectType.JAVA
-        ),
-        rules = listOf(
-            MyRule(),
+popcornGuineapigParentConfig {
+    type = ProjectType.KMP
+
+    children = listOf(
+        ...
+        PopcornChildConfiguration(
+            moduleNameRegex = ":target-module",
+            rules = listOf(
+                 MyRule(),
+            )
         )
-    )
 }
 ```
