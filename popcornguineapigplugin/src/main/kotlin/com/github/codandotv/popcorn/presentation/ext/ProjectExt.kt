@@ -4,7 +4,7 @@ import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import org.gradle.api.Project
 
 internal fun Project.internalProjectDependencies(
-    configurationName: String,
+    configurationNames: List<String>,
     groupName: String?,
 ): List<InternalDependenciesMetadata> {
     val internalProjectDependencies = mutableListOf<InternalDependenciesMetadata>()
@@ -13,22 +13,24 @@ internal fun Project.internalProjectDependencies(
     logger.popcornLoggerDebug("Project group name is $projectGroupName")
 
     project.configurations.onEach { conf ->
-        if (conf.name == configurationName) {
-            logger.popcornLoggerDebug("Checking configuration [${conf.name}, $configurationName]")
+        configurationNames.forEach { configurationName ->
+            if (conf.name == configurationName) {
+                logger.popcornLoggerDebug("Checking configuration [${conf.name}, $configurationName]")
 
-            conf.dependencies.map { dep ->
-                dep?.let { safeDep ->
-                    logger.popcornLoggerDebug("PopcornGp: ${safeDep.group}:${safeDep.name} <--> $projectGroupName")
-                    if (safeDep.group?.contains(projectGroupName) == true) {
+                conf.dependencies.map { dep ->
+                    dep?.let { safeDep ->
+                        logger.popcornLoggerDebug("PopcornGp: ${safeDep.group}:${safeDep.name} <--> $projectGroupName")
+                        if (safeDep.group?.contains(projectGroupName) == true) {
 
-                        logger.popcornLoggerDebug("PopcornGp: Dependency ${dep.name} is internal")
+                            logger.popcornLoggerDebug("PopcornGp: Dependency ${dep.name} is internal")
 
-                        internalProjectDependencies.add(
-                            InternalDependenciesMetadata(
-                                group = safeDep.group,
-                                moduleName = safeDep.name
+                            internalProjectDependencies.add(
+                                InternalDependenciesMetadata(
+                                    group = safeDep.group,
+                                    moduleName = safeDep.name
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
