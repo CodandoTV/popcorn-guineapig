@@ -6,7 +6,14 @@ enum class ProjectType {
     ANDROID
 }
 
-fun ProjectType.configurationName() = when (this) {
-    ProjectType.KMP -> "commonMainImplementation"
-    ProjectType.JAVA, ProjectType.ANDROID -> "implementation"
+fun ProjectType.configurationNames() = when (this) {
+    ProjectType.KMP -> listOf(
+        "commonMainImplementation",
+        "androidMainImplementation",
+        "iosMainImplementation"
+    )
+
+    ProjectType.JAVA, ProjectType.ANDROID -> listOf(
+        "implementation"
+    )
 }

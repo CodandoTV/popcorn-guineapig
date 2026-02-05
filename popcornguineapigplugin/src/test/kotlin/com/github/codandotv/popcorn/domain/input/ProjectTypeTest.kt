@@ -1,27 +1,28 @@
 package com.github.codandotv.popcorn.domain.input
 
 import org.junit.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ProjectTypeTest {
     @Test
     fun `Given a java project when the get right configuration is invoked then check if it is right`() {
-        val result = ProjectType.JAVA.configurationName()
+        val result = ProjectType.JAVA.configurationNames()
 
-        assertEquals("implementation", result)
+        assertContains(result, "implementation")
     }
 
     @Test
     fun `Given a kmp project when the get right configuration is invoked then check if it is right`() {
-        val result = ProjectType.KMP.configurationName()
+        val result = ProjectType.KMP.configurationNames()
 
-        assertEquals("commonMainImplementation", result)
+        assertContains(result, "commonMainImplementation")
     }
 
     @Test
     fun `Given an android project when the get right configuration is invoked then check if it is right`() {
-        val result = ProjectType.ANDROID.configurationName()
+        val result = ProjectType.ANDROID.configurationNames()
 
-        assertEquals("implementation", result)
+        assertContains(result, "implementation")
     }
 }

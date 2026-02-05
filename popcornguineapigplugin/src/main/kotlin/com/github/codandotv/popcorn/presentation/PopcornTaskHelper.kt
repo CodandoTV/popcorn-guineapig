@@ -1,7 +1,7 @@
 package com.github.codandotv.popcorn.presentation
 
 import com.github.codandotv.popcorn.domain.input.ProjectType
-import com.github.codandotv.popcorn.domain.input.configurationName
+import com.github.codandotv.popcorn.domain.input.configurationNames
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.output.CheckResult
@@ -37,7 +37,7 @@ internal class PopcornTaskHelper(
         logger.popcornLoggerInfo("Process popcorn task over ${gradleProject.displayName}")
 
         val internalProjectDependencies = gradleProject.internalProjectDependencies(
-            configurationName = projectType.configurationName(),
+            configurationNames = projectType.configurationNames(),
             groupName = groupName
         )
 
