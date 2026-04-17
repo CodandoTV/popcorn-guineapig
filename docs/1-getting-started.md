@@ -113,6 +113,12 @@ plugins {
 ./gradlew popcornParent
 ```
 
+!!!warning "For Gradle projects with Cache enabled for the  Configuration Phase"
+    In case your project has cache enabled for the Gradle configuration phase, you need to disable that for popcorngp. So your command should be:
+    ```sh
+    ./gradlew popcornParent --no-configuration-cache
+    ```
+
 ---
 
 It is simple as a popcorn 🍿 + 🐹

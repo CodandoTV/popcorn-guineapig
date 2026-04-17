@@ -38,6 +38,12 @@ naming conventions to your advantage.
 ./gradlew popcornParent
 ```
 
+⚠️ If your project is using cache for **configuration phase**, it is necessary to run popcorngp in this way:
+
+```sh
+./gradlew popcornParent --no-configuration-cache
+```
+
 It is simple as a popcorn 🍿 + 🐹
 
 ## 🎯 Supported Project Types
