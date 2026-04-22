@@ -1,6 +1,5 @@
 package com.github.codandotv.popcorn.presentation
 
-import com.github.codandotv.popcorn.DependencyFactory
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
@@ -11,12 +10,8 @@ import org.gradle.kotlin.dsl.register
 
 public class PopcornGpParentPlugin : Plugin<Project> {
 
-    private lateinit var dependencyFactory: DependencyFactory
-
     override fun apply(target: Project) {
         val reportPath = target.project.layout.buildDirectory.asFile.get().path
-
-        dependencyFactory = DependencyFactory()
 
         val extension = target.extensions.create(
             "popcornGuineapigParentConfig",
@@ -47,7 +42,6 @@ public class PopcornGpParentPlugin : Plugin<Project> {
                     reportPath = reportPath,
                     groupName = extension.groupName,
                     errorReportEnabled = errorReportEnabled,
-                    dependencyFactory = dependencyFactory
                 )
 
                 logger.popcornLoggerLifecycle("Start checking ${project.name} module")

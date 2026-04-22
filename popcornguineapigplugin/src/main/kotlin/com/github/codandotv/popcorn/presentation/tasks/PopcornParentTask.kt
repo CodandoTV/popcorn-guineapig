@@ -1,6 +1,6 @@
 package com.github.codandotv.popcorn.presentation.tasks
 
-import com.github.codandotv.popcorn.DependencyFactory
+import com.github.codandotv.popcorn.ServiceLocator
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
@@ -12,8 +12,12 @@ import org.gradle.api.tasks.TaskAction
 
 public open class PopcornParentTask : DefaultTask() {
 
-    private lateinit var checkArcUseCase: CheckArchitectureUseCase
-    private lateinit var generateReportUseCase: GenerateReportUseCase
+    private val checkArcUseCase: CheckArchitectureUseCase by lazy {
+        ServiceLocator.checkArchitectureUseCase
+    }
+    private val generateReportUseCase: GenerateReportUseCase by lazy {
+        ServiceLocator.generateReportUseCase
+    }
 
     @Input
     public lateinit var children: List<PopcornChildConfiguration>
@@ -30,13 +34,10 @@ public open class PopcornParentTask : DefaultTask() {
         reportPath: String?,
         groupName: String?,
         errorReportEnabled: Boolean,
-        dependencyFactory: DependencyFactory
     ) {
         _reportPath = reportPath.orEmpty()
         _groupName = groupName
         _errorReportEnabled = errorReportEnabled
-        checkArcUseCase = dependencyFactory.provideCheckArchitectureUseCase()
-        generateReportUseCase = dependencyFactory.provideGenerateReportUseCase()
     }
 
     @TaskAction
