@@ -154,14 +154,15 @@ Presentation Layer Tests
 │   DOMAIN LAYER (Lógica pura)            │
 │   ├── Rules (validação de regras)       │
 │   ├── UseCases (orquestração)           │
-│   └── Models (ProjectType, etc)         │
+│   ├── Models (ProjectType, etc)         │
+│   ├── Repository (interface contrato)   │
+│   └── Report (ReportData, etc)          │
 └──────────────┬──────────────────────────┘
                │
 ┌──────────────▼──────────────────────────┐
 │   DATA LAYER (I/O e transformação)      │
-│   ├── Repository (carregamento)         │
-│   ├── ReportDataSource (formatação)     │
-│   └── DTOs (modelos de dados)           │
+│   ├── RepositoryImpl (implementação)    │
+│   └── ReportDataSource (formatação)     │
 └─────────────────────────────────────────┘
 ```
 
@@ -171,7 +172,8 @@ Presentation Layer Tests
 ```
 Novo: Rule de validação         → domain/rules/
 Novo: Use case                  → domain/usecases/
-Novo: DTO ou formatação         → data/ (dto/ ou report/)
+Novo: Modelo de dados           → domain/report/
+Nova formatação de saída        → data/report/
 Nova integração Gradle          → presentation/
 ```
 
@@ -347,11 +349,14 @@ popcornguineapigplugin/
 │   ├── domain/               # Lógica de negócio pura
 │   │   ├── rules/           # NoDependency, JustWith, DoNotWith
 │   │   ├── usecases/        # CheckArchitecture, GenerateReport
-│   │   └── input/           # ProjectType, modelos
+│   │   ├── input/           # ProjectType, modelos de entrada
+│   │   ├── metadata/        # TargetModule, InternalDependenciesMetadata
+│   │   ├── output/          # CheckResult, ArchitectureViolationError
+│   │   ├── report/          # ReportData, AnalysisTableItemData, ReportInfo
+│   │   └── PopcornGuineapigRepository.kt  # Interface contrato
 │   ├── data/                # I/O e transformação
-│   │   ├── report/          # Formatação de saída
-│   │   ├── dto/             # Estruturas de dados
-│   │   └── PopcornGuineapigRepository.kt
+│   │   ├── report/          # Formatação de saída (ReportDataSource, ReportDataExt)
+│   │   └── PopcornGuineapigRepositoryImpl.kt  # Implementação do repositório
 │   └── DependencyFactory.kt # Service locator
 │
 ├── src/test/kotlin/         # Testes espelhando source
@@ -383,7 +388,7 @@ A: Em `domain/rules/MyNewRule.kt`. Implemente a interface `ArchitectureRule` com
 A: Use `FakePopcornGuineapigRepository` que fornece dados de teste. Veja `NoDependencyRuleTest.kt` como exemplo.
 
 **P: Posso importar Gradle em uma regra (domain)?**
-A: **Não!** Domain é pura. Coloque código que usa Gradle API em `data/` ou `presentation/`.
+A: **Não!** Domain é pura. Coloque código que usa Gradle API em `data/` ou `presentation/`. Modelos de dados puros (sem Gradle) ficam em `domain/report/`; formatação de saída fica em `data/report/`.
 
 **P: Aonde adiciono uma nova dependência?**
 A: Em `gradle/libs.versions.toml` (TOML catalog). Nunca adicione versões hardcoded em `build.gradle.kts`.
