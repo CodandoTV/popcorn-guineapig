@@ -1,16 +1,17 @@
 package com.github.codandotv.popcorn.domain.usecases
 
-import com.github.codandotv.popcorn.data.PopcornGuineapigRepository
-import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
-import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
-import com.github.codandotv.popcorn.data.dto.ReportDto
+import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
+import com.github.codandotv.popcorn.domain.report.AnalysisTableItemData
+import com.github.codandotv.popcorn.domain.report.AnalysisTableResultEnumData
+import com.github.codandotv.popcorn.domain.report.ReportData
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.report.ReportInfo
 import kotlin.reflect.KClass
 
-interface GenerateReportUseCase {
+internal interface GenerateReportUseCase {
     fun execute(
+        reportPath: String,
         reportInfo: ReportInfo
     )
 }
@@ -20,6 +21,7 @@ internal class GenerateReportUseCaseImpl(
 ) : GenerateReportUseCase {
 
     override fun execute(
+        reportPath: String,
         reportInfo: ReportInfo,
     ) {
         if (reportInfo.checkResult is CheckResult.Failure) {
@@ -28,7 +30,8 @@ internal class GenerateReportUseCaseImpl(
             )
 
             repository.exportReport(
-                ReportDto(
+                reportPath = reportPath,
+                report = ReportData(
                     moduleName = reportInfo.targetModule.moduleName,
                     analysisTable = analysisTable,
                 )
@@ -43,16 +46,16 @@ internal fun InternalDependenciesMetadata.toName(): String {
 
 internal fun CheckResult.Failure.toAnalysisTableList(
     skippedRules: List<KClass<*>>?
-): List<AnalysisTableItemDto> {
+): List<AnalysisTableItemData> {
     return errors.map { arcViolation ->
-        AnalysisTableItemDto(
+        AnalysisTableItemData(
             internalDependencyName = arcViolation.affectedRelationship?.toName().orEmpty(),
             ruleChecked = arcViolation.rule::class.simpleName.toString(),
             ruleDescription = arcViolation.message,
             result = if (skippedRules?.contains(arcViolation.rule::class) == true) {
-                AnalysisTableResultEnumDto.SKIPPED
+                AnalysisTableResultEnumData.SKIPPED
             } else {
-                AnalysisTableResultEnumDto.FAILED
+                AnalysisTableResultEnumData.FAILED
             }
         )
     }

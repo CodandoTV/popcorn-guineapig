@@ -37,6 +37,7 @@ class GenerateReportUseCaseTest {
 
         // act
         generateReportUseCase.execute(
+            reportPath = "",
             ReportInfo(
                 targetModule = fakeTargetModule,
                 checkResult = fakeCheckResult,
@@ -54,6 +55,7 @@ class GenerateReportUseCaseTest {
         // act, assert
         assertFails {
             generateReportUseCase.execute(
+                reportPath = "",
                 ReportInfo(
                     targetModule = fakeTargetModule,
                     checkResult = fakeCheckResult,

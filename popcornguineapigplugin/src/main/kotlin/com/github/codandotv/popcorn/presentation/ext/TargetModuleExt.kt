@@ -4,7 +4,7 @@ import com.github.codandotv.popcorn.domain.metadata.TargetModule
 
 private const val SEPARATOR = "\n----------------------"
 
-fun TargetModule.logMessage(): String {
+internal fun TargetModule.logMessage(): String {
     val internalDepsReport = internalDependencies.map { it.moduleName }
         .reduceOrNull { acc, s ->
             "$acc,$s"

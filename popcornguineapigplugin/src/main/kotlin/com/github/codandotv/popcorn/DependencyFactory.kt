@@ -7,10 +7,9 @@ import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCaseImpl
 
-class DependencyFactory(reportPath: String) {
+internal class DependencyFactory() {
 
     private val repository = PopcornGuineapigRepositoryImpl(
-        reportPath = reportPath,
         reportDataSource = ReportDataSource()
     )
 

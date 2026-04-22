@@ -9,14 +9,14 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
 
-class PopcornGpParentPlugin : Plugin<Project> {
+public class PopcornGpParentPlugin : Plugin<Project> {
 
     private lateinit var dependencyFactory: DependencyFactory
 
     override fun apply(target: Project) {
-        dependencyFactory = DependencyFactory(
-            reportPath = target.project.layout.buildDirectory.asFile.get().path
-        )
+        val reportPath = target.project.layout.buildDirectory.asFile.get().path
+
+        dependencyFactory = DependencyFactory()
 
         val extension = target.extensions.create(
             "popcornGuineapigParentConfig",
@@ -44,6 +44,7 @@ class PopcornGpParentPlugin : Plugin<Project> {
                             "errorReportEnabled $errorReportEnabled"
                 )
                 start(
+                    reportPath = reportPath,
                     groupName = extension.groupName,
                     errorReportEnabled = errorReportEnabled,
                     dependencyFactory = dependencyFactory
@@ -59,8 +60,8 @@ class PopcornGpParentPlugin : Plugin<Project> {
     }
 }
 
-open class PopcornGpParentPluginExtension {
-    var type: ProjectType? = null
-    var children: List<PopcornChildConfiguration>? = null
-    var groupName: String? = null
+public open class PopcornGpParentPluginExtension {
+    public var type: ProjectType? = null
+    public var children: List<PopcornChildConfiguration>? = null
+    public var groupName: String? = null
 }
