@@ -43,8 +43,8 @@ popcornguineapigplugin/
 ├── src/main/kotlin/com/github/codandotv/popcorn/
 │   ├── presentation/      # Gradle plugin entry point & task definitions
 │   ├── domain/            # Core business logic & rule implementations
-│   ├── data/              # Data models and repository pattern
-│   └── DependencyFactory  # Service locator for dependency injection
+│   ├── data/              # Repository implementation & report formatting
+│   └── ServiceLocator.kt  # Service locator for dependency injection
 ├── src/test/kotlin/       # Unit tests for all layers
 └── build.gradle.kts       # Plugin build configuration
 ```
@@ -60,17 +60,18 @@ popcornguineapigplugin/
    - **Rule Types**: `NoDependencyRule`, `JustWithRule`, `DoNotWithRule` - Enforce architectural constraints
    - **Use Cases**: `CheckArchitectureUseCase`, `GenerateReportUseCase` - Core plugin logic
    - **Models**: `ProjectType` (KMP, Java, Android), module graph representations
+   - **Report models**: `ReportData`, `AnalysisTableItemData`, `AnalysisTableResultEnumData`, `ReportInfo` - pure domain data classes (moved from `data/dto/`)
 
 3. **Data Layer** (`data/`)
-   - DTOs for analysis results, reports, and violations
-   - `PopcornGuineapigRepository` - Loads project modules and dependencies
-   - `ReportDataSource` - Formats violations into markdown/table format
+   - `PopcornGuineapigRepositoryImpl` - Loads project modules and dependencies
+   - `ReportDataSource` / `ReportDataExt` - Formats violations into markdown/table format
 
 ### Key Entry Points
 
 - **Plugin registration**: `PopcornGpParentPlugin.apply()` - Registers `popcornParent` task
 - **Main task**: `popcornParent` - Runs architecture validation
 - **Configuration**: Via `popcorn { }` DSL block in build.gradle files
+- **Service locator**: `ServiceLocator` - Wires repository and use cases together (replaces `DependencyFactory`)
 
 ## Testing
 
@@ -78,14 +79,14 @@ popcornguineapigplugin/
 - **Coverage tool**: Kover
 - **Test location**: Tests mirror source structure under `src/test/kotlin/`
 - **Fakes**: `FakePopcornGuineapigRepository` used for testing without real Gradle projects
-- **Example tests**: 
+- **Example tests**:
   - Rule validation: `NoDependencyRuleTest`, `JustWithRuleTest`, `DoNotWithRuleTest`
-  - Report generation: `ReportDtoToMarkDownFormatTest`, `GenerateReportUseCaseTest`
+  - Report generation: `ReportDataToMarkDownFormatTest`, `ReportDataToMarkDownTableLineTest`, `GenerateReportUseCaseTest`
 
 ## Dependencies & Versions
 
 Managed through `gradle/libs.versions.toml` (TOML catalog):
-- **Kotlin**: 2.0.21 (JVM target)
+- **Kotlin**: 2.0.21 (JVM target, explicit API mode enabled)
 - **Gradle API**: Latest compatible version
 - **Kotlin Serialization**: For data model serialization
 - **Vanniktech Maven Publish**: Handles Maven Central publishing
