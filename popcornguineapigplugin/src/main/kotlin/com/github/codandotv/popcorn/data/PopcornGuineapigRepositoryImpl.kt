@@ -10,7 +10,7 @@ internal class PopcornGuineapigRepositoryImpl(
     override fun exportReport(reportPath: String, report: ReportData) {
         reportDataSource.export(
             fullPath = reportPath,
-            reportDto = report
+            report = report
         )
     }
 }

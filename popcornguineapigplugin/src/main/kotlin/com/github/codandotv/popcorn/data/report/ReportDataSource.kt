@@ -5,7 +5,7 @@ import java.io.File
 
 internal class ReportDataSource {
 
-    fun export(fullPath: String, reportDto: ReportData) {
+    fun export(fullPath: String, report: ReportData) {
         val result = runCatching {
             val reportPath = File(
                 fullPath.plus(File.separator)
@@ -30,7 +30,7 @@ internal class ReportDataSource {
 
             reportFile.createNewFile()
 
-            val reportContent = reportDto.toMarkDownFormat()
+            val reportContent = report.toMarkDownFormat()
 
             reportFile.bufferedWriter().use {
                 it.write(reportContent)
