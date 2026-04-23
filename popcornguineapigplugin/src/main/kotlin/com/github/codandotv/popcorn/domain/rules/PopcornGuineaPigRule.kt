@@ -3,7 +3,7 @@ package com.github.codandotv.popcorn.domain.rules
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 
-interface PopcornGuineaPigRule {
+public interface PopcornGuineaPigRule {
 
-    fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError?
+    public fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError?
 }

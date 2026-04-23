@@ -1,6 +1,6 @@
 package com.github.codandotv.popcorn.presentation.tasks
 
-import com.github.codandotv.popcorn.DependencyFactory
+import com.github.codandotv.popcorn.ServiceLocator
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
@@ -10,38 +10,44 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-open class PopcornParentTask : DefaultTask() {
+public open class PopcornParentTask : DefaultTask() {
 
-    private lateinit var checkArcUseCase: CheckArchitectureUseCase
-    private lateinit var generateReportUseCase: GenerateReportUseCase
+    private val checkArcUseCase: CheckArchitectureUseCase by lazy {
+        ServiceLocator.checkArchitectureUseCase
+    }
+    private val generateReportUseCase: GenerateReportUseCase by lazy {
+        ServiceLocator.generateReportUseCase
+    }
 
     @Input
-    lateinit var children: List<PopcornChildConfiguration>
+    public lateinit var children: List<PopcornChildConfiguration>
 
     @Input
-    lateinit var type: ProjectType
+    public lateinit var type: ProjectType
 
     private var _errorReportEnabled: Boolean = false
     private var _groupName: String? = null
 
-    fun start(
+    private var _reportPath: String = ""
+
+    internal fun start(
+        reportPath: String?,
         groupName: String?,
         errorReportEnabled: Boolean,
-        dependencyFactory: DependencyFactory
     ) {
+        _reportPath = reportPath.orEmpty()
         _groupName = groupName
         _errorReportEnabled = errorReportEnabled
-        checkArcUseCase = dependencyFactory.provideCheckArchitectureUseCase()
-        generateReportUseCase = dependencyFactory.provideGenerateReportUseCase()
     }
 
     @TaskAction
-    fun process() {
+    public fun process() {
         val popcornTaskHelper = PopcornTaskHelper(
             checkArcUseCase = checkArcUseCase,
             generateReportUseCase = generateReportUseCase,
             logger = logger,
             groupName = _groupName,
+            reportPath = _reportPath,
         )
 
         val gradleProjects = project.allprojects.toList()

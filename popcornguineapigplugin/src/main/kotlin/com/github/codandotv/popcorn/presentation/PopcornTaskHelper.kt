@@ -19,13 +19,14 @@ import org.gradle.api.logging.Logger
 import kotlin.collections.forEach
 import kotlin.reflect.KClass
 
-typealias GradleProject = org.gradle.api.Project
+internal typealias GradleProject = org.gradle.api.Project
 
 internal class PopcornTaskHelper(
     private val checkArcUseCase: CheckArchitectureUseCase,
     private val generateReportUseCase: GenerateReportUseCase,
     private val logger: Logger,
     private val groupName: String?,
+    private val reportPath: String,
 ) {
     fun evaluate(
         gradleProject: GradleProject,
@@ -122,6 +123,7 @@ internal class PopcornTaskHelper(
             logger.popcornLoggerInfo("Generating the error report...")
             val result = runCatching {
                 generateReportUseCase.execute(
+                    reportPath = reportPath,
                     reportInfo = ReportInfo(
                         targetModule = targetModule,
                         skippedRules = skippedRules,

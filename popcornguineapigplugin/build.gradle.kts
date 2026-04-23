@@ -82,6 +82,10 @@ mavenPublishing {
     }
 }
 
+kotlin {
+    explicitApi()
+}
+
 tasks.koverHtmlReport {
     dependsOn("test") // Ensure tests are run before generating the report
 }

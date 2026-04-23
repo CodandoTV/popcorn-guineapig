@@ -3,7 +3,7 @@ package com.github.codandotv.popcorn.domain.rules
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 
-class JustWithRule(
+public class JustWithRule(
     private val justWith: List<String>
 ) : PopcornGuineaPigRule {
     override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {

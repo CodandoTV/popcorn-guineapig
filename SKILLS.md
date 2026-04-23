@@ -1,434 +1,408 @@
-# 🍿 Popcorn Gradle Plugin - Claude Skills Guide
+# Popcorn Gradle Plugin - Claude Skills Guide
 
-Este documento descreve os skills disponíveis para trabalhar com o Popcorn Gradle Plugin usando Claude Code ou Cowork.
+This document describes the available skills for working with the Popcorn Gradle Plugin using Claude Code, and serves as the primary technical reference for the project.
 
-> **Skills** são workflows reutilizáveis que você dispara com `/nome` para executar tarefas comuns de desenvolvimento, review e validação.
-
----
-
-## 📋 Quick Start
-
-Para usar um skill, digite `/nome-do-skill` em uma conversa com Claude. Os skills incluem:
-
-| Skill | Descrição | Quando usar |
-|-------|-----------|------------|
-| `/run-tests-popcorn` | Executa testes com coverage | Após mudanças, antes de commit |
-| `/build-and-check` | Compila e valida build | Validação pré-push, releases |
-| `/validate-architecture` | Analisa estrutura arquitetural | Code review, design de features |
-| `/review-pull-request` | Revisão sistemática de PR | Antes de merge |
+> **Skills** are reusable workflows you trigger with `/name` to execute common development, review, and validation tasks.
 
 ---
 
-## 🧪 1. `/run-tests-popcorn`
+## Quick Start
 
-**Executa unit tests e gera relatório Kover de code coverage.**
+To use a skill, type `/skill-name` in a conversation with Claude. Available skills:
 
-### Quando usar
-- Após fazer mudanças no código
-- Antes de fazer commit ou push
-- Para validar que tests existentes ainda passam
-- Para debugar falhas de testes
-- Para verificar cobertura de código
-
-### Comandos principais
-
-**Rodar suite completa com coverage:**
-```bash
-./gradlew popcornguineapigplugin:koverHtmlReport
-```
-
-**Rodar um teste específico:**
-```bash
-./gradlew popcornguineapigplugin:test --tests "com.github.codandotv.popcorn.domain.rules.NoDependencyRuleTest"
-```
-
-**Rodar um método específico:**
-```bash
-./gradlew popcornguineapigplugin:test --tests "com.github.codandotv.popcorn.domain.rules.NoDependencyRuleTest.testValidDependencies"
-```
-
-### Resultados
-- 📊 Relatório HTML: `popcornguineapigplugin/build/reports/kover/html/index.html`
-- 📋 Resultados: `popcornguineapigplugin/build/test-results/test/`
-
-### Estrutura de testes
-```
-Domain Layer Tests
-├── rules/               # NoDependencyRule, JustWithRule, DoNotWithRule
-├── usecases/           # CheckArchitectureUseCase, GenerateReportUseCase
-└── input/              # ProjectType, modelos de domínio
-
-Data Layer Tests
-├── report/             # Formatação de relatórios (Markdown, tabelas)
-└── dto/                # Transformação de dados
-
-Presentation Layer Tests
-└── Integração Gradle   # Tasks, plugin registration
-```
-
-### Exemplo: Debugar falha de teste
-
-```bash
-# 1. Você vê falha na regra "NoDependencyRule"
-./gradlew popcornguineapigplugin:test --tests "NoDependencyRuleTest"
-
-# 2. Use /validate-architecture para entender a estrutura
-# 3. Verificar se a lógica da regra está correta
-# 4. Rodar novamente após fix
-```
+| Skill | Description | When to use |
+|-------|-------------|-------------|
+| `/run-tests-popcorn` | Run tests with coverage | After changes, before commit |
+| `/build-and-check` | Compile and validate build | Pre-push validation, releases |
+| `/validate-architecture` | Analyze architectural structure | Code review, feature design |
+| `/review-pull-request` | Systematic PR review | Before merge |
 
 ---
 
-## 🏗️ 2. `/build-and-check`
-
-**Compila o plugin e valida a configuração de build.**
-
-### Quando usar
-- Após fazer mudanças que afetam build
-- Validar que não há erros de compilação
-- Verificar dependências estão corretas
-- Preparar para release
-- Validação pré-push
-- Atualizações de versão
-
-### Comandos principais
-
-**Build completo:**
-```bash
-./gradlew popcornguineapigplugin:build
-```
-
-**Clean build (remove artifacts antigos):**
-```bash
-./gradlew clean
-./gradlew popcornguineapigplugin:build
-```
-
-### Arquivos de configuração importantes
-
-| Arquivo | Propósito |
-|---------|-----------|
-| `popcornguineapigplugin/build.gradle.kts` | Config específica do plugin |
-| `gradle/libs.versions.toml` | Versões centralizadas de deps |
-| `gradle.properties` | Argumentos JVM, settings Kotlin |
-| `settings.gradle.kts` | Setup de repositórios e projetos |
-
-### Problemas comuns e soluções
-
-| Problema | Solução |
-|----------|---------|
-| "Plugin is already compiled" | Rodar `./gradlew clean` primeiro |
-| "JVM memory error" | Aumentar `org.gradle.jvmargs` em `gradle.properties` |
-| "Repository not accessible" | Verificar internet e URLs em `settings.gradle.kts` |
-| Kotlin compiler daemon error | Esperado! Desabilitado intencionalmente (KT-65761) |
-
-### Saída do build
-- 📦 Plugin JAR: `popcornguineapigplugin/build/libs/popcornguineapigplugin-<version>.jar`
-- 📋 Metadata: `popcornguineapigplugin/build/libs/popcornguineapigplugin-<version>-gradle-metadata.json`
-
----
-
-## 🏛️ 3. `/validate-architecture`
-
-**Analisa a estrutura do código e valida padrões arquiteturais.**
-
-### Quando usar
-- Revisar mudanças que afetam arquitetura
-- Validar que novos arquivos estão na camada certa
-- Analisar violações de importação entre camadas
-- Revisar implementação de novas regras
-- Garantir separação de responsabilidades
-- Projetar novas features
-
-### Arquitetura em 3 camadas
-
-```
-┌─────────────────────────────────────────┐
-│   PRESENTATION LAYER (Gradle API)       │
-│   ├── PopcornGpParentPlugin            │
-│   ├── Tasks                             │
-│   └── Configuração DSL                  │
-└──────────────┬──────────────────────────┘
-               │
-┌──────────────▼──────────────────────────┐
-│   DOMAIN LAYER (Lógica pura)            │
-│   ├── Rules (validação de regras)       │
-│   ├── UseCases (orquestração)           │
-│   └── Models (ProjectType, etc)         │
-└──────────────┬──────────────────────────┘
-               │
-┌──────────────▼──────────────────────────┐
-│   DATA LAYER (I/O e transformação)      │
-│   ├── Repository (carregamento)         │
-│   ├── ReportDataSource (formatação)     │
-│   └── DTOs (modelos de dados)           │
-└─────────────────────────────────────────┘
-```
-
-### Checklist de validação
-
-**Localização de arquivos** ✓
-```
-Novo: Rule de validação         → domain/rules/
-Novo: Use case                  → domain/usecases/
-Novo: DTO ou formatação         → data/ (dto/ ou report/)
-Nova integração Gradle          → presentation/
-```
-
-**Imports apropriados** ✓
-```kotlin
-// ✅ CORRETO
-class MyRule : ArchitectureRule {
-    fun validate(modules: List<Module>): List<Violation>
-}
-
-// ❌ ERRADO (Domain não pode importar Gradle!)
-import org.gradle.api.Project
-class MyRule { ... }
-```
-
-**Separação de responsabilidades** ✓
-- Domain: Lógica pura, sem Gradle
-- Data: Carregamento e formatação
-- Presentation: Integração Gradle, DSL
-
-### Padrões de implementação
-
-**Adicionar uma nova regra:**
-1. `domain/rules/MyNewRule.kt` - Implementar lógica
-2. `src/test/kotlin/domain/rules/MyNewRuleTest.kt` - Testes
-3. `domain/usecases/CheckArchitectureUseCase.kt` - Integração
-4. `DependencyFactory.kt` - Se precisar injetar
-
-**Adicionar um novo formato de relatório:**
-1. `data/report/MyFormatter.kt` - Implementar formatação
-2. `src/test/kotlin/data/report/MyFormatterTest.kt` - Testes
-3. `presentation/` - Integrar com task
-
----
-
-## 📝 4. `/review-pull-request`
-
-**Realiza revisão sistemática de pull requests.**
-
-### Quando usar
-- Revisar PRs antes de fazer merge
-- Validar qualidade geral do código
-- Verificar que testes foram adicionados
-- Analisar se arquitetura foi mantida
-- Assessar impacto de mudanças
-
-### Checklist de revisão
-
-#### ✓ Arquitetura
-- [ ] Novos arquivos estão na camada correta?
-- [ ] Não há violações de importação?
-- [ ] DependencyFactory foi atualizado (se necessário)?
-
-#### ✓ Testes
-- [ ] Novos testes foram adicionados?
-- [ ] Testes cobrem casos de sucesso E falha?
-- [ ] Estrutura espelha source?
-- [ ] Cobertura foi mantida ou melhorada?
-
-#### ✓ Qualidade do código
-- [ ] Nomes são descritivos?
-- [ ] Código segue convenções Kotlin?
-- [ ] Lógica complexa está dividida em funções menores?
-- [ ] Comentários explicam "por quê" não "quê"?
-
-#### ✓ Build & CI/CD
-- [ ] Testes passam (`./gradlew popcornguineapigplugin:koverHtmlReport`)?
-- [ ] Compila sem erros (`./gradlew popcornguineapigplugin:build`)?
-- [ ] GitHub Actions workflow passa?
-
-#### ✓ Documentação
-- [ ] Commit messages são claras?
-- [ ] CLAUDE.md foi atualizado (se mudanças arquiteturais)?
-- [ ] Código tem comentários adequados?
-
-### Red flags 🚩
-
-Peça mudanças se encontrar:
-- ❌ Domain importando `org.gradle.api.*`
-- ❌ Apresentação com lógica de negócio
-- ❌ Tests flaky ou faltando
-- ❌ Cobertura diminuiu
-- ❌ Imports circulares
-- ❌ Documentação desatualizada
-
-### Template de feedback
-
-```markdown
-## ✅ O que está bom
-- Arquitetura bem organizada
-- Testes abrangentes
-- Código legível
-
-## 🔧 Solicitar mudanças
-- [ ] Adicionar teste para edge case de módulos vazios
-- [ ] Atualizar docs/2-existing-rules.md
-- [ ] Melhorar mensagem de erro para usuários
-
-## ✨ Observações
-- Considere refatorar MyRule em funções menores
-- Ótimo trabalho na separação de responsabilidades!
-```
-
----
-
-## 🚀 Workflow Comum
-
-### Implementar uma nova feature
-
-```bash
-# 1. Entender arquitetura
-/validate-architecture
-
-# 2. Implementar (Domain → Data → Presentation)
-# 3. Escrever testes
-/run-tests-popcorn
-
-# 4. Compilar localmente
-/build-and-check
-
-# 5. Abrir PR
-git push origin seu-branch
-
-# 6. Revisar PR antes de merge
-/review-pull-request
-```
-
-### Debugar teste falhando
-
-```bash
-# 1. Identificar falha
-./gradlew popcornguineapigplugin:test
-
-# 2. Rodar teste específico isolado
-/run-tests-popcorn
-# E especificar qual teste rodar
-
-# 3. Entender arquitetura
-/validate-architecture
-
-# 4. Fazer fix e testar novamente
-```
-
-### Preparar para release
-
-```bash
-# 1. Validar arquitetura
-/validate-architecture
-
-# 2. Rodar testes completos
-/run-tests-popcorn
-
-# 3. Compilar
-/build-and-check
-
-# 4. Revisar PRs abertas
-/review-pull-request
-
-# 5. Atualizar version.properties
-# 6. Merge e trigger publish workflow
-```
-
----
-
-## 📚 Estrutura do Projeto
+## Project Structure
 
 ```
 popcornguineapigplugin/
 ├── src/main/kotlin/com/github/codandotv/popcorn/
-│   ├── presentation/          # Integração Gradle, tasks
+│   ├── presentation/          # Gradle integration, tasks
 │   │   ├── PopcornGpParentPlugin.kt
 │   │   └── ...tasks
-│   ├── domain/               # Lógica de negócio pura
+│   ├── domain/               # Pure business logic
 │   │   ├── rules/           # NoDependency, JustWith, DoNotWith
 │   │   ├── usecases/        # CheckArchitecture, GenerateReport
-│   │   └── input/           # ProjectType, modelos
-│   ├── data/                # I/O e transformação
-│   │   ├── report/          # Formatação de saída
-│   │   ├── dto/             # Estruturas de dados
-│   │   └── PopcornGuineapigRepository.kt
-│   └── DependencyFactory.kt # Service locator
+│   │   ├── input/           # ProjectType, input models
+│   │   ├── metadata/        # TargetModule, InternalDependenciesMetadata
+│   │   ├── output/          # CheckResult, ArchitectureViolationError
+│   │   ├── report/          # ReportData, AnalysisTableItemData, ReportInfo
+│   │   └── PopcornGuineapigRepository.kt  # Interface contract
+│   ├── data/                # I/O and transformation
+│   │   ├── report/          # Output formatting (ReportDataSource, ReportDataExt)
+│   │   └── PopcornGuineapigRepositoryImpl.kt
+│   └── ServiceLocator.kt    # Wires repository and use cases together
 │
-├── src/test/kotlin/         # Testes espelhando source
-│   ├── domain/              # Testes de regras e use cases
-│   ├── data/                # Testes de DTOs e formatação
-│   ├── presentation/        # Testes de integração Gradle
-│   └── fakes/               # FakeRepository para mocks
+├── src/test/kotlin/         # Tests mirroring source structure
+│   ├── domain/              # Rule and use case tests
+│   ├── data/                # DTO and formatting tests
+│   ├── presentation/        # Gradle integration tests
+│   └── fakes/               # FakeRepository for testing without real Gradle projects
 │
-├── build.gradle.kts         # Config do plugin
-├── gradle/libs.versions.toml # Versões de deps (centralizadas!)
-├── gradle.properties        # JVM args, settings Kotlin
-└── settings.gradle.kts      # Repositórios, projetos
+├── build.gradle.kts         # Plugin configuration
+├── gradle/libs.versions.toml # Dependency versions (centralized)
+├── gradle.properties        # JVM args, Kotlin settings
+└── settings.gradle.kts      # Repositories, projects
 
-docs/                        # Documentação de usuário
+docs/                        # User documentation
 ├── 1-getting-started.md
 ├── 2-existing-rules.md
 ├── 3-custom-rules.md
 └── 4-error-report.md
 ```
 
----
+### Key entry points
 
-## ❓ FAQ
-
-**P: Onde adiciono uma nova regra?**
-A: Em `domain/rules/MyNewRule.kt`. Implemente a interface `ArchitectureRule` com lógica pura (sem Gradle). Adicione testes em `src/test/kotlin/domain/rules/MyNewRuleTest.kt`.
-
-**P: Como testo uma regra sem carregar um projeto Gradle real?**
-A: Use `FakePopcornGuineapigRepository` que fornece dados de teste. Veja `NoDependencyRuleTest.kt` como exemplo.
-
-**P: Posso importar Gradle em uma regra (domain)?**
-A: **Não!** Domain é pura. Coloque código que usa Gradle API em `data/` ou `presentation/`.
-
-**P: Aonde adiciono uma nova dependência?**
-A: Em `gradle/libs.versions.toml` (TOML catalog). Nunca adicione versões hardcoded em `build.gradle.kts`.
-
-**P: Como atualizo a versão do plugin?**
-A: Em `popcornguineapigplugin/version.properties`. Siga semantic versioning (MAJOR.MINOR.PATCH).
-
-**P: O plugin publica automaticamente para Maven Central?**
-A: Sim! GitHub Actions workflow `publish.yml` publica quando acionado. Requer credenciais configuradas.
+- **Plugin registration**: `PopcornGpParentPlugin.apply()` — registers `popcornParent` task
+- **Main task**: `popcornParent` — runs architecture validation
+- **Configuration**: via `popcorn { }` DSL block in build.gradle files
 
 ---
 
-## 🔗 Recursos Importantes
+## Build Configuration
 
-| Recurso | Descrição |
-|---------|-----------|
-| **CLAUDE.md** | Documentação técnica completa (arquitetura, build, comandos) |
-| **CLAUDE.md** na pasta `.claude/skills/` | Documentação dos skills |
-| **docs/** | Documentação de usuário (regras, guias, contribuição) |
-| **README.md** | Overview do projeto e getting started |
-| **CONTRIBUTING.md** | Guia de contribuição |
+- **Java version**: JDK 17 (required locally and in CI)
+- **Kotlin**: 2.0.21, JVM target, explicit API mode enabled
+- **Gradle version**: managed via `gradlew` wrapper
+- **Key `gradle.properties` settings**:
+  - `org.gradle.jvmargs=-Xmx4608m`
+  - Kotlin Compiler Daemon intentionally disabled (KT-65761)
+- **Dependencies**: managed through `gradle/libs.versions.toml` (TOML catalog)
+  - Kotlin Serialization — data model serialization
+  - Vanniktech Maven Publish — Maven Central publishing
 
----
+### Important configuration files
 
-## ✅ Antes de Fazer Commit
-
-- [ ] `./gradlew popcornguineapigplugin:koverHtmlReport` ✓ (testes passam, cobertura mantida)
-- [ ] `./gradlew popcornguineapigplugin:build` ✓ (compila sem erros)
-- [ ] `/validate-architecture` ✓ (estrutura correta)
-- [ ] Novos arquivos estão no lugar correto?
-- [ ] Testes foram adicionados/atualizados?
-- [ ] Documentação foi atualizada?
-- [ ] Commit messages claras?
-
----
-
-## 🎯 Próximos Passos
-
-1. **Ler CLAUDE.md** para entender a arquitetura em detalhe
-2. **Explorar skills** usando `/nome` em uma conversa com Claude
-3. **Usar skills regularmente** durante desenvolvimento para manter qualidade
-4. **Revisar PRs com checklist** de `/review-pull-request`
+| File | Purpose |
+|------|---------|
+| `popcornguineapigplugin/build.gradle.kts` | Plugin-specific configuration |
+| `gradle/libs.versions.toml` | Centralized dependency versions |
+| `gradle.properties` | JVM arguments, Kotlin settings |
+| `settings.gradle.kts` | Repositories and project setup |
 
 ---
 
-**Boa sorte! 🍿🐹**
+## CI/CD
 
-Para dúvidas sobre os skills, pergunte ao Claude em uma conversa: "Qual skill devo usar para ...?"
+- **PR workflow** (`pr.yml`): runs on PRs to `main`, executes `./gradlew popcornguineapigplugin:koverHtmlReport`, requires JDK 17, uses Gradle caching
+- **Publish workflow** (`publish.yml`): publishes to Maven Central when triggered; requires configured credentials
+
+### Version management
+
+- Version stored in `popcornguineapigplugin/version.properties`
+- Applied to published artifact at build time
+- Follow semantic versioning (MAJOR.MINOR.PATCH)
+
+---
+
+## 1. `/run-tests-popcorn`
+
+**Runs unit tests and generates a Kover code coverage report.**
+
+### When to use
+- After making code changes
+- Before committing or pushing
+- To validate that existing tests still pass
+- To check code coverage
+
+### Main commands
+
+```bash
+# Full suite with coverage
+./gradlew popcornguineapigplugin:koverHtmlReport
+
+# Specific test class
+./gradlew popcornguineapigplugin:test --tests "com.github.codandotv.popcorn.domain.rules.NoDependencyRuleTest"
+
+# Specific test method
+./gradlew popcornguineapigplugin:test --tests "com.github.codandotv.popcorn.domain.rules.NoDependencyRuleTest.testValidDependencies"
+```
+
+### Results
+- HTML Report: `popcornguineapigplugin/build/reports/kover/html/index.html`
+- Test results: `popcornguineapigplugin/build/test-results/test/`
+
+### Test structure
+```
+Domain Layer Tests
+├── rules/               # NoDependencyRule, JustWithRule, DoNotWithRule
+├── usecases/           # CheckArchitectureUseCase, GenerateReportUseCase
+└── input/              # ProjectType, domain models
+
+Data Layer Tests
+├── report/             # Report formatting (Markdown, tables)
+└── dto/                # Data transformation
+
+Presentation Layer Tests
+└── Gradle integration  # Tasks, plugin registration
+```
+
+### Testing approach
+- Framework: JUnit with Kotlin Test
+- Coverage tool: Kover
+- Tests mirror source structure under `src/test/kotlin/`
+- Use `FakePopcornGuineapigRepository` to test without a real Gradle project — see `NoDependencyRuleTest.kt` as example
+
+---
+
+## 2. `/build-and-check`
+
+**Compiles the plugin and validates the build configuration.**
+
+### When to use
+- After changes that affect the build
+- To verify there are no compilation errors
+- To prepare for a release
+
+### Main commands
+
+```bash
+# Full build
+./gradlew popcornguineapigplugin:build
+
+# Clean build
+./gradlew clean
+./gradlew popcornguineapigplugin:build
+```
+
+### Common issues and solutions
+
+| Issue | Solution |
+|-------|----------|
+| "Plugin is already compiled" | Run `./gradlew clean` first |
+| "JVM memory error" | Increase `org.gradle.jvmargs` in `gradle.properties` |
+| "Repository not accessible" | Check internet and URLs in `settings.gradle.kts` |
+| Kotlin compiler daemon error | Expected — intentionally disabled (KT-65761) |
+
+### Build output
+- Plugin JAR: `popcornguineapigplugin/build/libs/popcornguineapigplugin-<version>.jar`
+
+---
+
+## 3. `/validate-architecture`
+
+**Analyzes the code structure and validates architectural patterns.**
+
+### When to use
+- Reviewing changes that affect architecture
+- Validating that new files are in the correct layer
+- Analyzing import violations between layers
+- Designing new features
+
+### Three-layer architecture
+
+```
+┌─────────────────────────────────────────┐
+│   PRESENTATION LAYER (Gradle API)       │
+│   ├── PopcornGpParentPlugin            │
+│   ├── Tasks                             │
+│   └── DSL configuration                 │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│   DOMAIN LAYER (Pure logic)             │
+│   ├── Rules (rule validation)           │
+│   ├── UseCases (orchestration)          │
+│   ├── Models (ProjectType, etc)         │
+│   ├── Repository (interface contract)   │
+│   └── Report (ReportData, etc)          │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│   DATA LAYER (I/O and transformation)   │
+│   ├── RepositoryImpl (implementation)   │
+│   └── ReportDataSource (formatting)     │
+└─────────────────────────────────────────┘
+```
+
+### File placement rules
+
+| New file type | Correct location |
+|---------------|-----------------|
+| Validation rule | `domain/rules/` |
+| Use case | `domain/usecases/` |
+| Pure data model / report model | `domain/report/` |
+| Output formatting | `data/report/` |
+| Gradle integration | `presentation/` |
+
+### Import rules
+
+```kotlin
+// CORRECT
+class MyRule : ArchitectureRule {
+    fun validate(modules: List<Module>): List<Violation>
+}
+
+// WRONG — domain must not import Gradle
+import org.gradle.api.Project
+class MyRule { ... }
+```
+
+- **Domain**: pure logic, no Gradle imports
+- **Data**: loading and formatting
+- **Presentation**: Gradle integration, DSL
+
+### Implementation patterns
+
+**Adding a new rule:**
+1. `domain/rules/MyNewRule.kt` — implement logic
+2. `src/test/kotlin/domain/rules/MyNewRuleTest.kt` — tests
+3. `domain/usecases/CheckArchitectureUseCase.kt` — integrate
+4. `ServiceLocator.kt` — wire if injection is needed
+
+**Adding a new report format:**
+1. `data/report/MyFormatter.kt` — implement formatting
+2. `src/test/kotlin/data/report/MyFormatterTest.kt` — tests
+3. `presentation/` — integrate with task
+
+---
+
+## 4. `/review-pull-request`
+
+**Performs a systematic pull request review.**
+
+### When to use
+- Reviewing PRs before merging
+- Validating overall code quality
+- Checking that tests were added
+- Assessing the impact of changes
+
+### Review checklist
+
+#### Architecture
+- [ ] Are new files in the correct layer?
+- [ ] Are there no import violations (domain importing Gradle)?
+- [ ] Was `ServiceLocator.kt` updated if new dependencies were added?
+
+#### Tests
+- [ ] Were new tests added?
+- [ ] Do tests cover both success AND failure cases?
+- [ ] Does structure mirror the source?
+- [ ] Was coverage maintained or improved?
+
+#### Code quality
+- [ ] Are names descriptive?
+- [ ] Does the code follow Kotlin conventions?
+- [ ] Do comments explain "why" rather than "what"?
+
+#### Build & CI/CD
+- [ ] Do tests pass (`./gradlew popcornguineapigplugin:koverHtmlReport`)?
+- [ ] Does it compile without errors (`./gradlew popcornguineapigplugin:build`)?
+- [ ] Does the GitHub Actions workflow pass?
+
+#### Documentation
+- [ ] Are commit messages clear?
+- [ ] Was SKILLS.md updated if architectural changes were made?
+
+### Red flags
+
+Request changes if you find:
+- Domain importing `org.gradle.api.*`
+- Presentation layer containing business logic
+- Flaky or missing tests
+- Decreased coverage
+- Circular imports
+
+### Feedback template
+
+```markdown
+## What looks good
+- Well-organized architecture
+- Comprehensive tests
+
+## Request changes
+- [ ] Add test for edge case with empty modules
+- [ ] Update docs/2-existing-rules.md
+
+## Notes
+- Consider refactoring MyRule into smaller functions
+```
+
+---
+
+## Common Workflows
+
+### Implementing a new feature
+
+```bash
+# 1. Understand the architecture
+/validate-architecture
+
+# 2. Implement (Domain → Data → Presentation)
+# 3. Write tests
+/run-tests-popcorn
+
+# 4. Compile locally
+/build-and-check
+
+# 5. Open PR and review
+/review-pull-request
+```
+
+### Debugging a failing test
+
+```bash
+# 1. Run the full suite to identify failures
+./gradlew popcornguineapigplugin:test
+
+# 2. Run the specific test in isolation
+./gradlew popcornguineapigplugin:test --tests "FailingTestClass"
+
+# 3. Fix and re-run
+```
+
+### Preparing for a release
+
+```bash
+# 1. Validate architecture
+/validate-architecture
+
+# 2. Run full tests
+/run-tests-popcorn
+
+# 3. Compile
+/build-and-check
+
+# 4. Update popcornguineapigplugin/version.properties
+# 5. Merge and trigger publish.yml workflow
+```
+
+---
+
+## FAQ
+
+**Q: Where do I add a new rule?**
+A: `domain/rules/MyNewRule.kt`. Implement `ArchitectureRule` with pure logic (no Gradle). Add tests in `src/test/kotlin/domain/rules/MyNewRuleTest.kt`.
+
+**Q: How do I test a rule without loading a real Gradle project?**
+A: Use `FakePopcornGuineapigRepository`. See `NoDependencyRuleTest.kt` as example.
+
+**Q: Can I import Gradle in a rule (domain)?**
+A: No. Domain is pure. Place Gradle API code in `data/` or `presentation/`. Pure data models go in `domain/report/`; output formatting goes in `data/report/`.
+
+**Q: Where do I add a new dependency?**
+A: In `gradle/libs.versions.toml`. Never add hardcoded versions in `build.gradle.kts`.
+
+**Q: How do I update the plugin version?**
+A: In `popcornguineapigplugin/version.properties`. Follow semantic versioning (MAJOR.MINOR.PATCH).
+
+**Q: Does the plugin publish automatically to Maven Central?**
+A: Yes, via the `publish.yml` GitHub Actions workflow when triggered. Requires configured credentials.
+
+---
+
+## Before Committing
+
+- [ ] `./gradlew popcornguineapigplugin:koverHtmlReport` passes (tests pass, coverage maintained)
+- [ ] `./gradlew popcornguineapigplugin:build` compiles without errors
+- [ ] `/validate-architecture` confirms correct structure
+- [ ] New files are in the right layer
+- [ ] Tests were added/updated
+- [ ] Commit messages are clear

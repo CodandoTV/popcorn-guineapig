@@ -1,11 +1,11 @@
 package com.github.codandotv.popcorn.data.report
 
-import com.github.codandotv.popcorn.data.dto.ReportDto
+import com.github.codandotv.popcorn.domain.report.ReportData
 import java.io.File
 
 internal class ReportDataSource {
 
-    fun export(fullPath: String, reportDto: ReportDto) {
+    fun export(fullPath: String, report: ReportData) {
         val result = runCatching {
             val reportPath = File(
                 fullPath.plus(File.separator)
@@ -30,7 +30,7 @@ internal class ReportDataSource {
 
             reportFile.createNewFile()
 
-            val reportContent = reportDto.toMarkDownFormat()
+            val reportContent = report.toMarkDownFormat()
 
             reportFile.bufferedWriter().use {
                 it.write(reportContent)
@@ -43,7 +43,7 @@ internal class ReportDataSource {
     }
 }
 
-class PopcornGuineapigReportException(private val fullPath: String) : Throwable() {
+internal class PopcornGuineapigReportException(private val fullPath: String) : Throwable() {
     override val message: String
         get() = "Something went wrong to generate your report.Is there something wrong with the path $fullPath?"
 }

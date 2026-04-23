@@ -5,7 +5,7 @@ import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 
-interface CheckArchitectureUseCase {
+internal interface CheckArchitectureUseCase {
     fun execute(
         internalDependencies: List<InternalDependenciesMetadata>,
         rules: List<PopcornGuineaPigRule>

@@ -2,25 +2,25 @@ package com.github.codandotv.popcorn
 
 import com.github.codandotv.popcorn.data.PopcornGuineapigRepositoryImpl
 import com.github.codandotv.popcorn.data.report.ReportDataSource
+import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCaseImpl
 
-class DependencyFactory(reportPath: String) {
+internal object ServiceLocator {
 
-    private val repository = PopcornGuineapigRepositoryImpl(
-        reportPath = reportPath,
-        reportDataSource = ReportDataSource()
-    )
-
-    fun provideCheckArchitectureUseCase(): CheckArchitectureUseCase {
-        return CheckArchitectureUseCaseImpl()
+    val repository: PopcornGuineapigRepository by lazy {
+        PopcornGuineapigRepositoryImpl(
+            reportDataSource = ReportDataSource()
+        )
     }
 
-    fun provideGenerateReportUseCase(): GenerateReportUseCase {
-        return GenerateReportUseCaseImpl(
-            repository = repository
-        )
+    val checkArchitectureUseCase: CheckArchitectureUseCase by lazy {
+        CheckArchitectureUseCaseImpl()
+    }
+
+    val generateReportUseCase: GenerateReportUseCase by lazy {
+        GenerateReportUseCaseImpl(repository)
     }
 }

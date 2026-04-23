@@ -1,20 +1,20 @@
 package com.github.codandotv.popcorn.data.report
 
-import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
-import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
-import com.github.codandotv.popcorn.data.dto.ReportDto
+import com.github.codandotv.popcorn.domain.report.AnalysisTableItemData
+import com.github.codandotv.popcorn.domain.report.AnalysisTableResultEnumData
+import com.github.codandotv.popcorn.domain.report.ReportData
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ReportDtoToMarkDownTableLineTest {
+class ReportDataToMarkDownTableLineTest {
     @Test
     fun `Given some table item when toMarkdownTableLine occurs then check the markdown text`() {
         // arrange
-        val tableItem = AnalysisTableItemDto(
+        val tableItem = AnalysisTableItemData(
             internalDependencyName = "chuck-norris",
             ruleChecked = "DoNotWith",
             ruleDescription = "DoNotWith desc",
-            result = AnalysisTableResultEnumDto.PASSED
+            result = AnalysisTableResultEnumData.PASSED
         )
 
         // act
@@ -32,17 +32,17 @@ class ReportDtoToMarkDownTableLineTest {
                     "| bruce-lee  | JustWith  | JustWith desc | Failed ❌|"
 
         val table = listOf(
-            AnalysisTableItemDto(
+            AnalysisTableItemData(
                 internalDependencyName = "chuck-norris",
                 ruleChecked = "DoNotWith",
                 ruleDescription = "DoNotWith desc",
-                result = AnalysisTableResultEnumDto.PASSED
+                result = AnalysisTableResultEnumData.PASSED
             ),
-            AnalysisTableItemDto(
+            AnalysisTableItemData(
                 internalDependencyName = "bruce-lee",
                 ruleChecked = "JustWith",
                 ruleDescription = "JustWith desc",
-                result = AnalysisTableResultEnumDto.FAILED
+                result = AnalysisTableResultEnumData.FAILED
             )
         )
 
@@ -56,7 +56,7 @@ class ReportDtoToMarkDownTableLineTest {
         // arrange
         val expected = ""
 
-        val table = emptyList<AnalysisTableItemDto>()
+        val table = emptyList<AnalysisTableItemData>()
 
         // act
         val result = table.toMarkdownTable()
@@ -71,13 +71,13 @@ class ReportDtoToMarkDownTableLineTest {
                 "| ------------- |:--------------:|:--------------:|:--------------:|\n" +
                 "| dependency  | Rule2  | Rule description | Failed ❌|\n"
 
-        val input = ReportDto(
+        val input = ReportData(
             analysisTable = listOf(
-                AnalysisTableItemDto(
+                AnalysisTableItemData(
                     "dependency",
                     "Rule2",
                     "Rule description",
-                    AnalysisTableResultEnumDto.FAILED
+                    AnalysisTableResultEnumData.FAILED
                 )
             ),
             moduleName = "moduleName",

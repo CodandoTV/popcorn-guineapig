@@ -1,7 +1,7 @@
 package com.github.codandotv.popcorn.domain.usecases
 
-import com.github.codandotv.popcorn.data.dto.AnalysisTableItemDto
-import com.github.codandotv.popcorn.data.dto.AnalysisTableResultEnumDto
+import com.github.codandotv.popcorn.domain.report.AnalysisTableItemData
+import com.github.codandotv.popcorn.domain.report.AnalysisTableResultEnumData
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.output.CheckResult
@@ -31,11 +31,11 @@ class ReportInfoExtTest {
 
         assertEquals(
             listOf(
-                AnalysisTableItemDto(
+                AnalysisTableItemData(
                     internalDependencyName = "chuckNorris",
                     ruleChecked = "NoDependencyRule",
                     ruleDescription = "This module should not have dependencies",
-                    result = AnalysisTableResultEnumDto.FAILED
+                    result = AnalysisTableResultEnumData.FAILED
                 )
             ),
             result
@@ -69,17 +69,17 @@ class ReportInfoExtTest {
 
         assertEquals(
             listOf(
-                AnalysisTableItemDto(
+                AnalysisTableItemData(
                     internalDependencyName = "chuckNorris",
                     ruleChecked = "NoDependencyRule",
                     ruleDescription = "This module should not have dependencies",
-                    result = AnalysisTableResultEnumDto.FAILED
+                    result = AnalysisTableResultEnumData.FAILED
                 ),
-                AnalysisTableItemDto(
+                AnalysisTableItemData(
                     internalDependencyName = "bruceLee",
                     ruleChecked = "DoNotWithRule",
                     ruleDescription = "This module should not depends on [[bruceLee]]",
-                    result = AnalysisTableResultEnumDto.SKIPPED
+                    result = AnalysisTableResultEnumData.SKIPPED
                 )
             ),
             result
