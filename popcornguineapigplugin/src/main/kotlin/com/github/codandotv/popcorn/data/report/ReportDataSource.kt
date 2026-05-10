@@ -13,7 +13,7 @@ internal class ReportDataSource {
                     .plus(File.separator)
                     .plus("popcornguineapig")
             )
-            if (!reportPath.exists()) {
+            if (reportPath.exists().not()) {
                 reportPath.mkdirs()
             }
 
@@ -30,9 +30,9 @@ internal class ReportDataSource {
 
             reportFile.createNewFile()
 
-            val reportContent = reportData.map {
-                it.toMarkDownFormat()
-            }.reduce { acc, value -> "$acc\n$value" }
+            val reportContent = reportData.map { it.toMarkDownFormat() }
+                .reduceOrNull { acc, value -> "$acc\n$value" }
+                .orEmpty()
 
             reportFile.bufferedWriter().use {
                 it.write(reportContent)

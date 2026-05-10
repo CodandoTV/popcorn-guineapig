@@ -32,7 +32,7 @@ internal class GenerateReportUseCaseImpl(
         failureResults.forEach { (moduleName, result) ->
             val analysisTable = mutableListOf<AnalysisTableItemData>()
             if (result is CheckResult.Failure) {
-                analysisTable.addAll(result.errors.map { arcViolation ->
+                val tableItems = result.errors.map { arcViolation ->
                     AnalysisTableItemData(
                         internalDependencyName = arcViolation.affectedRelationship?.toName()
                             .orEmpty(),
@@ -41,7 +41,7 @@ internal class GenerateReportUseCaseImpl(
                         result = AnalysisTableResultEnumData.FAILED,
                     )
                 }
-                )
+                analysisTable.addAll(tableItems)
             }
             reportData.add(
                 ReportData(
@@ -51,12 +51,10 @@ internal class GenerateReportUseCaseImpl(
             )
         }
 
-        if (reportData.isNotEmpty()) {
-            repository.exportReport(
-                reportPath = reportPath,
-                reportData = reportData
-            )
-        }
+        repository.exportReport(
+            reportPath = reportPath,
+            reportData = reportData
+        )
     }
 }
 
