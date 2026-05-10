@@ -1,12 +1,15 @@
 package com.github.codandotv.popcorn.presentation.tasks
 
 import com.github.codandotv.popcorn.ServiceLocator
+import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.input.configurationNames
 import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.usecases.AnalyseArchitectureUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerError
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerInfo
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
@@ -14,7 +17,17 @@ import org.gradle.api.tasks.TaskAction
 public open class PopcornParentTask : DefaultTask() {
 
     private val analyseArchitectureUseCase: AnalyseArchitectureUseCase by lazy {
-        ServiceLocator.analyseArchitectureUseCase
+        ServiceLocator.provideAnalyseArchitectureUseCase(
+            logger = object : Logger {
+                override fun log(message: String) {
+                    logger.popcornLoggerInfo(message)
+                }
+
+                override fun logError(message: String) {
+                   logger.popcornLoggerError(message)
+                }
+            }
+        )
     }
 
     @Input

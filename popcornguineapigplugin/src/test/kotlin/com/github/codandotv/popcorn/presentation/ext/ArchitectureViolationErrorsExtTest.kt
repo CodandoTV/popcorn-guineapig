@@ -1,13 +1,15 @@
 package com.github.codandotv.popcorn.presentation.ext
 
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.output.CheckResult
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.JustWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ArchitectureViolationErrorsExtTest {
+
+class CheckResultFailure {
 
     @Test
     fun `Given a list of errors when toErrorMessage is called then check the log message is right`() {
@@ -31,7 +33,7 @@ class ArchitectureViolationErrorsExtTest {
         )
 
         // Act
-        val errorMessage = listOfErrors.toErrorMessage()
+        val errorMessage = CheckResult.Failure(errors = listOfErrors).toString()
 
         // Assert
         assertEquals(
