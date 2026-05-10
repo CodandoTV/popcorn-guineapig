@@ -49,13 +49,9 @@ internal class AnalyseArchitectureUseCaseImpl(
             )
         }
 
-        triggerErrors(results.values.toList())
+        val shouldTriggerError = results.any { it.value is CheckResult.Failure }
+        if(shouldTriggerError) {
+            error("Something went wrong. Check the logs above for more details.")
+        }
     }
-}
-
-private fun triggerErrors(results: List<CheckResult>) {
-    val errorMessage = results.filterIsInstance<CheckResult.Failure>().map {
-        it.toString()
-    }.reduce { acc, value -> "$acc\n$value" }
-    error(errorMessage)
 }
