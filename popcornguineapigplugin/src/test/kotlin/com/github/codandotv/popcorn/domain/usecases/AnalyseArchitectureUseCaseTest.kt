@@ -1,3 +1,5 @@
+@file:Suppress("MaxLineLength")
+
 package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
