@@ -1,0 +1,43 @@
+name: Popcorn
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: false
+        type: string
+        default: .
+
+jobs:
+  popcorn:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run popcorn
+        id: module_analysis
+        working-directory: ${{ inputs.working-directory }}
+        run: ./gradlew popcornParent -PerrorReportEnabled
+
+      - name: Read Markdown file
+        if: failure()
+        id: read_md
+        run: |
+          content=$(find . -type f -regex ".*/build/reports/popcornguineapig/errorReport.md" -exec cat {} +)
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$content" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post comment with module analysis
+        if: failure()
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          comment-tag: module-analysis-report
+          message: ${{ steps.read_md.outputs.content }}
+
+      - name: Delete comment with module analysis
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          comment-tag: module-analysis-report
+          mode: delete
