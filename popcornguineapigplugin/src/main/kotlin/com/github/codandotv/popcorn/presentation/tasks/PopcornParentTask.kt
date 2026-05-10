@@ -3,20 +3,18 @@ package com.github.codandotv.popcorn.presentation.tasks
 import com.github.codandotv.popcorn.ServiceLocator
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
-import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
-import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
-import com.github.codandotv.popcorn.presentation.PopcornTaskHelper
+import com.github.codandotv.popcorn.domain.input.configurationNames
+import com.github.codandotv.popcorn.domain.metadata.TargetModule
+import com.github.codandotv.popcorn.domain.usecases.AnalyseArchitectureUseCase
+import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 public open class PopcornParentTask : DefaultTask() {
 
-    private val checkArcUseCase: CheckArchitectureUseCase by lazy {
-        ServiceLocator.checkArchitectureUseCase
-    }
-    private val generateReportUseCase: GenerateReportUseCase by lazy {
-        ServiceLocator.generateReportUseCase
+    private val analyseArchitectureUseCase: AnalyseArchitectureUseCase by lazy {
+        ServiceLocator.analyseArchitectureUseCase
     }
 
     @Input
@@ -42,28 +40,30 @@ public open class PopcornParentTask : DefaultTask() {
 
     @TaskAction
     public fun process() {
-        val popcornTaskHelper = PopcornTaskHelper(
-            checkArcUseCase = checkArcUseCase,
-            generateReportUseCase = generateReportUseCase,
-            logger = logger,
-            groupName = _groupName,
-            reportPath = _reportPath,
-        )
-
         val gradleProjects = project.allprojects.toList()
 
+        val targetModules = mutableListOf<TargetModule>()
         children.forEach { child ->
             gradleProjects.filter { gradleProject ->
                 child.moduleNameRegex.toRegex().matches(gradleProject.path)
             }.forEach { gradleMatchedProject ->
-                popcornTaskHelper.evaluate(
-                    gradleProject = gradleMatchedProject,
-                    projectType = type,
-                    rules = child.rules,
-                    skippedRules = emptyList(),
-                    errorReportEnabled = _errorReportEnabled,
+                val internalProjectDependencies = gradleMatchedProject.internalProjectDependencies(
+                    configurationNames = type.configurationNames(),
+                    groupName = _groupName
+                )
+                targetModules.add(
+                    TargetModule(
+                        moduleName = gradleMatchedProject.name,
+                        internalDependencies = internalProjectDependencies,
+                        rules = child.rules
+                    )
                 )
             }
         }
+
+        analyseArchitectureUseCase.execute(
+            modules = targetModules,
+            errorReportPath = if (_errorReportEnabled) _reportPath else null
+        )
     }
 }

@@ -25,7 +25,8 @@ class TargetModuleExtTest {
                     group = "PopcornTest",
                     moduleName = "util"
                 )
-            )
+            ),
+            rules = emptyList(),
         )
 
         // Act

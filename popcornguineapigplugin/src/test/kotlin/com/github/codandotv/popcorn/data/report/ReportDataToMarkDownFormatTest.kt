@@ -15,15 +15,6 @@ class ReportDataToMarkDownFormatTest {
     }
 
     @Test
-    fun `Given a skipped status when toMarkdownStatus occurs then check the markdown text`() {
-        // arrange, act
-        val status = AnalysisTableResultEnumData.SKIPPED.toMarkdownStatus()
-
-        // assert
-        assertEquals("Skipped ⚠️", status)
-    }
-
-    @Test
     fun `Given a passed status when toMarkdownStatus occurs then check the markdown text`() {
         // arrange, act
         val status = AnalysisTableResultEnumData.PASSED.toMarkdownStatus()
