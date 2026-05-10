@@ -12,12 +12,12 @@ To run PopcornGP architecture validation in your CI pipeline, use the custom com
 ## Prerequisites
 - Gradle project with the PopcornGP plugin (https://github.com/CodandoTV/popcorn-guineapig) applied and configured
 - Gradlew present in the specified working directory
-- Java setup (actions/setup-java) run before this action
+- Java setup
 
 ## What it does
 
-1. Runs ./gradlew popcornParent -PerrorReportEnabled
-2. On failure (violations found): reads build/reports/popcornguineapig/errorReport.md and posts it as a comment on the PR tagged module-analysis-report
+1. Runs `./gradlew popcornParent -PerrorReportEnabled`
+2. On failure (violations found): reads `build/reports/popcornguineapig/errorReport.md` and posts it as a comment
 3. On success (no violations): deletes any previous module-analysis-report comment from the PR
 
 The error reports looks like:
