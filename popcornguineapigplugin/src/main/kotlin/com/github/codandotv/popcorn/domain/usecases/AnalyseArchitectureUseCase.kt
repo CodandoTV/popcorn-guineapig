@@ -42,7 +42,7 @@ internal class AnalyseArchitectureUseCaseImpl(
             }
         }
 
-        errorReportPath?.let { errorReportPath ->
+        errorReportPath?.let {
             generateReportUseCase.execute(
                 reportPath = errorReportPath,
                 results = results
