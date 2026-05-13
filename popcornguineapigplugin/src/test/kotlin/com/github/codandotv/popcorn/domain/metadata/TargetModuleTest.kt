@@ -1,11 +1,9 @@
-package com.github.codandotv.popcorn.presentation.ext
+package com.github.codandotv.popcorn.domain.metadata
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TargetModuleExtTest {
+class TargetModuleTest {
 
     @Test
     fun `Given a target module when logMessage is called then returns a formatted message`() {
@@ -25,11 +23,12 @@ class TargetModuleExtTest {
                     group = "PopcornTest",
                     moduleName = "util"
                 )
-            )
+            ),
+            rules = emptyList(),
         )
 
         // Act
-        val logMessage = targetModule.logMessage()
+        val logMessage = targetModule.toString()
 
         // Assert
         assertEquals(

@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.0.21"
 junit = "4.13.2"
-gradle = "8.2.2"
+gradle = "8.7.3"
 vanniktech = "0.28.0"
 kover = "0.8.0"
 

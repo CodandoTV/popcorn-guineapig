@@ -7,10 +7,10 @@ import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 internal class PopcornGuineapigRepositoryImpl(
     private val reportDataSource: ReportDataSource
 ) : PopcornGuineapigRepository {
-    override fun exportReport(reportPath: String, report: ReportData) {
+    override fun exportReport(reportPath: String, reportData: List<ReportData>) {
         reportDataSource.export(
             fullPath = reportPath,
-            report = report
+            reportData = reportData
         )
     }
 }

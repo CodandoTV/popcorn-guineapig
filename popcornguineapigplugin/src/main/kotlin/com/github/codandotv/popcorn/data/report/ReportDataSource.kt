@@ -5,7 +5,7 @@ import java.io.File
 
 internal class ReportDataSource {
 
-    fun export(fullPath: String, report: ReportData) {
+    fun export(fullPath: String, reportData: List<ReportData>) {
         val result = runCatching {
             val reportPath = File(
                 fullPath.plus(File.separator)
@@ -13,7 +13,7 @@ internal class ReportDataSource {
                     .plus(File.separator)
                     .plus("popcornguineapig")
             )
-            if (!reportPath.exists()) {
+            if (reportPath.exists().not()) {
                 reportPath.mkdirs()
             }
 
@@ -30,7 +30,9 @@ internal class ReportDataSource {
 
             reportFile.createNewFile()
 
-            val reportContent = report.toMarkDownFormat()
+            val reportContent = reportData.map { it.toMarkDownFormat() }
+                .reduceOrNull { acc, value -> "$acc\n$value" }
+                .orEmpty()
 
             reportFile.bufferedWriter().use {
                 it.write(reportContent)

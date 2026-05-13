@@ -27,14 +27,12 @@ class CheckArchitectureUseCaseTest {
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
-            )
+            ),
+            rules = listOf(DoNotWithRule(notWith = listOf("resources")))
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(DoNotWithRule(notWith = listOf("resources")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Failure>(result)
@@ -47,14 +45,12 @@ class CheckArchitectureUseCaseTest {
             moduleName = "user-data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "user-presentation"),
-            )
+            ),
+            rules = listOf(DoNotWithRule(listOf("[a-z]+-presentation"))),
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(DoNotWithRule(listOf("[a-z]+-presentation")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Failure>(result)
@@ -68,13 +64,11 @@ class CheckArchitectureUseCaseTest {
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "domain")
             ),
+            rules = listOf(DoNotWithRule(notWith = listOf("resources")))
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(DoNotWithRule(notWith = listOf("resources")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Success>(result)
@@ -85,14 +79,12 @@ class CheckArchitectureUseCaseTest {
         // Arrange
         val targetModule = TargetModule(
             moduleName = "domain",
+            rules = listOf(NoDependencyRule()),
             internalDependencies = emptyList(),
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(NoDependencyRule())
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Success>(result)
@@ -109,13 +101,11 @@ class CheckArchitectureUseCaseTest {
                     moduleName = "domain"
                 )
             ),
+            rules = listOf(NoDependencyRule())
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(NoDependencyRule())
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Failure>(result)
@@ -129,18 +119,16 @@ class CheckArchitectureUseCaseTest {
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, "domain"),
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
-            )
-        )
-
-        // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
+            ),
             rules = listOf(
                 JustWithRule(
                     justWith = listOf("domain", "resources")
                 )
             )
         )
+
+        // Act
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Success>(result)
@@ -155,14 +143,12 @@ class CheckArchitectureUseCaseTest {
                 InternalDependenciesMetadata(group = null, "domain"),
                 InternalDependenciesMetadata(group = null, "domain"),
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
-            )
+            ),
+            rules = listOf(JustWithRule(justWith = listOf("domain", "resources")))
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(JustWithRule(justWith = listOf("domain", "resources")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Success>(result)
@@ -173,6 +159,7 @@ class CheckArchitectureUseCaseTest {
         // Arrange
         val targetModule = TargetModule(
             moduleName = "presentation",
+            rules = listOf(JustWithRule(justWith = listOf("resources", "domain"))),
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
                 InternalDependenciesMetadata(group = null, moduleName = "resources")
@@ -180,10 +167,7 @@ class CheckArchitectureUseCaseTest {
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(JustWithRule(justWith = listOf("resources", "domain")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Success>(result)
@@ -197,14 +181,12 @@ class CheckArchitectureUseCaseTest {
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
-            )
+            ),
+            rules = listOf(JustWithRule(justWith = listOf("domain")))
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(JustWithRule(justWith = listOf("domain")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Failure>(result)
@@ -218,14 +200,12 @@ class CheckArchitectureUseCaseTest {
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
-            )
+            ),
+            rules = listOf(JustWithRule(listOf("domain")))
         )
 
         // Act
-        val result = checkArchitectureUseCase.execute(
-            internalDependencies = targetModule.internalDependencies,
-            rules = listOf(JustWithRule(listOf("domain")))
-        )
+        val result = checkArchitectureUseCase.execute(targetModule)
 
         // Assert
         assertIs<CheckResult.Failure>(result)

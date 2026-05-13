@@ -28,5 +28,4 @@ internal fun AnalysisTableItemData.toMarkdownTableLine() =
 internal fun AnalysisTableResultEnumData.toMarkdownStatus() = when (this) {
     AnalysisTableResultEnumData.PASSED -> "Passed ✅"
     AnalysisTableResultEnumData.FAILED -> "Failed ❌"
-    AnalysisTableResultEnumData.SKIPPED -> "Skipped ⚠️"
 }

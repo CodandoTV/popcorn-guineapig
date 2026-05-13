@@ -1,10 +1,7 @@
 package com.github.codandotv.popcorn.domain.usecases
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
 import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.output.CheckResult
-import com.github.codandotv.popcorn.domain.report.ReportInfo
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepository
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepositoryWithError
@@ -14,12 +11,6 @@ import kotlin.test.assertFails
 class GenerateReportUseCaseTest {
 
     private lateinit var generateReportUseCase: GenerateReportUseCase
-    private val fakeTargetModule = TargetModule(
-        "moduleName", internalDependencies = listOf(
-            InternalDependenciesMetadata(group = null, moduleName = "dep1"),
-            InternalDependenciesMetadata(group = null, moduleName = "dep2")
-        )
-    )
     private val fakeCheckResult = CheckResult.Failure(
         errors = listOf(
             ArchitectureViolationError(
@@ -38,10 +29,8 @@ class GenerateReportUseCaseTest {
         // act
         generateReportUseCase.execute(
             reportPath = "",
-            ReportInfo(
-                targetModule = fakeTargetModule,
-                checkResult = fakeCheckResult,
-                skippedRules = emptyList(),
+            results = mapOf(
+                "moduleName" to fakeCheckResult
             )
         )
     }
@@ -56,10 +45,8 @@ class GenerateReportUseCaseTest {
         assertFails {
             generateReportUseCase.execute(
                 reportPath = "",
-                ReportInfo(
-                    targetModule = fakeTargetModule,
-                    checkResult = fakeCheckResult,
-                    skippedRules = emptyList(),
+                results = mapOf(
+                    "moduleName" to fakeCheckResult
                 )
             )
         }

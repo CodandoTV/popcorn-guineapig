@@ -1,0 +1,48 @@
+name: "Popcorn"
+description: "Run PopcornGP parent analysis"
+
+inputs:
+  working-directory:
+    description: "Directory where gradlew is located"
+    required: false
+    default: "."
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Grant execute permission for gradlew
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: chmod +x gradlew
+
+    - name: Run popcorn
+      id: module_analysis
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: ./gradlew popcornParent -PerrorReportEnabled
+
+    - name: Read Markdown file
+      if: failure()
+      id: read_md
+      shell: bash
+      run: |
+        content=$(find . -type f -regex ".*/build/reports/popcornguineapig/errorReport.md" -exec cat {} +)
+
+        echo "content<<EOF" >> $GITHUB_OUTPUT
+        echo "$content" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Post comment with module analysis
+      if: failure()
+      uses: thollander/actions-comment-pull-request@v3
+      with:
+        comment-tag: module-analysis-report
+        message: ${{ steps.read_md.outputs.content }}
+
+    - name: Delete comment with module analysis
+      if: success()
+      uses: thollander/actions-comment-pull-request@v3
+      with:
+        comment-tag: module-analysis-report
+        mode: delete
