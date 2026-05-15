@@ -1,7 +1,7 @@
 package com.github.codandotv.popcorn.fakes
 
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
-import com.github.codandotv.popcorn.domain.output.CheckResult
+import com.github.codandotv.popcorn.domain.models.TargetModule
+import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
 
 internal class FakeCheckArchitectureUseCase(

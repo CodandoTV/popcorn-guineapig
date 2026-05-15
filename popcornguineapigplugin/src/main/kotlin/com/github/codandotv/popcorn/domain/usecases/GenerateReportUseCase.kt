@@ -1,11 +1,11 @@
 package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
-import com.github.codandotv.popcorn.domain.report.AnalysisTableItemData
-import com.github.codandotv.popcorn.domain.report.AnalysisTableResultEnumData
-import com.github.codandotv.popcorn.domain.report.ReportData
+import com.github.codandotv.popcorn.domain.models.ViolationReportItem
+import com.github.codandotv.popcorn.domain.models.ViolationReportType
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
-import com.github.codandotv.popcorn.domain.output.CheckResult
+import com.github.codandotv.popcorn.domain.models.CheckResult
 import kotlin.collections.map
 
 internal interface GenerateReportUseCase {
@@ -27,24 +27,24 @@ internal class GenerateReportUseCaseImpl(
             it.value is CheckResult.Failure
         }
 
-        val reportData = mutableListOf<ReportData>()
+        val architectureViolationReportData = mutableListOf<ArchitectureViolationReport>()
 
         failureResults.forEach { (moduleName, result) ->
-            val analysisTable = mutableListOf<AnalysisTableItemData>()
+            val analysisTable = mutableListOf<ViolationReportItem>()
             if (result is CheckResult.Failure) {
                 val tableItems = result.errors.map { arcViolation ->
-                    AnalysisTableItemData(
+                    ViolationReportItem(
                         internalDependencyName = arcViolation.affectedRelationship?.toName()
                             .orEmpty(),
                         ruleChecked = arcViolation.rule::class.simpleName.toString(),
                         ruleDescription = arcViolation.message,
-                        result = AnalysisTableResultEnumData.FAILED,
+                        result = ViolationReportType.FAILED,
                     )
                 }
                 analysisTable.addAll(tableItems)
             }
-            reportData.add(
-                ReportData(
+            architectureViolationReportData.add(
+                ArchitectureViolationReport(
                     moduleName = moduleName,
                     analysisTable = analysisTable
                 )
@@ -53,7 +53,7 @@ internal class GenerateReportUseCaseImpl(
 
         repository.exportReport(
             reportPath = reportPath,
-            reportData = reportData
+            architectureViolationReportData = architectureViolationReportData
         )
     }
 }

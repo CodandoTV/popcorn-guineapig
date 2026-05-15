@@ -1,6 +1,6 @@
-package com.github.codandotv.popcorn.domain.output
+package com.github.codandotv.popcorn.domain.models
 
-import kotlin.collections.map
+import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
 
 internal sealed class CheckResult {
     object Success : CheckResult()

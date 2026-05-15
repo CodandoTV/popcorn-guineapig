@@ -1,8 +1,8 @@
 package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.domain.Logger
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
-import com.github.codandotv.popcorn.domain.output.CheckResult
+import com.github.codandotv.popcorn.domain.models.TargetModule
+import com.github.codandotv.popcorn.domain.models.CheckResult
 
 internal interface AnalyseArchitectureUseCase {
     fun execute(

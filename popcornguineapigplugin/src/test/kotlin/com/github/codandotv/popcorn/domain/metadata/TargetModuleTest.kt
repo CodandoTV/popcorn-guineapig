@@ -1,5 +1,6 @@
 package com.github.codandotv.popcorn.domain.metadata
 
+import com.github.codandotv.popcorn.domain.models.TargetModule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

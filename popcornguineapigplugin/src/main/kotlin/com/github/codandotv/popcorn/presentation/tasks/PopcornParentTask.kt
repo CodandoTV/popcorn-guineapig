@@ -5,7 +5,7 @@ import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.input.configurationNames
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
+import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.usecases.AnalyseArchitectureUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerError

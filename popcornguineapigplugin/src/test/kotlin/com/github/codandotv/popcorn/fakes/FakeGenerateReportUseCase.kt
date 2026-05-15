@@ -1,6 +1,6 @@
 package com.github.codandotv.popcorn.fakes
 
-import com.github.codandotv.popcorn.domain.output.CheckResult
+import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
 
 internal class FakeGenerateReportUseCase(

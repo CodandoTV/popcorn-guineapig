@@ -1,14 +1,14 @@
 package com.github.codandotv.popcorn.data.report
 
-import com.github.codandotv.popcorn.domain.report.AnalysisTableItemData
-import com.github.codandotv.popcorn.domain.report.AnalysisTableResultEnumData
-import com.github.codandotv.popcorn.domain.report.ReportData
+import com.github.codandotv.popcorn.domain.models.ViolationReportItem
+import com.github.codandotv.popcorn.domain.models.ViolationReportType
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 
-internal fun ReportData.toMarkDownFormat() = "# \uD83C\uDF7F\uD83D\uDC39 Analysis -> " +
+internal fun ArchitectureViolationReport.toMarkDownFormat() = "# \uD83C\uDF7F\uD83D\uDC39 Analysis -> " +
         "${moduleName}\n\n" +
         analysisTable.toMarkdownTable() + "\n"
 
-internal fun List<AnalysisTableItemData>.toMarkdownTable(): String {
+internal fun List<ViolationReportItem>.toMarkdownTable(): String {
     val header = "| Dependency    | Rule           | Rule Description           | Result         |\n" +
             "| ------------- |:--------------:|:--------------:|:--------------:|\n"
 
@@ -22,10 +22,10 @@ internal fun List<AnalysisTableItemData>.toMarkdownTable(): String {
     } else ""
 }
 
-internal fun AnalysisTableItemData.toMarkdownTableLine() =
+internal fun ViolationReportItem.toMarkdownTableLine() =
     "| $internalDependencyName  | $ruleChecked  | $ruleDescription | ${result.toMarkdownStatus()}|"
 
-internal fun AnalysisTableResultEnumData.toMarkdownStatus() = when (this) {
-    AnalysisTableResultEnumData.PASSED -> "Passed ✅"
-    AnalysisTableResultEnumData.FAILED -> "Failed ❌"
+internal fun ViolationReportType.toMarkdownStatus() = when (this) {
+    ViolationReportType.PASSED -> "Passed ✅"
+    ViolationReportType.FAILED -> "Failed ❌"
 }
