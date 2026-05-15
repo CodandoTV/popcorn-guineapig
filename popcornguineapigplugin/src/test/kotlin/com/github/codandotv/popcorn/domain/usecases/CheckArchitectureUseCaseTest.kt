@@ -2,7 +2,7 @@ package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.models.TargetModule
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.JustWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule

@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.metadata
+package com.github.codandotv.popcorn.domain.models
 
 public data class InternalDependenciesMetadata(
     val group: String?,

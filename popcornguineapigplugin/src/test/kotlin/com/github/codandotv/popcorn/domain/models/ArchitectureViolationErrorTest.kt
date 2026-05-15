@@ -1,6 +1,5 @@
-package com.github.codandotv.popcorn.domain.output
+package com.github.codandotv.popcorn.domain.models
 
-import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.JustWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule

@@ -1,7 +1,7 @@
 package com.github.codandotv.popcorn.domain.rules
 
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 
 public class JustWithRule(
     private val justWith: List<String>

@@ -1,6 +1,6 @@
 package com.github.codandotv.popcorn.domain.rules
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull

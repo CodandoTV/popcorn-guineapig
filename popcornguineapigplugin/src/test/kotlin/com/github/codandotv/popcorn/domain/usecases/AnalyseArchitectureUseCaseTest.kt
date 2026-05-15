@@ -2,9 +2,9 @@
 
 package com.github.codandotv.popcorn.domain.usecases
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.TargetModule
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.FakeCheckArchitectureUseCase

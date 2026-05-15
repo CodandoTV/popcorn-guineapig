@@ -4,7 +4,7 @@ import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.CheckResult
 import kotlin.collections.map
 

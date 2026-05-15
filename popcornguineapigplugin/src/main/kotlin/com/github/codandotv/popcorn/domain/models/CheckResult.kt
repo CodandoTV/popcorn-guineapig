@@ -1,7 +1,5 @@
 package com.github.codandotv.popcorn.domain.models
 
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
-
 internal sealed class CheckResult {
     object Success : CheckResult()
 

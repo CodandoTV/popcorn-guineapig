@@ -2,7 +2,7 @@ package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.models.CheckResult
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
 
 internal interface CheckArchitectureUseCase {
     fun execute(
