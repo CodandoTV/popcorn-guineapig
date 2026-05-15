@@ -3,19 +3,52 @@ package com.github.codandotv.popcorn.fakes
 import com.github.codandotv.popcorn.data.report.PopcornGuineapigReportException
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
+import com.github.codandotv.popcorn.domain.models.ModuleMetric
 
 internal val fakePopcornGuineapigRepository = object : PopcornGuineapigRepository {
-    override fun exportReport(
+    override fun exportErrorReport(
         reportPath: String,
         architectureViolationReportData: List<ArchitectureViolationReport>,
     ) = Unit
+
+    override fun exportMetricsReport(
+        reportPath: String,
+        metrics: List<ModuleMetric>
+    ) {
+        error("Should not being called")
+    }
 }
 
 internal val fakePopcornGuineapigRepositoryWithError = object : PopcornGuineapigRepository {
-    override fun exportReport(
+    override fun exportErrorReport(
         reportPath: String,
         architectureViolationReportData: List<ArchitectureViolationReport>
     ) {
         throw PopcornGuineapigReportException("/users/moro/documents/svn/myreport.md")
+    }
+
+    override fun exportMetricsReport(reportPath: String, metrics: List<ModuleMetric>) {
+        error("Should not being called")
+    }
+}
+
+internal fun fakePopcornGuineapigRepositoryWithCallbacks(
+    onErrorReportCallback: () -> Unit = {},
+    onMetricsReportCallback: () -> Unit = {},
+) : PopcornGuineapigRepository {
+    return object : PopcornGuineapigRepository{
+        override fun exportErrorReport(
+            reportPath: String,
+            architectureViolationReportData: List<ArchitectureViolationReport>
+        ) {
+            onErrorReportCallback()
+        }
+
+        override fun exportMetricsReport(
+            reportPath: String,
+            metrics: List<ModuleMetric>
+        ) {
+            onMetricsReportCallback()
+        }
     }
 }
