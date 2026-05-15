@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.usecases
+package com.github.codandotv.popcorn.domain.usecases.check
 
 import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.models.TargetModule

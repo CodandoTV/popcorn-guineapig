@@ -4,12 +4,17 @@ import com.github.codandotv.popcorn.data.PopcornGuineapigRepositoryImpl
 import com.github.codandotv.popcorn.data.report.ReportDataSource
 import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
-import com.github.codandotv.popcorn.domain.usecases.AnalyseArchitectureUseCase
-import com.github.codandotv.popcorn.domain.usecases.AnalyseArchitectureUseCaseImpl
-import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCase
-import com.github.codandotv.popcorn.domain.usecases.CheckArchitectureUseCaseImpl
-import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCase
-import com.github.codandotv.popcorn.domain.usecases.GenerateReportUseCaseImpl
+import com.github.codandotv.popcorn.domain.usecases.check.AnalyseArchitectureUseCase
+import com.github.codandotv.popcorn.domain.usecases.check.AnalyseArchitectureUseCaseImpl
+import com.github.codandotv.popcorn.domain.usecases.check.CheckArchitectureUseCase
+import com.github.codandotv.popcorn.domain.usecases.check.CheckArchitectureUseCaseImpl
+import com.github.codandotv.popcorn.domain.usecases.metric.CollectModuleMetricsUseCase
+import com.github.codandotv.popcorn.domain.usecases.metric.CollectModuleMetricsUseCaseImpl
+import com.github.codandotv.popcorn.domain.usecases.check.GenerateArchitectureViolationReport
+import com.github.codandotv.popcorn.domain.usecases.check.GenerateArchitectureViolationReportImpl
+import com.github.codandotv.popcorn.domain.usecases.metric.GenerateMetricsReportUseCase
+import com.github.codandotv.popcorn.domain.usecases.metric.GenerateMetricsReportUseCaseImpl
+import kotlin.math.log
 
 internal object ServiceLocator {
 
@@ -23,14 +28,26 @@ internal object ServiceLocator {
         CheckArchitectureUseCaseImpl()
     }
 
-    val generateReportUseCase: GenerateReportUseCase by lazy {
-        GenerateReportUseCaseImpl(repository)
+    val generateArchitectureViolationReport: GenerateArchitectureViolationReport by lazy {
+        GenerateArchitectureViolationReportImpl(repository)
+    }
+
+    val collectModuleMetricsUseCase: CollectModuleMetricsUseCase by lazy {
+        CollectModuleMetricsUseCaseImpl()
     }
 
     fun provideAnalyseArchitectureUseCase(logger: Logger): AnalyseArchitectureUseCase {
         return AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = checkArchitectureUseCase,
-            generateReportUseCase = generateReportUseCase,
+            generateArchitectureViolationReport = generateArchitectureViolationReport,
+            logger = logger,
+        )
+    }
+
+    fun provideGenerateMetricsReportUseCase(logger: Logger): GenerateMetricsReportUseCase {
+        return GenerateMetricsReportUseCaseImpl(
+            repository = repository,
+            collectModuleMetricsUseCase = collectModuleMetricsUseCase,
             logger = logger,
         )
     }

@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.usecases
+package com.github.codandotv.popcorn.domain.usecases.check
 
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ViolationReportItem
@@ -8,16 +8,16 @@ import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.CheckResult
 import kotlin.collections.map
 
-internal interface GenerateReportUseCase {
+internal interface GenerateArchitectureViolationReport {
     fun execute(
         reportPath: String,
         results: Map<String, CheckResult>
     )
 }
 
-internal class GenerateReportUseCaseImpl(
+internal class GenerateArchitectureViolationReportImpl(
     private val repository: PopcornGuineapigRepository,
-) : GenerateReportUseCase {
+) : GenerateArchitectureViolationReport {
 
     override fun execute(
         reportPath: String,
@@ -51,7 +51,7 @@ internal class GenerateReportUseCaseImpl(
             )
         }
 
-        repository.exportReport(
+        repository.exportErrorReport(
             reportPath = reportPath,
             architectureViolationReportData = architectureViolationReportData
         )

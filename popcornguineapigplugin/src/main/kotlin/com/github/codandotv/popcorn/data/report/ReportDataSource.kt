@@ -38,6 +38,41 @@ internal class ReportDataSource {
             throw PopcornGuineapigReportException(fullPath = fullPath)
         }
     }
+
+    fun exportMetricsReportInCsv(fullPath: String, reportContent: String) {
+        val result = runCatching {
+            val reportPath = File(
+                fullPath.plus(File.separator)
+                    .plus("reports")
+                    .plus(File.separator)
+                    .plus("metrics")
+            )
+            if (reportPath.exists().not()) {
+                reportPath.mkdirs()
+            }
+
+            val reportFile = File(
+                reportPath.path
+                    .plus(File.separator)
+                    .plus("metrics.csv")
+            )
+
+            // If exists replace it
+            if (reportFile.exists()) {
+                reportFile.delete()
+            }
+
+            reportFile.createNewFile()
+
+            reportFile.bufferedWriter().use {
+                it.write(reportContent)
+            }
+        }
+
+        if (result.isFailure) {
+            throw PopcornGuineapigReportException(fullPath = fullPath)
+        }
+    }
 }
 
 internal class PopcornGuineapigReportException(private val fullPath: String) : Throwable() {

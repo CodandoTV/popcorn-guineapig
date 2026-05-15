@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.usecases
+package com.github.codandotv.popcorn.domain.usecases.check
 
 import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.models.TargetModule
@@ -13,7 +13,7 @@ internal interface AnalyseArchitectureUseCase {
 
 internal class AnalyseArchitectureUseCaseImpl(
     private val checkArchitectureUseCase: CheckArchitectureUseCase,
-    private val generateReportUseCase: GenerateReportUseCase,
+    private val generateArchitectureViolationReport: GenerateArchitectureViolationReport,
     private val logger: Logger,
 ) : AnalyseArchitectureUseCase {
     override fun execute(
@@ -43,7 +43,7 @@ internal class AnalyseArchitectureUseCaseImpl(
         }
 
         errorReportPath?.let {
-            generateReportUseCase.execute(
+            generateArchitectureViolationReport.execute(
                 reportPath = errorReportPath,
                 results = results
             )
