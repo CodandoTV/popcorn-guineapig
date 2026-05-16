@@ -33,14 +33,16 @@ internal class GenerateArchitectureViolationReportImpl(
             val analysisTable = mutableListOf<ViolationReportItem>()
             if (result is CheckResult.Failure) {
                 val tableItems = result.errors.map { arcViolation ->
-                    ViolationReportItem(
-                        internalDependencyName = arcViolation.affectedRelationship?.toName()
-                            .orEmpty(),
-                        ruleChecked = arcViolation.rule::class.simpleName.toString(),
-                        ruleDescription = arcViolation.message,
-                        result = ViolationReportType.FAILED,
-                    )
-                }
+                    arcViolation.affectedRelationship?.map { affectedRelationship ->
+                        ViolationReportItem(
+                            internalDependencyName = affectedRelationship.toName(),
+                            ruleChecked = arcViolation.rule::class.simpleName.toString(),
+                            ruleDescription = arcViolation.message,
+                            result = ViolationReportType.FAILED,
+                        )
+                    }.orEmpty()
+                }.flatten()
+
                 analysisTable.addAll(tableItems)
             }
             architectureViolationReportData.add(

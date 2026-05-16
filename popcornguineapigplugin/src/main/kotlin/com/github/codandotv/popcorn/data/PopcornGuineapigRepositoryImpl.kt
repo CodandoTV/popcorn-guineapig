@@ -2,7 +2,7 @@ package com.github.codandotv.popcorn.data
 
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 import com.github.codandotv.popcorn.data.report.ReportDataSource
-import com.github.codandotv.popcorn.data.report.toMarkDownFormat
+import com.github.codandotv.popcorn.data.report.toMarkdownReport
 import com.github.codandotv.popcorn.data.report.toMetricsReport
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ModuleMetric
@@ -14,10 +14,7 @@ internal class PopcornGuineapigRepositoryImpl(
         reportPath: String,
         architectureViolationReportData: List<ArchitectureViolationReport>
     ) {
-        val reportContent = architectureViolationReportData.map { it.toMarkDownFormat() }
-            .reduceOrNull { acc, value -> "$acc\n$value" }
-            .orEmpty()
-
+        val reportContent = architectureViolationReportData.toMarkdownReport()
         reportDataSource.exportErrorReportInMarkdown(
             fullPath = reportPath,
             reportContent = reportContent

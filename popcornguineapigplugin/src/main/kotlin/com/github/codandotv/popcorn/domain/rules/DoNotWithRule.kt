@@ -7,17 +7,24 @@ public class DoNotWithRule(
     private val notWith: List<String>
 ) : PopcornGuineaPigRule {
     override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
+        val affectedRelationships = mutableListOf<InternalDependenciesMetadata>()
+
         notWith.forEach { notWithRuleItem ->
-            deps.forEach { internalDependencyItem ->
-                if (notWithRuleItem.toRegex().matches(internalDependencyItem.moduleName)) {
-                    return ArchitectureViolationError(
-                        rule = this,
-                        message = "This module should not depends on [$notWith]",
-                        affectedRelationship = internalDependencyItem
-                    )
+            affectedRelationships.addAll(
+                deps.filter { dep ->
+                    notWithRuleItem.toRegex().matches(dep.moduleName)
                 }
-            }
+            )
         }
-        return null
+
+        if (affectedRelationships.isNotEmpty()) {
+            return ArchitectureViolationError(
+                rule = this,
+                message = "This module should not depends on [$notWith]",
+                affectedRelationship = affectedRelationships
+            )
+        } else {
+            return null
+        }
     }
 }

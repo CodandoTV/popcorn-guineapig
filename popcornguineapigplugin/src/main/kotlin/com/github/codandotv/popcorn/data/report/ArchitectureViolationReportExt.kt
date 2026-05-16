@@ -1,29 +1,72 @@
+@file:Suppress("MaxLineLength", "NestedBlockDepth")
 package com.github.codandotv.popcorn.data.report
 
-import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
+import kotlin.collections.iterator
 
-internal fun ArchitectureViolationReport.toMarkDownFormat() = "# \uD83C\uDF7F\uD83D\uDC39 Analysis -> " +
-        "${moduleName}\n\n" +
-        analysisTable.toMarkdownTable() + "\n"
+internal fun List<ArchitectureViolationReport>.toMarkdownReport(): String {
+    if (isNotEmpty()) {
+        val reportContent = StringBuilder()
+        reportContent.append(
+            "# 🍿🐹 Popcorn Guinea Pig Architecture Error Report\n\n"
+        )
 
-internal fun List<ViolationReportItem>.toMarkdownTable(): String {
-    val header = "| Dependency    | Rule           | Rule Description           | Result         |\n" +
-            "| ------------- |:--------------:|:--------------:|:--------------:|\n"
+        val summary = groupBy {
+            it.moduleName
+        }
 
-    val content = map { tableLine -> tableLine.toMarkdownTableLine() }
-        .reduceOrNull { acc, s ->
-            acc + "\n" + s
-        }.orEmpty()
+        for (entry in summary) {
+            var generalSummaryStatus = ViolationReportType.PASSED
+            entry.value.forEach { violationReport ->
+                val isThereAnyFailure = violationReport.analysisTable.any { analysisItem ->
+                    analysisItem.result == ViolationReportType.FAILED
+                }
+                if (isThereAnyFailure) {
+                    generalSummaryStatus = ViolationReportType.FAILED
+                }
+            }
+            reportContent.append(
+                """
+## Analysis: ${entry.key} Module
 
-    return if (content.isNotEmpty()) {
-        header.plus(content)
-    } else ""
+### Summary
+- **Status**: ${generalSummaryStatus.toMarkdownStatus()}
+- **Module**: ${entry.key}"""
+            )
+
+            entry.value.forEachIndexed { index, report ->
+                reportContent.append(
+                    """
+- **Violations Found**: ${report.analysisTable.count()}
+
+---
+
+## Violation Details
+| # | Module | Dependency | Rule | Description | Status |
+| --|--------|------------|------|-------------|--------|"""
+                )
+                report.analysisTable.forEachIndexed { index, analysisItem ->
+                    reportContent.append(
+                        """
+| ${index + 1} | ${entry.key} | ${analysisItem.internalDependencyName} | ${analysisItem.ruleChecked} | ${analysisItem.ruleDescription} | ${analysisItem.result.toMarkdownStatus()} |"""
+                    )
+                }
+            }
+
+            reportContent.append(
+                """
+            
+-----
+
+"""
+            )
+        }
+        return reportContent.toString()
+    } else {
+        return ""
+    }
 }
-
-internal fun ViolationReportItem.toMarkdownTableLine() =
-    "| $internalDependencyName  | $ruleChecked  | $ruleDescription | ${result.toMarkdownStatus()}|"
 
 internal fun ViolationReportType.toMarkdownStatus() = when (this) {
     ViolationReportType.PASSED -> "Passed ✅"

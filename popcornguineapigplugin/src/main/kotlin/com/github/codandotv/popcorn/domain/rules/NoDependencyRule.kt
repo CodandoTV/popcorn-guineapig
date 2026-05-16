@@ -9,7 +9,7 @@ public class NoDependencyRule : PopcornGuineaPigRule {
             return ArchitectureViolationError(
                 message = "This module should not have dependencies",
                 rule = this,
-                affectedRelationship = deps.firstOrNull(),
+                affectedRelationship = deps,
             )
         }
 
