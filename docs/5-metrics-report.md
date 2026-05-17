@@ -1,4 +1,8 @@
-# Metrics Report
+# Metrics Report 📊
+
+!!!note "Metrics reports available >= 3.2.0" 
+    Starting from version `3.2.0`, you can enable error report generation in your project.
+
 
 The `popcornModuleMetrics` Gradle task analyzes your multi-module project's internal dependency graph and generates a CSV report with three structural metrics for each module: **FanIn**, **FanOut**, and **Instability**.
 
