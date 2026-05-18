@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.output
+package com.github.codandotv.popcorn.domain.models
 
 import com.github.codandotv.popcorn.domain.rules.DoNotWithRule
 import com.github.codandotv.popcorn.domain.rules.JustWithRule

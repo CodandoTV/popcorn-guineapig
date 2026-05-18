@@ -51,26 +51,27 @@ git push
 !!!warning "Use JVM 17"
     Make sure your Gradle is using **JVM 17**, otherwise you could have some issues.
 
-To run the plugin locally you need to publish it in your local machine using `mavenLocal`. 
-You can follow the steps:
-
-1- Update the `popcornguineapigplugin/build.gradle.kts` commenting the lines:
-
-```kotlin
-...
-mavenPublishing {
-    //publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    //signAllPublications()
-    ...
-```
-
-2- Publish the plugin locally, using the command:
+To run the plugin locally you need to publish it in your local machine using `mavenLocal`.
+Use the [`scripts/publish-local.sh`](https://github.com/CodandoTV/popcorn-guineapig/blob/main/scripts/publish-local.sh) script:
 
 ```shell
-./gradlew :popcornguineapigplugin:publishToMavenLocal
+./scripts/publish-local.sh
 ```
 
-After that, the plugin artifacts will be in your machine in the following path 
+You can optionally override the version by passing it as an argument:
+
+```shell
+./scripts/publish-local.sh 1.0.0-test
+```
+
+**What the script does:**
+
+1. Optionally accepts a version override — if provided, it temporarily updates `version.properties` and restores the original afterward.
+2. Automatically comments out `publishToMavenCentral` and `signAllPublications` in `build.gradle.kts`, then restores them on exit via a `trap cleanup`.
+3. Runs `./gradlew :popcornguineapigplugin:publishToMavenLocal` to publish the artifact.
+4. Prints the artifact coordinates and the local Maven path (`$HOME/.m2/repository/io/github/codandotv/popcornguineapig/<version>/`).
+
+After that, the plugin artifacts will be in your machine in the following path
 `$HOME/.m2/repository/io/github/codandotv/popcornguineapig/x.x.x`.
 
 ### Using the local library in any project

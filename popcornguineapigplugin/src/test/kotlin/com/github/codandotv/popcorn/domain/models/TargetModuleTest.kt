@@ -1,4 +1,4 @@
-package com.github.codandotv.popcorn.domain.metadata
+package com.github.codandotv.popcorn.domain.models
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

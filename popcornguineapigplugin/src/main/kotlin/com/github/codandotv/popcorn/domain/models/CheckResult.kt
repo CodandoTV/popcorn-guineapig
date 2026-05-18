@@ -1,6 +1,4 @@
-package com.github.codandotv.popcorn.domain.output
-
-import kotlin.collections.map
+package com.github.codandotv.popcorn.domain.models
 
 internal sealed class CheckResult {
     object Success : CheckResult()

@@ -1,6 +1,6 @@
 package com.github.codandotv.popcorn.presentation.ext
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import org.gradle.api.Project
 
 internal fun Project.internalProjectDependencies(

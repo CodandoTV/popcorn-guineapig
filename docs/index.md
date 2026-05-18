@@ -30,4 +30,6 @@ Take a look at our [repository](https://github.com/CodandoTV/popcorn-guineapig).
 
 ### 4. [Error report](./4-error-report.md)
 
-### 5. [Contributions](./5-contributions.md)
+### 5. [Metrics report](./5-metrics-report.md)
+
+### 6. [Contributions](6-contributions.md)

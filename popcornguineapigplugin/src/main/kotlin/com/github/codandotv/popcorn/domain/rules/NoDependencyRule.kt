@@ -1,7 +1,7 @@
 package com.github.codandotv.popcorn.domain.rules
 
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 
 public class NoDependencyRule : PopcornGuineaPigRule {
     override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
@@ -9,7 +9,7 @@ public class NoDependencyRule : PopcornGuineaPigRule {
             return ArchitectureViolationError(
                 message = "This module should not have dependencies",
                 rule = this,
-                affectedRelationship = deps.firstOrNull(),
+                affectedRelationship = deps,
             )
         }
 

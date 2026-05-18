@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.presentation
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
+import com.github.codandotv.popcorn.presentation.tasks.PopcornModuleMetricsTask
 import com.github.codandotv.popcorn.presentation.tasks.PopcornParentTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -49,6 +50,18 @@ public class PopcornGpParentPlugin : Plugin<Project> {
 
             doLast {
                 logger.popcornLoggerLifecycle("Finishing the analysis over ${project.name} module")
+            }
+        }
+
+        target.tasks.register<PopcornModuleMetricsTask>("popcornModuleMetrics") {
+            type = extension.type
+                ?: error("It is required to specify the project type")
+
+            doFirst {
+                start(
+                    reportPath = reportPath,
+                    groupName = extension.groupName,
+                )
             }
         }
     }

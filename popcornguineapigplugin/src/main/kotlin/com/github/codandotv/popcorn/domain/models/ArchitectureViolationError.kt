@@ -1,12 +1,11 @@
-package com.github.codandotv.popcorn.domain.output
+package com.github.codandotv.popcorn.domain.models
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 
 public data class ArchitectureViolationError(
     val message: String,
     val rule: PopcornGuineaPigRule,
-    val affectedRelationship: InternalDependenciesMetadata?
+    val affectedRelationship: List<InternalDependenciesMetadata>?
 ) {
     override fun toString(): String {
         return message

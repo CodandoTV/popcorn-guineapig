@@ -1,14 +1,14 @@
 @file:Suppress("MaxLineLength")
 
-package com.github.codandotv.popcorn.domain.usecases
+package com.github.codandotv.popcorn.domain.usecases.check
 
-import com.github.codandotv.popcorn.domain.metadata.InternalDependenciesMetadata
-import com.github.codandotv.popcorn.domain.metadata.TargetModule
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
-import com.github.codandotv.popcorn.domain.output.CheckResult
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
+import com.github.codandotv.popcorn.domain.models.TargetModule
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.FakeCheckArchitectureUseCase
-import com.github.codandotv.popcorn.fakes.FakeGenerateReportUseCase
+import com.github.codandotv.popcorn.fakes.FakeGenerateArchitectureViolationReport
 import com.github.codandotv.popcorn.fakes.FakeLogger
 import junit.framework.TestCase.assertFalse
 import org.junit.Test
@@ -51,7 +51,7 @@ class AnalyseArchitectureUseCaseTest {
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf("data" to CheckResult.Success)
             ),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> reportCalled = true }
             ),
             logger = fakeLogger,
@@ -83,7 +83,7 @@ class AnalyseArchitectureUseCaseTest {
                     "presentation" to CheckResult.Failure(listOf(fakeError)),
                 )
             ),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> reportCalled = true }
             ),
             logger = fakeLogger,
@@ -112,7 +112,7 @@ class AnalyseArchitectureUseCaseTest {
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf("data" to CheckResult.Success)
             ),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { path, results ->
                     capturedReportPath = path
                     capturedResults = results
@@ -147,7 +147,7 @@ class AnalyseArchitectureUseCaseTest {
                     "presentation" to CheckResult.Failure(listOf(fakeError)),
                 )
             ),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> reportCalled = true }
             ),
             logger = fakeLogger,
@@ -175,7 +175,7 @@ class AnalyseArchitectureUseCaseTest {
                     "domain" to CheckResult.Success,
                 )
             ),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> }
             ),
             logger = fakeLogger,
@@ -210,7 +210,7 @@ class AnalyseArchitectureUseCaseTest {
                     "presentation" to CheckResult.Failure(listOf(fakeError)),
                 )
             ),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> }
             ),
             logger = fakeLogger,
@@ -240,7 +240,7 @@ class AnalyseArchitectureUseCaseTest {
         val fakeLogger = FakeLogger(loggerMessages, loggerErrorMessages)
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(modulesResults = emptyMap()),
-            generateReportUseCase = FakeGenerateReportUseCase(
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> }
             ),
             logger = fakeLogger,

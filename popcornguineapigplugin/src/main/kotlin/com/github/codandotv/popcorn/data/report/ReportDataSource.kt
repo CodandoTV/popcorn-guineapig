@@ -1,11 +1,10 @@
 package com.github.codandotv.popcorn.data.report
 
-import com.github.codandotv.popcorn.domain.report.ReportData
 import java.io.File
 
 internal class ReportDataSource {
 
-    fun export(fullPath: String, reportData: List<ReportData>) {
+    fun exportErrorReportInMarkdown(fullPath: String, reportContent: String) {
         val result = runCatching {
             val reportPath = File(
                 fullPath.plus(File.separator)
@@ -30,9 +29,40 @@ internal class ReportDataSource {
 
             reportFile.createNewFile()
 
-            val reportContent = reportData.map { it.toMarkDownFormat() }
-                .reduceOrNull { acc, value -> "$acc\n$value" }
-                .orEmpty()
+            reportFile.bufferedWriter().use {
+                it.write(reportContent)
+            }
+        }
+
+        if (result.isFailure) {
+            throw PopcornGuineapigReportException(fullPath = fullPath)
+        }
+    }
+
+    fun exportMetricsReportInCsv(fullPath: String, reportContent: String) {
+        val result = runCatching {
+            val reportPath = File(
+                fullPath.plus(File.separator)
+                    .plus("reports")
+                    .plus(File.separator)
+                    .plus("metrics")
+            )
+            if (reportPath.exists().not()) {
+                reportPath.mkdirs()
+            }
+
+            val reportFile = File(
+                reportPath.path
+                    .plus(File.separator)
+                    .plus("metrics.csv")
+            )
+
+            // If exists replace it
+            if (reportFile.exists()) {
+                reportFile.delete()
+            }
+
+            reportFile.createNewFile()
 
             reportFile.bufferedWriter().use {
                 it.write(reportContent)

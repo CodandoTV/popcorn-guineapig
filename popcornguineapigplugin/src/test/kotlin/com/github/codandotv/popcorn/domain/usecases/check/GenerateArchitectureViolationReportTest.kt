@@ -1,16 +1,16 @@
-package com.github.codandotv.popcorn.domain.usecases
+package com.github.codandotv.popcorn.domain.usecases.check
 
-import com.github.codandotv.popcorn.domain.output.ArchitectureViolationError
-import com.github.codandotv.popcorn.domain.output.CheckResult
+import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepository
 import com.github.codandotv.popcorn.fakes.fakePopcornGuineapigRepositoryWithError
 import org.junit.Test
 import kotlin.test.assertFails
 
-class GenerateReportUseCaseTest {
+class GenerateArchitectureViolationReportTest {
 
-    private lateinit var generateReportUseCase: GenerateReportUseCase
+    private lateinit var generateArchitectureViolationReport: GenerateArchitectureViolationReport
     private val fakeCheckResult = CheckResult.Failure(
         errors = listOf(
             ArchitectureViolationError(
@@ -24,10 +24,11 @@ class GenerateReportUseCaseTest {
     @Test
     fun `Given a report object when generate report is called then checks if all flow runs`() {
         // arrange
-        generateReportUseCase = GenerateReportUseCaseImpl(fakePopcornGuineapigRepository)
+        generateArchitectureViolationReport =
+            GenerateArchitectureViolationReportImpl(fakePopcornGuineapigRepository)
 
         // act
-        generateReportUseCase.execute(
+        generateArchitectureViolationReport.execute(
             reportPath = "",
             results = mapOf(
                 "moduleName" to fakeCheckResult
@@ -39,11 +40,12 @@ class GenerateReportUseCaseTest {
     @Test
     fun `Given a report object + an exception in the repository when generate report is called then checks if the exception is being triggered`() {
         // arrange
-        generateReportUseCase = GenerateReportUseCaseImpl(fakePopcornGuineapigRepositoryWithError)
+        generateArchitectureViolationReport =
+            GenerateArchitectureViolationReportImpl(fakePopcornGuineapigRepositoryWithError)
 
         // act, assert
         assertFails {
-            generateReportUseCase.execute(
+            generateArchitectureViolationReport.execute(
                 reportPath = "",
                 results = mapOf(
                     "moduleName" to fakeCheckResult
