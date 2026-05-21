@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import java.util.Properties
 
 plugins {
@@ -47,7 +46,7 @@ gradlePlugin {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
     signAllPublications()
 
     coordinates(
