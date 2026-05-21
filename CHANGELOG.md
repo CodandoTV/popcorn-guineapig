@@ -7,7 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [3.1.6] - Latest
+## [3.2.0] - Latest
+
+### Changed
+
+- New Metrics Report feature — `popcornModuleMetrics` Gradle task that generates a CSV report (FanIn, FanOut, Instability) per module
+
+- Rules improvements — DoNotWithRule, JustWithRule, and NoDependencyRule now report all affected dependencies (not just the first match)
+
+- New docs - [Metrics Report](https://codandotv.github.io/popcorn-guineapig/5-metrics-report/) new metrics report page, renamed contribution page, updated index
+
+---
+
+## [3.1.7]
+
+### Changed
+
+- New composite GitHub Action (.github/actions/popcorn/action.yml) — runs popcornParent Gradle task, posts markdown error report as a PR comment on failure, and deletes it on success.
+
+- Architecture refactor and improvements.
+
+- Gradle & wrapper upgrade — Gradle 8.4 → 8.12, updated gradlew/gradlew.bat scripts, version bumped to 3.1.7.
+
+- New docs — [Automating Popcorngp with GitHub CICD](https://codandotv.github.io/popcorn-guineapig/7-automating-popcorngp-with-github-cicd/) explaining how to use the composite action.
+
+---
+
+## [3.1.6]
 
 ### Changed
 - Version bump via automated Fastlane `update_tag` pipeline.
