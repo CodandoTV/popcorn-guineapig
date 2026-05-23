@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Kotlin upgraded from `2.1.x` to `2.2.0`
-- Gradle upgraded to `8.12` (wrapper update)
+- Gradle upgraded to `9.0` (wrapper update)
 - Updated SCM URL in build configuration
 
 ---
