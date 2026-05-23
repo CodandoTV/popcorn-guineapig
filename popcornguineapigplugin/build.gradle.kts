@@ -69,7 +69,7 @@ mavenPublishing {
         }
         scm {
             connection.set("scm:git@github.com:CodandoTV/popcorn-guineapig.git")
-            url.set("https://github.com/CodandoTV/CraftD.git")
+            url.set("https://github.com/CodandoTV/popcorn-guineapig.git")
         }
         developers {
             developer {
