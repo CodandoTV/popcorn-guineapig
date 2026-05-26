@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import java.util.Properties
 
 plugins {
@@ -47,7 +46,7 @@ gradlePlugin {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
     signAllPublications()
 
     coordinates(
@@ -70,7 +69,7 @@ mavenPublishing {
         }
         scm {
             connection.set("scm:git@github.com:CodandoTV/popcorn-guineapig.git")
-            url.set("https://github.com/CodandoTV/CraftD.git")
+            url.set("https://github.com/CodandoTV/popcorn-guineapig.git")
         }
         developers {
             developer {
