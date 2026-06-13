@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin-2.0.21-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.codandotv/popcornguineapig)](https://central.sonatype.com/artifact/io.github.codandotv/popcornguineapig)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
@@ -13,6 +13,15 @@ Welcome to the **Popcorn Gradle Plugin**! A CodandoTV library : )
 The goal of this plugin is to help enforce architectural rules in your project. Once you apply the plugin and specify your architecture guidelines, the plugin will automatically verify whether your architecture adheres to these rules.
 
 📚 Take a look at our [documentation](https://codandotv.github.io/popcorn-guineapig)
+
+## ⚙️ Minimum requirements
+
+| Requirement | Minimum version |
+|-------------|----------------|
+| Java | 17 |
+| Gradle | 8.7 |
+| Kotlin | 2.2.0 |
+| Android Gradle Plugin | 8.7.3 (for Android projects) |
 
 ## 🚀 Getting Started
 
