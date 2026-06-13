@@ -1,5 +1,14 @@
 # Getting started 🚀
 
+## Minimum requirements
+
+| Requirement | Minimum version |
+|-------------|----------------|
+| Java | 17 |
+| Gradle | 8.7 |
+| Kotlin | 2.2.0 |
+| Android Gradle Plugin | 8.7.3 (for Android projects) |
+
 ## 1. Add the Plugin Dependency
 
 Go to your build-logic folder, in the `build-logic/build.gradle.kts`, add the following dependency:
@@ -10,54 +19,9 @@ implementation("io.github.codandotv:popcornguineapig:<version>")
 
 ## 2. Apply the Plugin
 
-You have two ways to use PopcornGP in your project. In this section, we will present both options.
+You can use the parent plugin to define all your rules in a centralized place.
 
-!!!warning "Deprecated - Please use the parent plugin"
-    ### 2.1. Individual plugin
-    
-    You can chose a conventional gradle plugin to define your rules. 
-    
-    For example, I have a gradle plugin applied to all data modules `data-setup-plugin.gradle.kts`. In this conventional plugin, you can add:
-    
-    ```kotlin
-    // build-logic/data-setup-plugin.gradle.kts
-    plugins {
-      ...
-      id("io.github.codandotv.popcorngp")
-    }
-    ```
-    
-    #### Configure Your Architecture Rules
-    
-    Considering a data module, I want it to depend only on the domain module. This allows me to define it as follows:
-    
-    ```kotlin
-    // build-logic/data-setup-plugin.gradle.kts
-    popcornGuineapigConfig {
-        // You also can skip rules to help duing migration
-        skippedRules = listOf(DoNotWithRule::class)
-        
-        configuration = PopcornConfiguration(
-            project = PopcornProject(
-                type = ProjectType.JAVA
-            ),
-            rules = listOf(
-                NoDependencyRule(),
-                JustWithRule(
-                    justWith = listOf("[a-z]+-domain")
-                )
-            )
-        )
-    }
-    ```
-    
-    #### **Run the task**
-    
-    ```sh
-    ./gradlew popcorn
-    ```
-
-### 2.2. Parent plugin
+### 2.1. Parent plugin
 
 Starting with version v3.1.0, we introduced support for a parent plugin, enabling developers to define all project rules in a centralized location.
 
@@ -95,6 +59,9 @@ popcornGuineapigParentConfig {
                 ),
             ),
         ),
+        // ... more children
+    )
+}
 ```
 
 Don't forget to apply the plugin to the root build.gradle file:

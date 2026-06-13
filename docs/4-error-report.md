@@ -5,13 +5,6 @@
 
 To enable this feature, you need to run the popcorn task:
 
-!!!warning "Deprecated - Please use the parent plugin"
-    ```shell
-    ./gradlew popcorn -PerrorReportEnabled
-    ```
-
-or
-
 ```shell
 ./gradlew popcornParent -PerrorReportEnabled
 ```
