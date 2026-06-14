@@ -52,7 +52,7 @@ git push
     Make sure your Gradle is using **JVM 17**, otherwise you could have some issues.
 
 To run the plugin locally you need to publish it in your local machine using `mavenLocal`.
-Use the [`scripts/publish-local.sh`](https://github.com/CodandoTV/popcorn-guineapig/blob/main/scripts/publish-local.sh) script:
+Use the [`scripts/publish-local.sh`](https://github.com/CodandoTV/popcorn-guineapig/blob/main/scripts/publish-local.sh) script (see the [repository](https://github.com/CodandoTV/popcorn-guineapig) for the latest version):
 
 ```shell
 ./scripts/publish-local.sh

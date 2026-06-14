@@ -1,4 +1,4 @@
-[![Kotlin](https://img.shields.io/badge/kotlin-2.0.21-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.codandotv/popcornguineapig)](https://central.sonatype.com/artifact/io.github.codandotv/popcornguineapig)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CodandoTV/popcorn-guineapig/issues)
 
@@ -14,6 +14,15 @@ The goal of this plugin is to help enforce architectural rules in your project. 
 
 📚 Take a look at our [documentation](https://codandotv.github.io/popcorn-guineapig)
 
+## ⚙️ Minimum requirements
+
+| Requirement | Minimum version |
+|-------------|----------------|
+| Java | 17 |
+| Gradle | 8.7 |
+| Kotlin | 2.2.0 |
+| Android Gradle Plugin | 8.7.3 (for Android projects) |
+
 ## 🚀 Getting Started
 
 ### 1. Add the Plugin Dependency
@@ -26,7 +35,7 @@ implementation("io.github.codandotv:popcornguineapig:<version>")
 
 ### 2. Apply the Plugin and define your rules
 
-Popcorn gives you the option to use a [parent plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#22-parent-plugin).
+Popcorn gives you the option to use a [parent plugin](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#21-parent-plugin).
 
 As for the rules, you can define things like: "I don't want modules with the word *presentation* 
 in their name to depend on modules that have *data* in the name." This lets you use your module 
