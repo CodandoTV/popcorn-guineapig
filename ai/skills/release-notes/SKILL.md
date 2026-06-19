@@ -36,8 +36,6 @@ git log <latest-tag>..HEAD --oneline
 
 ### 4. Categorize commits for semver bump
 
-Scan each commit message for conventional prefixes:
-
 | Prefix | Bump | Example |
 |--------|------|---------|
 | `breaking`, `BREAKING CHANGE`, `!` | **Major** | `feat!: change API signature` |
@@ -71,8 +69,6 @@ Prepend a new entry to `CHANGELOG.md` in this format:
 ### Changed
 - ...
 ```
-
-Group commits by category under the appropriate heading.
 
 ### 7. Prompt user
 

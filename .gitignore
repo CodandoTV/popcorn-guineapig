@@ -3,4 +3,6 @@
 local.properties
 **/build/
 gradle.properties
-.claude
+.DS_Store
+venv/
+gradle/gradle-daemon-jvm.properties

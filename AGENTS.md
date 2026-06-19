@@ -1,80 +1,85 @@
-# Popcorn GuineaPig — Project Reference
+# Popcorn GuineaPig — AI Context
 
-## Purpose
+A Gradle plugin that enforces architectural rules in multi-module projects.
+Validates module dependency graphs against user-defined rules (NoDependency, JustWith, DoNotWith)
+and generates error/metrics reports.
 
-Popcorn GuineaPig is a Gradle plugin that enforces architectural rules in multi-module projects. It validates module dependency graphs against user-defined rules (NoDependency, JustWith, DoNotWith) and generates error/metrics reports.
+## Project Structure
 
-## Language & Platform
+```
+popcorn-guineapig/                          # Root — Gradle aggregator
+├── popcornguineapigplugin/                 # Plugin source (single module)
+│   ├── src/main/kotlin/com/github/codandotv/popcorn/
+│   │   ├── presentation/  (Gradle API, tasks, DSL)
+│   │   ├── domain/        (Pure business logic — no Gradle imports)
+│   │   └── data/          (I/O, file writing, formatting)
+│   └── src/test/kotlin/
+│       ├── domain/        (Rule and use case tests)
+│       ├── data/          (DTO and formatting tests)
+│       ├── presentation/  (Gradle integration tests)
+│       └── fakes/         (Fake repository for testing)
+├── popcornguineapig-detekt-rule/           # Detekt custom rule (separate module)
+├── docs/                                    # User documentation (MkDocs)
+└── ai/                                      # AI context (this directory)
+```
 
-- **Language**: Kotlin 2.2.0, JVM target
-- **Explicit API mode**: enabled
-- **Minimum Java**: JDK 17 (required locally and in CI)
+## Platform Context
 
-## Build System
+Load the platform-specific file from `ai/instructions/` before starting work:
 
-- **Gradle**: wrapper-managed; version catalog at `gradle/libs.versions.toml`
-- **Dependencies**: centralized in TOML catalog — Kotlin Serialization, Vanniktech Maven Publish, Kover
-- **Version file**: `popcornguineapigplugin/version.properties` (current: `3.2.1`)
-- **JVM args**: `-Xmx4608m`
-- **Kotlin Compiler Daemon**: intentionally disabled (KT-65761)
+| Platform              | File                              |
+|-----------------------|-----------------------------------|
+| OpenCode              | `ai/instructions/opencode.md`    |
+| Claude Code           | `ai/instructions/claude.md`      |
+| Cursor                | `ai/instructions/cursor.md`      |
+| GitHub Copilot        | `ai/instructions/copilot.md`     |
+| Gemini Code Assist    | `ai/instructions/gemini.md`      |
 
-## Modules
+## Available Skills
 
-Single Gradle module: `popcornguineapigplugin` — contains the plugin source, tests, and publishing config.
+Before starting any task, list files in `ai/skills/`, identify which covers
+the task, and read it in full before proceeding.
 
-**Source structure** (`src/main/kotlin/com/github/codandotv/popcorn/`):
+| Skill                  | When to use                                      |
+|------------------------|--------------------------------------------------|
+| `popcorn-reference`    | General project reference (architecture, FAQ)    |
+| `build-and-check`      | Compiling, validating build config               |
+| `validate-architecture`| Analyzing code structure, layer violations       |
+| `documentation-review` | Validating docs/ content, links, examples        |
+| `release-notes`        | Version bumping, changelog generation            |
+| `review-pr`            | Pull request review checklist                    |
+| `run-tests`            | Running tests, checking coverage                 |
+| `minimum-requirements` | Analyzing deps, updating README requirements     |
 
-| Layer | Path | Responsibility |
-|-------|------|---------------|
-| `presentation/` | `PopcornGpParentPlugin.kt`, `tasks/` | Gradle integration, task registration |
-| `domain/` | `rules/`, `usecases/`, `models/`, `input/` | Pure business logic (no Gradle imports) |
-| `data/` | `PopcornGuineapigRepositoryImpl.kt`, `report/` | I/O, file writing, formatting |
+## Critical Architectural Rules
 
-## Plugin
+1. **Three-layer clean architecture**: presentation → domain → data (presentation depends on domain; data implements domain interfaces)
+2. **Domain is pure Kotlin**: NEVER import `org.gradle.api.*` in domain/
+3. **Explicit API mode**: all public declarations must have explicit visibility and type annotations (`explicitApi()` in build.gradle.kts)
+4. **No circular dependencies** between layers
+5. **ServiceLocator.kt** wires dependencies — update it when adding new dependencies
 
-- **Plugin ID**: `io.github.codandotv.popcorngpparent`
-- **Entry class**: `com.github.codandotv.popcorn.presentation.PopcornGpParentPlugin`
-- **Task**: `popcornParent` (runs architecture validation)
-- **Config DSL**: `popcorn { }` block in build scripts
-- **Maven Central**: `io.github.codandotv:popcornguineapig:<version>`
-- **License**: MIT
+## Implementation Workflow
 
-## Testing
+1. Understand which layer the change belongs to
+2. Implement: Domain (pure logic) → Data (I/O) → Presentation (Gradle integration)
+3. Write/update tests (mirror source structure under `src/test/kotlin/`)
+4. Validate: `./gradlew popcornguineapigplugin:koverHtmlReport`
+5. Build: `./gradlew popcornguineapigplugin:build`
+6. Mark task done only after tests pass and build compiles
 
-- **Framework**: JUnit 4 + Kotlin Test
-- **Coverage**: Kover (runs via `koverHtmlReport`)
-- **Fakes**: `FakePopcornGuineapigRepository`, `FakeLogger` in `src/test/kotlin/fakes/`
-- **Test command**: `./gradlew popcornguineapigplugin:test`
-
-## Documentation
-
-- **Tool**: MkDocs with Material theme
-- **Config**: `mkdocs.yml`
-- **Source**: `docs/` directory
-- **Hosted**: GitHub Pages at `https://codandotv.github.io/popcorn-guineapig`
-
-## Versioning
-
-- **Semantic versioning** (MAJOR.MINOR.PATCH)
-- **Version stored**: `popcornguineapigplugin/version.properties`
-- **Git tags**: 24 tags from v1.0.0 to v3.1.6
-
-## CI/CD
+## CI / Automation
 
 | Workflow | Trigger | Action |
 |----------|---------|--------|
-| `pr.yml` | PR to `main` | `koverHtmlReport` on JDK 17 |
-| `publish.yml` | Manual (`workflow_dispatch`) | Publish to Maven Central (Vanniktech + Fastlane) |
-| `documentation.yml` | PR to `main` with docs changes | Deploy MkDocs to GitHub Pages |
-| `mega-linter.yml` | PR to `main` | MegaLinter Java flavor |
+| `pr.yml` | PR to main | `koverHtmlReport` on JDK 17 |
+| `publish.yml` | Manual dispatch | Publish to Maven Central |
+| `documentation.yml` | PR to main (docs changed) | Deploy MkDocs to GitHub Pages |
+| `mega-linter.yml` | PR to main | MegaLinter Java flavor |
 
-## Development Scripts
+## PR Review Checklist
 
-- `scripts/publish-local.sh` — publish to `mavenLocal` for local testing
-- `scripts/detektcheck.sh` — run Detekt static analysis
-
-## Git Workflow
-
-- **Branch convention**: `feature/*`, `gmoro/*`, `improvement/*`
-- **Merge**: squash merge via PR
-- **Commit messages**: clear, descriptive prefixes (`Bump`, `Update`, `Add`, `Fix`)
+- [ ] **Architecture**: files in correct layer? No Gradle imports in domain? `ServiceLocator` updated?
+- [ ] **Tests**: new tests added? Success AND failure cases? Coverage maintained?
+- [ ] **Code quality**: descriptive names? Kotlin conventions? Explicit API annotations present?
+- [ ] **Build**: `./gradlew popcornguineapigplugin:build` and `koverHtmlReport` pass?

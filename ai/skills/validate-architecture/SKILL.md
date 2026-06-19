@@ -45,7 +45,7 @@ Analyzes the code structure and validates architectural patterns.
 |---------------|-----------------|
 | Validation rule | `domain/rules/` |
 | Use case | `domain/usecases/` |
-| Pure data model / report model | `domain/report/` |
+| Pure data model / report model | `domain/models/` |
 | Output formatting | `data/report/` |
 | Gradle integration | `presentation/` |
 
@@ -60,7 +60,7 @@ Analyzes the code structure and validates architectural patterns.
 **Adding a new rule:**
 1. `domain/rules/MyNewRule.kt` — implement logic
 2. `src/test/kotlin/domain/rules/MyNewRuleTest.kt` — tests
-3. `domain/usecases/CheckArchitectureUseCase.kt` — integrate
+3. `domain/usecases/check/CheckArchitectureUseCase.kt` — integrate
 4. `ServiceLocator.kt` — wire if injection is needed
 
 **Adding a new report format:**

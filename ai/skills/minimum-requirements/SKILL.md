@@ -31,8 +31,8 @@ gradle = "..."
 Find the minimum supported versions from source code and documentation:
 
 - **Gradle** — check `gradle-wrapper.properties` and any `minGradleVersion` constants
-- **Java** — check `gradle.properties` JVM args, CI workflow JDK setup, and `sourceCompatibility`/`targetCompatibility`
-- **Kotlin** — check `kotlin` version in `libs.versions.toml` (the plugin requires the compiler version)
+- **Java** — check `gradle.properties` JVM args, CI workflow JDK setup, and source/target compatibility
+- **Kotlin** — check `kotlin` version in `libs.versions.toml`
 - **Android Gradle Plugin** — check `buildscript` dependencies if Android support is documented
 - **Project types** — review `ProjectType.kt` (JAVA, KMP, ANDROID)
 
@@ -50,8 +50,6 @@ Write (or update) a "## Minimum requirements" section in `README.md` with a tabl
 | Gradle | 8.x |
 | Kotlin | 2.2.0 |
 | Android Gradle Plugin | (if applicable) |
-
-Insert the section before "## Getting Started".
 
 ### 5. Summary
 

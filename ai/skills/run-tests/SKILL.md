@@ -28,7 +28,7 @@ Run unit tests and generate a Kover code coverage report for the Popcorn Gradle 
 
 ## Results
 - HTML Report: `popcornguineapigplugin/build/reports/kover/html/index.html`
-- Test results: `popcornguineapigplugin/build/test-results/test/`
+- Test results: `popcornguineapigplugin/build/reports/tests/test/index.html`
 
 ## Test structure
 ```
@@ -49,4 +49,4 @@ Presentation Layer Tests
 - Framework: JUnit with Kotlin Test
 - Coverage tool: Kover
 - Tests mirror source structure under `src/test/kotlin/`
-- Use `FakePopcornGuineapigRepository` to test without a real Gradle project — see `NoDependencyRuleTest.kt` as example
+- Use `FakePopcornGuineapigRepository` to test without a real Gradle project

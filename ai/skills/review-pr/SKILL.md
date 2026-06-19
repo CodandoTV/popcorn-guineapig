@@ -29,7 +29,6 @@ Performs a systematic pull request review.
 ### Code quality
 - [ ] Are names descriptive?
 - [ ] Does the code follow Kotlin conventions?
-- [ ] Do comments explain "why" rather than "what"?
 
 ### Build & CI/CD
 - [ ] Do tests pass (`./gradlew popcornguineapigplugin:koverHtmlReport`)?
@@ -38,7 +37,6 @@ Performs a systematic pull request review.
 
 ### Documentation
 - [ ] Are commit messages clear?
-- [ ] Was SKILLS.md updated if architectural changes were made?
 
 ## Red flags
 
