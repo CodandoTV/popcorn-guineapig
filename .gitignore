@@ -3,4 +3,3 @@
 local.properties
 **/build/
 gradle.properties
-.claude
