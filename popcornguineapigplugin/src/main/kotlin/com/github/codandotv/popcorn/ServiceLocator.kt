@@ -1,6 +1,7 @@
 package com.github.codandotv.popcorn
 
 import com.github.codandotv.popcorn.data.PopcornGuineapigRepositoryImpl
+import com.github.codandotv.popcorn.data.SkillDataSource
 import com.github.codandotv.popcorn.data.report.ReportDataSource
 import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
@@ -20,7 +21,8 @@ internal object ServiceLocator {
 
     val repository: PopcornGuineapigRepository by lazy {
         PopcornGuineapigRepositoryImpl(
-            reportDataSource = ReportDataSource()
+            reportDataSource = ReportDataSource(),
+            skillDataSource = SkillDataSource(),
         )
     }
 

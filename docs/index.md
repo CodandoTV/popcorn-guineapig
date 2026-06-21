@@ -33,3 +33,7 @@ Take a look at our [repository](https://github.com/CodandoTV/popcorn-guineapig).
 ### 5. [Metrics report](./5-metrics-report.md)
 
 ### 6. [Contributions](6-contributions.md)
+
+### 7. [Automating PopcornGP with GitHub CI/CD](7-automating-popcorngp-with-github-cicd.md)
+
+### 8. [AI Skill Installation](8-ai-skill-installation.md)

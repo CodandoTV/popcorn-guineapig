@@ -1,0 +1,39 @@
+package com.github.codandotv.popcorn.data
+
+import java.io.File
+
+internal class SkillDataSource {
+
+    fun installSkill(
+        projectDir: String,
+        skillOutputDir: String,
+        skillName: String,
+        classLoader: ClassLoader,
+    ): Result<Unit> {
+        return runCatching {
+            val resourcePath = "skills/$skillName/SKILL.md"
+            val resourceStream = classLoader.getResourceAsStream(resourcePath)
+                ?: error("Skill resource not found: $resourcePath")
+
+            val content = resourceStream.bufferedReader().use { it.readText() }
+
+            val outputDir = File(projectDir, skillOutputDir).resolve(skillName)
+            if (outputDir.exists().not()) {
+                outputDir.mkdirs()
+            }
+
+            val skillFile = File(outputDir, "SKILL.md")
+
+            if (skillFile.exists() && skillFile.readText() == content) {
+                return@runCatching
+            }
+
+            if (skillFile.exists()) {
+                skillFile.delete()
+            }
+
+            skillFile.createNewFile()
+            skillFile.bufferedWriter().use { it.write(content) }
+        }
+    }
+}

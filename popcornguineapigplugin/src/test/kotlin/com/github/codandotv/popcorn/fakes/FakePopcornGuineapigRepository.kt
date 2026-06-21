@@ -17,6 +17,12 @@ internal val fakePopcornGuineapigRepository = object : PopcornGuineapigRepositor
     ) {
         error("Should not being called")
     }
+
+    override fun installSkill(
+        projectDir: String,
+        skillOutputDir: String,
+        skillName: String,
+    ) = Unit
 }
 
 internal val fakePopcornGuineapigRepositoryWithError = object : PopcornGuineapigRepository {
@@ -30,11 +36,18 @@ internal val fakePopcornGuineapigRepositoryWithError = object : PopcornGuineapig
     override fun exportMetricsReport(reportPath: String, metrics: List<ModuleMetric>) {
         error("Should not being called")
     }
+
+    override fun installSkill(
+        projectDir: String,
+        skillOutputDir: String,
+        skillName: String,
+    ) = Unit
 }
 
 internal fun fakePopcornGuineapigRepositoryWithCallbacks(
     onErrorReportCallback: () -> Unit = {},
     onMetricsReportCallback: () -> Unit = {},
+    onInstallSkillCallback: () -> Unit = {},
 ) : PopcornGuineapigRepository {
     return object : PopcornGuineapigRepository{
         override fun exportErrorReport(
@@ -49,6 +62,14 @@ internal fun fakePopcornGuineapigRepositoryWithCallbacks(
             metrics: List<ModuleMetric>
         ) {
             onMetricsReportCallback()
+        }
+
+        override fun installSkill(
+            projectDir: String,
+            skillOutputDir: String,
+            skillName: String,
+        ) {
+            onInstallSkillCallback()
         }
     }
 }
