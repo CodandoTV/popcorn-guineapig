@@ -22,7 +22,9 @@ internal object ServiceLocator {
     val repository: PopcornGuineapigRepository by lazy {
         PopcornGuineapigRepositoryImpl(
             reportDataSource = ReportDataSource(),
-            skillDataSource = SkillDataSource(),
+            skillDataSource = SkillDataSource(
+                classLoader = PopcornGuineapigRepositoryImpl::class.java.classLoader,
+            ),
         )
     }
 

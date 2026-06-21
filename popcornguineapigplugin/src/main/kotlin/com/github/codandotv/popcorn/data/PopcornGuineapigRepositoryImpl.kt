@@ -33,15 +33,12 @@ internal class PopcornGuineapigRepositoryImpl(
     }
 
     override fun installSkill(
-        projectDir: String,
         skillOutputDir: String,
         skillName: String,
     ) {
         skillDataSource.installSkill(
-            projectDir = projectDir,
             skillOutputDir = skillOutputDir,
             skillName = skillName,
-            classLoader = PopcornGuineapigRepositoryImpl::class.java.classLoader,
         ).getOrThrow()
     }
 }

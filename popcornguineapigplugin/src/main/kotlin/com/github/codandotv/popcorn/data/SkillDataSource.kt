@@ -2,13 +2,13 @@ package com.github.codandotv.popcorn.data
 
 import java.io.File
 
-internal class SkillDataSource {
+internal class SkillDataSource(
+    private val classLoader: ClassLoader = SkillDataSource::class.java.classLoader,
+) {
 
     fun installSkill(
-        projectDir: String,
         skillOutputDir: String,
         skillName: String,
-        classLoader: ClassLoader,
     ): Result<Unit> {
         return runCatching {
             val resourcePath = "skills/$skillName/SKILL.md"
@@ -17,7 +17,7 @@ internal class SkillDataSource {
 
             val content = resourceStream.bufferedReader().use { it.readText() }
 
-            val outputDir = File(projectDir, skillOutputDir).resolve(skillName)
+            val outputDir = File(skillOutputDir).resolve(skillName)
             if (outputDir.exists().not()) {
                 outputDir.mkdirs()
             }

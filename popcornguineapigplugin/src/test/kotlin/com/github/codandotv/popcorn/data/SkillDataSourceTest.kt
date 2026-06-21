@@ -7,16 +7,16 @@ import kotlin.test.assertTrue
 
 class SkillDataSourceTest {
 
-    private val skillDataSource = SkillDataSource()
+    private val skillDataSource = SkillDataSource(
+        classLoader = SkillDataSourceTest::class.java.classLoader,
+    )
 
     @Test
     fun `Given valid parameters when installSkill is called then writes SKILL md file to target directory`() {
         val tempDir = createTempDir()
         val result = skillDataSource.installSkill(
-            projectDir = tempDir.absolutePath,
-            skillOutputDir = ".opencode/skills",
+            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
 
         assertTrue(result.isSuccess)
@@ -30,20 +30,16 @@ class SkillDataSourceTest {
     fun `Given existing file with same content when installSkill is called then skips and does not overwrite`() {
         val tempDir = createTempDir()
         val firstResult = skillDataSource.installSkill(
-            projectDir = tempDir.absolutePath,
-            skillOutputDir = ".opencode/skills",
+            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
         assertTrue(firstResult.isSuccess)
         val skillFile = File(tempDir, ".opencode/skills/setup-popcorn-plugin/SKILL.md")
         val firstModified = skillFile.lastModified()
 
         val secondResult = skillDataSource.installSkill(
-            projectDir = tempDir.absolutePath,
-            skillOutputDir = ".opencode/skills",
+            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
 
         assertTrue(secondResult.isSuccess)
@@ -62,10 +58,8 @@ class SkillDataSourceTest {
         Thread.sleep(10)
 
         val result = skillDataSource.installSkill(
-            projectDir = tempDir.absolutePath,
-            skillOutputDir = ".opencode/skills",
+            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
 
         assertTrue(result.isSuccess)
@@ -77,10 +71,8 @@ class SkillDataSourceTest {
     fun `Given missing resource when installSkill is called then returns failure`() {
         val tempDir = createTempDir()
         val result = skillDataSource.installSkill(
-            projectDir = tempDir.absolutePath,
-            skillOutputDir = ".opencode/skills",
+            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "nonexistent-skill",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
 
         assertTrue(result.isFailure)
@@ -90,10 +82,8 @@ class SkillDataSourceTest {
     fun `Given custom output directory when installSkill is called then writes to specified path`() {
         val tempDir = createTempDir()
         val result = skillDataSource.installSkill(
-            projectDir = tempDir.absolutePath,
-            skillOutputDir = ".cursor/skills",
+            skillOutputDir = File(tempDir, ".cursor/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
 
         assertTrue(result.isSuccess)
@@ -107,10 +97,8 @@ class SkillDataSourceTest {
         val nestedDir = File(tempDir, "nested/dir")
 
         val result = skillDataSource.installSkill(
-            projectDir = nestedDir.absolutePath,
-            skillOutputDir = ".opencode/skills",
+            skillOutputDir = File(nestedDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
-            classLoader = SkillDataSourceTest::class.java.classLoader,
         )
 
         assertTrue(result.isSuccess)

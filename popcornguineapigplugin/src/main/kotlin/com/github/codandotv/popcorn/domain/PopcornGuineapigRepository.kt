@@ -15,8 +15,7 @@ internal interface PopcornGuineapigRepository {
     )
 
     fun installSkill(
-        projectDir: String,
         skillOutputDir: String,
-        skillName: String
+        skillName: String,
     )
 }

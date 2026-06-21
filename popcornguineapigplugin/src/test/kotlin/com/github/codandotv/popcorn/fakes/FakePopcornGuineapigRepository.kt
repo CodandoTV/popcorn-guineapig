@@ -19,7 +19,6 @@ internal val fakePopcornGuineapigRepository = object : PopcornGuineapigRepositor
     }
 
     override fun installSkill(
-        projectDir: String,
         skillOutputDir: String,
         skillName: String,
     ) = Unit
@@ -38,7 +37,6 @@ internal val fakePopcornGuineapigRepositoryWithError = object : PopcornGuineapig
     }
 
     override fun installSkill(
-        projectDir: String,
         skillOutputDir: String,
         skillName: String,
     ) = Unit
@@ -65,7 +63,6 @@ internal fun fakePopcornGuineapigRepositoryWithCallbacks(
         }
 
         override fun installSkill(
-            projectDir: String,
             skillOutputDir: String,
             skillName: String,
         ) {

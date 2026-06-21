@@ -23,8 +23,7 @@ public open class InstallPopcornSkillTask : DefaultTask() {
     @TaskAction
     public fun install() {
         repository.installSkill(
-            projectDir = project.projectDir.absolutePath,
-            skillOutputDir = outputDir,
+            skillOutputDir = project.file(outputDir).absolutePath,
             skillName = skillName,
         )
     }
