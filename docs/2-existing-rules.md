@@ -51,6 +51,18 @@ popcornGuineapigParentConfig {
 
 In this case, all data modules (e.g. `:car:data`, `:rent:data`, and others) should depend only on a domain module.
 
+The `justWith` entries also support regex patterns. For example, to restrict modules to depend only on modules whose names match a pattern:
+
+> **Note:** Regex pattern support in `JustWithRule.justWith` is available from version 3.2.2 onward.
+
+```kotlin
+JustWithRule(
+    justWith = listOf("domain", "feature-.*")
+)
+```
+
+Each dependency must match at least one `justWith` pattern. Like the `DoNotWithRule`, each entry is treated as a regular expression — so `"domain"` matches exactly, while `"feature-.*"` matches any module name starting with `feature-`. Dependencies that don't match any `justWith` pattern are flagged as violations.
+
 ## NoDependencyRule
 
 The `NoDependencyRule` ensures that some modules remains free of any dependencies. For example:
