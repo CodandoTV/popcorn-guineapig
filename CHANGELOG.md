@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.2]
+
+### Changed
+
+- `JustWithRule` now supports regex patterns in `justWith` — entries like `"feature-.*"` match module names via regex, not just exact strings.
+
+- `JustWithRule` refactored to detect missing required dependencies — previously only detected extraneous dependencies, now also flags when a required pattern has no matching dependency.
+
+- Updated `Existing Rules` docs with regex pattern examples for `JustWithRule`.
+
+---
+
 ## [3.2.1]
 
 ### Changed
