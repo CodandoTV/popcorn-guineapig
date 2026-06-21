@@ -48,6 +48,7 @@ the task, and read it in full before proceeding.
 | `documentation-review` | Validating docs/ content, links, examples        |
 | `release-notes`        | Version bumping, changelog generation            |
 | `review-pr`            | Pull request review checklist                    |
+| `open-pr`              | Opening pull requests, auto-generated description|
 | `run-tests`            | Running tests, checking coverage                 |
 | `minimum-requirements` | Analyzing deps, updating README requirements     |
 
