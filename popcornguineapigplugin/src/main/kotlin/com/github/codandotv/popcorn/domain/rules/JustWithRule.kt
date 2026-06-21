@@ -7,22 +7,31 @@ public class JustWithRule(
     private val justWith: List<String>
 ) : PopcornGuineaPigRule {
     override fun check(deps: List<InternalDependenciesMetadata>): ArchitectureViolationError? {
-        val internalProjectDependenciesSortedByModuleName = deps.sortedBy { it.moduleName }
-        val internalProjectDependencyModuleNames = internalProjectDependenciesSortedByModuleName.map { it.moduleName }
+        val affectedRelationships = mutableListOf<InternalDependenciesMetadata>()
 
-        val justWithSorted = justWith.sorted()
-        if (internalProjectDependencyModuleNames != justWithSorted) {
-            val affectedRelationships = internalProjectDependenciesSortedByModuleName.filterNot {
-                justWithSorted.contains(it.moduleName)
+        deps.forEach { dep ->
+            val matchesAnyPattern = justWith.any { pattern ->
+                pattern.toRegex().matches(dep.moduleName)
             }
+            if (!matchesAnyPattern) {
+                affectedRelationships.add(dep)
+            }
+        }
 
-            return ArchitectureViolationError(
+        val missingRequiredDeps = justWith.any { pattern ->
+            deps.none { dep ->
+                pattern.toRegex().matches(dep.moduleName)
+            }
+        }
+
+        return if (affectedRelationships.isNotEmpty() || missingRequiredDeps) {
+            ArchitectureViolationError(
                 message = "This module should depends on $justWith",
                 rule = this,
                 affectedRelationship = affectedRelationships
             )
+        } else {
+            null
         }
-
-        return null
     }
 }

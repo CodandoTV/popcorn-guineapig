@@ -81,4 +81,96 @@ class JustWithRuleTest  {
             affectedNames
         )
     }
+
+    @Test
+    fun `given regex pattern justWith when all deps match the pattern then rule passes`() {
+        // Arrange
+        val justWith = listOf("[a-z]+-data")
+        val justWithRule = JustWithRule(justWith)
+
+        // Act
+        val result = justWithRule.check(
+            deps = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "user-data"),
+                InternalDependenciesMetadata(group = null, moduleName = "car-data")
+            )
+        )
+
+        // Assert
+        assertNull(result)
+    }
+
+    @Test
+    fun `given regex pattern justWith when some deps do not match the pattern then rule fails and reports them`() {
+        // Arrange
+        val justWith = listOf("[a-z]+-data")
+        val justWithRule = JustWithRule(justWith)
+
+        // Act
+        val result = justWithRule.check(
+            deps = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "user-data"),
+                InternalDependenciesMetadata(group = null, moduleName = "user-presentation")
+            )
+        )
+
+        // Assert
+        assertNotNull(result)
+        val affectedNames = result.affectedRelationship?.map { it.moduleName }?.toSet()
+        assertEquals(setOf("user-presentation"), affectedNames)
+    }
+
+    @Test
+    fun `given regex pattern justWith with multiple patterns when deps match all patterns then rule passes`() {
+        // Arrange
+        val justWith = listOf("domain", "feature-.*")
+        val justWithRule = JustWithRule(justWith)
+
+        // Act
+        val result = justWithRule.check(
+            deps = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+                InternalDependenciesMetadata(group = null, moduleName = "feature-list")
+            )
+        )
+
+        // Assert
+        assertNull(result)
+    }
+
+    @Test
+    fun `given regex pattern justWith with multiple patterns when a pattern is unmatched then rule fails`() {
+        // Arrange
+        val justWith = listOf("domain", "data")
+        val justWithRule = JustWithRule(justWith)
+
+        // Act
+        val result = justWithRule.check(
+            deps = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain")
+            )
+        )
+
+        // Assert
+        assertNotNull(result)
+    }
+
+    @Test
+    fun `given regex pattern justWith with wildcard when all deps match then rule passes`() {
+        // Arrange
+        val justWith = listOf("feature-.*")
+        val justWithRule = JustWithRule(justWith)
+
+        // Act
+        val result = justWithRule.check(
+            deps = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "feature-list"),
+                InternalDependenciesMetadata(group = null, moduleName = "feature-details"),
+                InternalDependenciesMetadata(group = null, moduleName = "feature-movies")
+            )
+        )
+
+        // Assert
+        assertNull(result)
+    }
 }
