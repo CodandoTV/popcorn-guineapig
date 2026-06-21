@@ -18,13 +18,7 @@ public class JustWithRule(
             }
         }
 
-        val missingRequiredDeps = justWith.any { pattern ->
-            deps.none { dep ->
-                pattern.toRegex().matches(dep.moduleName)
-            }
-        }
-
-        return if (affectedRelationships.isNotEmpty() || missingRequiredDeps) {
+        return if (affectedRelationships.isNotEmpty()) {
             ArchitectureViolationError(
                 message = "This module should depends on $justWith",
                 rule = this,

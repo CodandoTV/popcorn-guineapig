@@ -10,7 +10,7 @@ import kotlin.test.assertNull
 class JustWithRuleTest  {
 
     @Test
-    fun `given some not allowed dependencies when the rule checks then fails`() {
+    fun `given subset of allowed dependencies when the rule checks then passes`() {
         // Arrange
         val justWith = listOf("data", "presentation")
         val justWithRule = JustWithRule(justWith)
@@ -26,11 +26,11 @@ class JustWithRuleTest  {
         )
 
         // Assert
-        assertNotNull(result)
+        assertNull(result)
     }
 
     @Test
-    fun `given some allowed dependencies when the rule checks then fails`() {
+    fun `given all allowed dependencies when the rule checks then passes`() {
         // Arrange
         val justWith = listOf("data", "presentation")
         val justWithRule = JustWithRule(justWith)
@@ -139,7 +139,7 @@ class JustWithRuleTest  {
     }
 
     @Test
-    fun `given regex pattern justWith with multiple patterns when a pattern is unmatched then rule fails`() {
+    fun `given regex pattern justWith with multiple patterns when a pattern is unmatched but all deps match subset then rule passes`() {
         // Arrange
         val justWith = listOf("domain", "data")
         val justWithRule = JustWithRule(justWith)
@@ -152,7 +152,7 @@ class JustWithRuleTest  {
         )
 
         // Assert
-        assertNotNull(result)
+        assertNull(result)
     }
 
     @Test
