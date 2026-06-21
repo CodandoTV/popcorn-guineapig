@@ -13,7 +13,7 @@ public class JustWithRule(
             val matchesAnyPattern = justWith.any { pattern ->
                 pattern.toRegex().matches(dep.moduleName)
             }
-            if (!matchesAnyPattern) {
+            if (matchesAnyPattern.not()) {
                 affectedRelationships.add(dep)
             }
         }
