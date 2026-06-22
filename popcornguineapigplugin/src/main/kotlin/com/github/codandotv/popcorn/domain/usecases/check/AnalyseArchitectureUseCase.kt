@@ -52,6 +52,8 @@ internal class AnalyseArchitectureUseCaseImpl(
         val shouldTriggerError = results.any { it.value is CheckResult.Failure }
         if(shouldTriggerError) {
             error("Something went wrong. Check the logs above for more details.")
+        } else {
+            logger.logSuccess("No violation issues found!")
         }
     }
 }

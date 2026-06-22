@@ -8,7 +8,8 @@ import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ModuleMetric
 
 internal class PopcornGuineapigRepositoryImpl(
-    private val reportDataSource: ReportDataSource
+    private val reportDataSource: ReportDataSource,
+    private val skillDataSource: SkillDataSource,
 ) : PopcornGuineapigRepository {
     override fun exportErrorReport(
         reportPath: String,
@@ -28,6 +29,16 @@ internal class PopcornGuineapigRepositoryImpl(
         reportDataSource.exportMetricsReportInCsv(
             fullPath = reportPath,
             reportContent = metrics.toMetricsReport()
+        )
+    }
+
+    override fun installSkill(
+        skillOutputDir: String,
+        skillName: String,
+    ) {
+        skillDataSource.installSkill(
+            skillOutputDir = skillOutputDir,
+            skillName = skillName,
         )
     }
 }

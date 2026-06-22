@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.presentation
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
+import com.github.codandotv.popcorn.presentation.tasks.InstallPopcornSkillTask
 import com.github.codandotv.popcorn.presentation.tasks.PopcornModuleMetricsTask
 import com.github.codandotv.popcorn.presentation.tasks.PopcornParentTask
 import org.gradle.api.Plugin
@@ -64,6 +65,15 @@ public class PopcornGpParentPlugin : Plugin<Project> {
                 )
             }
         }
+
+        target.tasks.register<InstallPopcornSkillTask>("installPopcornSkill") {
+            doFirst {
+                val dir = extension.skillOutputDir?.path
+                    ?: project.findProperty("popcornSkillOutputDir") as? String
+                    ?: ".opencode/skills"
+                configure(dir)
+            }
+        }
     }
 }
 
@@ -71,4 +81,5 @@ public open class PopcornGpParentPluginExtension {
     public var type: ProjectType? = null
     public var children: List<PopcornChildConfiguration>? = null
     public var groupName: String? = null
+    public var skillOutputDir: java.io.File? = null
 }

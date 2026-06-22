@@ -86,6 +86,19 @@ plugins {
     ./gradlew popcornParent --no-configuration-cache
     ```
 
+### 2.2. AI-Assisted Setup 🤖
+
+!!!note "AI skill available >= 3.2.3"
+    Starting from version `3.2.3`, PopcornGP ships with an embedded AI skill file that helps AI coding tools configure the plugin automatically.
+
+To install the skill file in your project, run:
+
+```sh
+./gradlew installPopcornSkill
+```
+
+This creates a `SKILL.md` file that AI tools (OpenCode, Claude Code, Cursor) can use. See the [AI Skill Installation](./8-ai-skill-installation.md) page for custom destinations and details.
+
 ---
 
 It is simple as a popcorn 🍿 + 🐹

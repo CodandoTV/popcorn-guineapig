@@ -13,4 +13,9 @@ internal interface PopcornGuineapigRepository {
         reportPath: String,
         metrics: List<ModuleMetric>
     )
+
+    fun installSkill(
+        skillOutputDir: String,
+        skillName: String,
+    )
 }

@@ -1,3 +1,5 @@
+@file:Suppress("TooGenericExceptionThrown")
+
 package com.github.codandotv.popcorn.domain.usecases.metric
 
 import com.github.codandotv.popcorn.domain.models.ModuleMetric
@@ -13,8 +15,11 @@ class GenerateMetricsReportUseCaseTest {
 
     @Test
     fun `Given modules when invoke then collectModuleMetricsUseCase is called with correct modules`() {
-        // Arrange
-        val fakeLogger = FakeLogger(mutableListOf(), mutableListOf())
+        val fakeLogger = FakeLogger(
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf()
+        )
         var capturedModulesList: List<TargetModule>? = null
 
         var metricsReportCall = false
@@ -46,15 +51,51 @@ class GenerateMetricsReportUseCaseTest {
             TargetModule("domain", emptyList(), emptyList())
         )
 
-        // Act
         generateMetricsReportUseCase.invoke(
             metricsReportPath = "/tmp/report.csv",
             modules = expectedModules
         )
 
-        // Assert
         assertNotNull(capturedModulesList)
         assertEquals(expectedModules, capturedModulesList)
         assertTrue(metricsReportCall)
+    }
+
+    @Test
+    fun `Given repository throws when invoke then error is logged`() {
+        val errorMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            successMessages = mutableListOf(),
+            logMessages = mutableListOf(),
+            errorMessages = errorMessages,
+        )
+
+        val fakeRepository = fakePopcornGuineapigRepositoryWithCallbacks(
+            onMetricsReportCallback = {
+                throw RuntimeException("write failure")
+            },
+        )
+
+        val fakeCollectMetricsUseCase = object : CollectModuleMetricsUseCase {
+            override fun invoke(modules: List<TargetModule>): List<ModuleMetric> {
+                return listOf(ModuleMetric(":module", 1, 0, 1.0f))
+            }
+        }
+
+        val generateMetricsReportUseCase = GenerateMetricsReportUseCaseImpl(
+            collectModuleMetricsUseCase = fakeCollectMetricsUseCase,
+            repository = fakeRepository,
+            logger = fakeLogger
+        )
+
+        generateMetricsReportUseCase.invoke(
+            metricsReportPath = "/tmp/report.csv",
+            modules = listOf(TargetModule(":module", emptyList(), emptyList()))
+        )
+
+        assertTrue(errorMessages.isNotEmpty())
+        assertTrue(
+            errorMessages.first().contains("Something went wrong to generate the metrics report.")
+        )
     }
 }

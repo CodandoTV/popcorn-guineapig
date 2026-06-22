@@ -21,12 +21,6 @@ internal fun Logger.popcornLoggerInfo(message: String) {
     )
 }
 
-internal fun Logger.popcornLoggerWarn(message: String) {
-    warn(
-        LOGGER_PREFIX + YELLOW_COLOR + message + RESET_COLOR
-    )
-}
-
 internal fun Logger.popcornLoggerError(message: String) {
     error(
         LOGGER_PREFIX + RED_COLOR + message + RESET_COLOR
@@ -43,6 +37,10 @@ internal fun Logger.toPopcornGPLogger(): com.github.codandotv.popcorn.domain.Log
     return object : com.github.codandotv.popcorn.domain.Logger {
         override fun log(message: String) {
             popcornLoggerInfo(message)
+        }
+
+        override fun logSuccess(message: String) {
+            popcornLoggerLifecycle(message)
         }
 
         override fun logError(message: String) {

@@ -28,11 +28,15 @@ internal class GenerateMetricsReportUseCaseImpl(
 
         logger.log("Preparing report with ${metrics.size} metrics")
 
-        repository.exportMetricsReport(
-            reportPath = metricsReportPath,
-            metrics = metrics
-        )
-
-        logger.log("Check the report at $metricsReportPath...")
+        runCatching {
+            repository.exportMetricsReport(
+                reportPath = metricsReportPath,
+                metrics = metrics
+            )
+        }.onSuccess {
+            logger.logSuccess("Check the report at $metricsReportPath...")
+        }.onFailure {
+            logger.logError("Something went wrong to generate the metrics report.")
+        }
     }
 }
