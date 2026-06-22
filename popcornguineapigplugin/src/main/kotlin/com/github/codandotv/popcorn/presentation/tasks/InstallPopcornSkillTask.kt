@@ -1,6 +1,7 @@
 package com.github.codandotv.popcorn.presentation.tasks
 
 import com.github.codandotv.popcorn.ServiceLocator
+import com.github.codandotv.popcorn.presentation.ext.toPopcornGPLogger
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
@@ -8,7 +9,11 @@ import org.gradle.api.tasks.TaskAction
 
 public open class InstallPopcornSkillTask : DefaultTask() {
 
-    private val repository by lazy { ServiceLocator.repository }
+    private val installSkillUseCase by lazy {
+        ServiceLocator.provideInstallSkillUseCase(
+            logger = logger.toPopcornGPLogger()
+        )
+    }
 
     @get:Input
     @get:Optional
@@ -22,7 +27,7 @@ public open class InstallPopcornSkillTask : DefaultTask() {
 
     @TaskAction
     public fun install() {
-        repository.installSkill(
+        installSkillUseCase.execute(
             skillOutputDir = project.file(outputDir).absolutePath,
             skillName = skillName,
         )

@@ -1,5 +1,6 @@
 package com.github.codandotv.popcorn.domain.usecases.check
 
+import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
@@ -16,6 +17,7 @@ internal interface GenerateArchitectureViolationReport {
 }
 
 internal class GenerateArchitectureViolationReportImpl(
+    private val logger: Logger,
     private val repository: PopcornGuineapigRepository,
 ) : GenerateArchitectureViolationReport {
 
@@ -53,10 +55,16 @@ internal class GenerateArchitectureViolationReportImpl(
             )
         }
 
-        repository.exportErrorReport(
-            reportPath = reportPath,
-            architectureViolationReportData = architectureViolationReportData
-        )
+        runCatching {
+            repository.exportErrorReport(
+                reportPath = reportPath,
+                architectureViolationReportData = architectureViolationReportData
+            )
+        }.onSuccess {
+            logger.log("Error report generated at $reportPath")
+        }.onFailure {
+            logger.logError("Something went wrong to generate your error report.")
+        }
     }
 }
 

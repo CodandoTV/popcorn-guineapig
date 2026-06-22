@@ -5,6 +5,8 @@ import com.github.codandotv.popcorn.data.SkillDataSource
 import com.github.codandotv.popcorn.data.report.ReportDataSource
 import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
+import com.github.codandotv.popcorn.domain.usecases.InstallSkillUseCase
+import com.github.codandotv.popcorn.domain.usecases.InstallSkillUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.check.AnalyseArchitectureUseCase
 import com.github.codandotv.popcorn.domain.usecases.check.AnalyseArchitectureUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.check.CheckArchitectureUseCase
@@ -53,6 +55,13 @@ internal object ServiceLocator {
             repository = repository,
             collectModuleMetricsUseCase = collectModuleMetricsUseCase,
             logger = logger,
+        )
+    }
+
+    fun provideInstallSkillUseCase(logger: Logger): InstallSkillUseCase {
+        return InstallSkillUseCaseImpl(
+            logger = logger,
+            repository = repository,
         )
     }
 }
