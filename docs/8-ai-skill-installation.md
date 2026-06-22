@@ -1,7 +1,7 @@
 # AI Skill Installation 🤖
 
-!!!note "AI skill installation available >= 3.3.0"
-    Starting from version `3.3.0`, PopcornGP ships with an embedded AI skill file that AI coding tools can use to automatically help configure the plugin in your project.
+!!!note "AI skill installation available >= 3.2.3"
+    Starting from version `3.2.3`, PopcornGP ships with an embedded AI skill file that AI coding tools can use to automatically help configure the plugin in your project.
 
 ## What it is
 
