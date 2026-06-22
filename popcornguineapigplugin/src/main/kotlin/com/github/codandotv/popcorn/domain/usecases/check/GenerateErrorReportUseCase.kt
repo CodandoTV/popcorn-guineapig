@@ -61,7 +61,7 @@ internal class GenerateArchitectureViolationReportImpl(
                 architectureViolationReportData = architectureViolationReportData
             )
         }.onSuccess {
-            logger.log("Error report generated at $reportPath")
+            logger.logSuccess("Error report generated at $reportPath")
         }.onFailure {
             logger.logError("Something went wrong to generate your error report.")
         }

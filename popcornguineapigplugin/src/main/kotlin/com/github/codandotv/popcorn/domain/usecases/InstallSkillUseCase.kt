@@ -21,7 +21,7 @@ internal class InstallSkillUseCaseImpl(
                 skillName = skillName,
             )
         }.onSuccess {
-            logger.log("AI Skill generated successfully at $skillOutputDir")
+            logger.logSuccess("AI Skill generated successfully at $skillOutputDir")
         }.onFailure {
             logger.logError("Something went wrong to generate the AI Skill.")
         }

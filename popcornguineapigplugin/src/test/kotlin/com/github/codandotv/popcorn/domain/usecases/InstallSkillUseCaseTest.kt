@@ -11,7 +11,12 @@ class InstallSkillUseCaseTest {
     fun `Given valid parameters when execute then logs success message`() {
         val logMessages = mutableListOf<String>()
         val errorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(logMessages, errorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = logMessages,
+            errorMessages = errorMessages,
+            successMessages = successMessages,
+        )
 
         var installSkillCalled = false
         val fakeRepository = fakePopcornGuineapigRepositoryWithCallbacks(
@@ -31,14 +36,23 @@ class InstallSkillUseCaseTest {
         )
 
         assertTrue(installSkillCalled)
-        assertTrue(logMessages.first().contains("AI Skill generated successfully at /tmp/skills"))
+        assertTrue {
+            successMessages.first().contains(
+                "AI Skill generated successfully at /tmp/skills"
+            )
+        }
     }
 
     @Test
     fun `Given repository throws when execute then logs error message`() {
         val logMessages = mutableListOf<String>()
         val errorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(logMessages, errorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = logMessages,
+            successMessages = successMessages,
+            errorMessages = errorMessages
+        )
 
         val fakeRepository = fakePopcornGuineapigRepositoryWithCallbacks(
             onInstallSkillCallback = {

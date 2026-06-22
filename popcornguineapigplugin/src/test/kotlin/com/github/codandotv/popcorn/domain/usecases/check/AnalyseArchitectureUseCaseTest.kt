@@ -2,6 +2,7 @@
 
 package com.github.codandotv.popcorn.domain.usecases.check
 
+import com.android.tools.r8.internal.su
 import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
@@ -45,7 +46,12 @@ class AnalyseArchitectureUseCaseTest {
         // Arrange
         val loggerMessages = mutableListOf<String>()
         val loggerErrorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(loggerMessages, loggerErrorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = loggerMessages,
+            errorMessages = loggerErrorMessages,
+            successMessages = successMessages,
+        )
         var reportCalled = false
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
@@ -64,8 +70,9 @@ class AnalyseArchitectureUseCaseTest {
         )
 
         // Assert
-        assertTrue(loggerMessages.isNotEmpty())
-        assertTrue(loggerErrorMessages.isEmpty())
+        assertTrue { loggerMessages.isNotEmpty() }
+        assertTrue { loggerErrorMessages.isEmpty() }
+        assertTrue { successMessages.isNotEmpty() }
         assertFalse(reportCalled)
     }
 
@@ -74,7 +81,12 @@ class AnalyseArchitectureUseCaseTest {
         // Arrange
         val loggerMessages = mutableListOf<String>()
         val loggerErrorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(loggerMessages, loggerErrorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = loggerMessages,
+            errorMessages = loggerErrorMessages,
+            successMessages = successMessages,
+        )
         var reportCalled = false
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
@@ -105,7 +117,12 @@ class AnalyseArchitectureUseCaseTest {
         // Arrange
         val loggerMessages = mutableListOf<String>()
         val loggerErrorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(loggerMessages, loggerErrorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = loggerMessages,
+            errorMessages = loggerErrorMessages,
+            successMessages = successMessages,
+        )
         var capturedReportPath: String? = null
         var capturedResults: Map<String, CheckResult>? = null
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
@@ -139,7 +156,12 @@ class AnalyseArchitectureUseCaseTest {
         // Arrange
         val loggerMessages = mutableListOf<String>()
         val loggerErrorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(loggerMessages, loggerErrorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = loggerMessages,
+            errorMessages = loggerErrorMessages,
+            successMessages = successMessages,
+        )
         var reportCalled = false
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
@@ -161,13 +183,18 @@ class AnalyseArchitectureUseCaseTest {
             )
         }
         assertTrue(loggerErrorMessages.isNotEmpty())
+        assertTrue(loggerMessages.isNotEmpty())
         assertTrue(reportCalled)
     }
 
     @Test
     fun `Given multiple modules all passing when execute then no error is thrown`() {
         // Arrange
-        val fakeLogger = FakeLogger(mutableListOf(), mutableListOf())
+        val fakeLogger = FakeLogger(
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf()
+        )
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf(
@@ -202,7 +229,11 @@ class AnalyseArchitectureUseCaseTest {
     @Test
     fun `Given multiple modules with some passing and some failing when execute then error is thrown`() {
         // Arrange
-        val fakeLogger = FakeLogger(mutableListOf(), mutableListOf())
+        val fakeLogger = FakeLogger(
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf(),
+        )
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf(
@@ -237,7 +268,12 @@ class AnalyseArchitectureUseCaseTest {
         // Arrange
         val loggerMessages = mutableListOf<String>()
         val loggerErrorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(loggerMessages, loggerErrorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = loggerMessages,
+            errorMessages = loggerErrorMessages,
+            successMessages = successMessages,
+        )
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(modulesResults = emptyMap()),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(

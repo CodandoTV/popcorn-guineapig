@@ -13,7 +13,11 @@ class GenerateMetricsReportUseCaseTest {
 
     @Test
     fun `Given modules when invoke then collectModuleMetricsUseCase is called with correct modules`() {
-        val fakeLogger = FakeLogger(mutableListOf(), mutableListOf())
+        val fakeLogger = FakeLogger(
+            mutableListOf(),
+            mutableListOf(),
+            mutableListOf()
+        )
         var capturedModulesList: List<TargetModule>? = null
 
         var metricsReportCall = false
@@ -58,7 +62,11 @@ class GenerateMetricsReportUseCaseTest {
     @Test
     fun `Given repository throws when invoke then error is logged`() {
         val errorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(mutableListOf(), errorMessages)
+        val fakeLogger = FakeLogger(
+            successMessages = mutableListOf(),
+            logMessages = mutableListOf(),
+            errorMessages = errorMessages,
+        )
 
         val fakeRepository = fakePopcornGuineapigRepositoryWithCallbacks(
             onMetricsReportCallback = {
@@ -84,6 +92,8 @@ class GenerateMetricsReportUseCaseTest {
         )
 
         assertTrue(errorMessages.isNotEmpty())
-        assertTrue(errorMessages.first().contains("Something went wrong to generate the metrics report."))
+        assertTrue(
+            errorMessages.first().contains("Something went wrong to generate the metrics report.")
+        )
     }
 }

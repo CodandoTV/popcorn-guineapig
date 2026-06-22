@@ -27,7 +27,12 @@ class GenerateArchitectureViolationReportTest {
     fun `Given a report object when generate report is called then checks if all flow runs`() {
         val logMessages = mutableListOf<String>()
         val errorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(logMessages, errorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = logMessages,
+            successMessages = successMessages,
+            errorMessages = errorMessages
+        )
 
         generateArchitectureViolationReport =
             GenerateArchitectureViolationReportImpl(fakeLogger, fakePopcornGuineapigRepository)
@@ -39,7 +44,7 @@ class GenerateArchitectureViolationReportTest {
             )
         )
 
-        assertContains(logMessages.first(), "Error report generated at some/path")
+        assertContains(successMessages.first(), "Error report generated at some/path")
     }
 
     @Suppress("MaxLineLength")
@@ -47,10 +52,18 @@ class GenerateArchitectureViolationReportTest {
     fun `Given a report object + an exception in the repository when generate report is called then error is logged`() {
         val logMessages = mutableListOf<String>()
         val errorMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(logMessages, errorMessages)
+        val successMessages = mutableListOf<String>()
+        val fakeLogger = FakeLogger(
+            logMessages = logMessages,
+            successMessages = successMessages,
+            errorMessages = errorMessages,
+        )
 
         generateArchitectureViolationReport =
-            GenerateArchitectureViolationReportImpl(fakeLogger, fakePopcornGuineapigRepositoryWithError)
+            GenerateArchitectureViolationReportImpl(
+                fakeLogger,
+                fakePopcornGuineapigRepositoryWithError
+            )
 
         generateArchitectureViolationReport.execute(
             reportPath = "",

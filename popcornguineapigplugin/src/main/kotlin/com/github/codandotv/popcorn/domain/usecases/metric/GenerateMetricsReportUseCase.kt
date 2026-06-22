@@ -34,7 +34,7 @@ internal class GenerateMetricsReportUseCaseImpl(
                 metrics = metrics
             )
         }.onSuccess {
-            logger.log("Check the report at $metricsReportPath...")
+            logger.logSuccess("Check the report at $metricsReportPath...")
         }.onFailure {
             logger.logError("Something went wrong to generate the metrics report.")
         }

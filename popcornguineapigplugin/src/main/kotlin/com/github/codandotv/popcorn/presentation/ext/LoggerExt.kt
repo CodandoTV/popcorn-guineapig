@@ -45,6 +45,10 @@ internal fun Logger.toPopcornGPLogger(): com.github.codandotv.popcorn.domain.Log
             popcornLoggerInfo(message)
         }
 
+        override fun logSuccess(message: String) {
+            popcornLoggerLifecycle(message)
+        }
+
         override fun logError(message: String) {
             popcornLoggerError(message)
         }
