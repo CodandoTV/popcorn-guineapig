@@ -1,6 +1,5 @@
 package com.github.codandotv.popcorn.fakes
 
-import com.github.codandotv.popcorn.data.report.PopcornGuineapigReportException
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 import com.github.codandotv.popcorn.domain.models.ModuleMetric
@@ -29,7 +28,7 @@ internal val fakePopcornGuineapigRepositoryWithError = object : PopcornGuineapig
         reportPath: String,
         architectureViolationReportData: List<ArchitectureViolationReport>
     ) {
-        throw PopcornGuineapigReportException("/users/moro/documents/svn/myreport.md")
+        throw RuntimeException("Something went wrong with the report")
     }
 
     override fun exportMetricsReport(reportPath: String, metrics: List<ModuleMetric>) {

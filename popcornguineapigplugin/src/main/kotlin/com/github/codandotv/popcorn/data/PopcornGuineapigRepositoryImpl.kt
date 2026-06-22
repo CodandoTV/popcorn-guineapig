@@ -39,6 +39,6 @@ internal class PopcornGuineapigRepositoryImpl(
         skillDataSource.installSkill(
             skillOutputDir = skillOutputDir,
             skillName = skillName,
-        ).getOrThrow()
+        )
     }
 }

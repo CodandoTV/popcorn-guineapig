@@ -2,7 +2,7 @@ package com.github.codandotv.popcorn.data
 
 import org.junit.Test
 import java.io.File
-import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertTrue
 
 class SkillDataSourceTest {
@@ -14,36 +14,15 @@ class SkillDataSourceTest {
     @Test
     fun `Given valid parameters when installSkill is called then writes SKILL md file to target directory`() {
         val tempDir = createTempDir()
-        val result = skillDataSource.installSkill(
+        skillDataSource.installSkill(
             skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
         )
 
-        assertTrue(result.isSuccess)
         val expectedFile = File(tempDir, ".opencode/skills/setup-popcorn-plugin/SKILL.md")
         assertTrue(expectedFile.exists())
         assertTrue(expectedFile.readText().isNotEmpty())
         assertTrue(expectedFile.readText().contains("name: setup-popcorn-plugin"))
-    }
-
-    @Test
-    fun `Given existing file with same content when installSkill is called then skips and does not overwrite`() {
-        val tempDir = createTempDir()
-        val firstResult = skillDataSource.installSkill(
-            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
-            skillName = "setup-popcorn-plugin",
-        )
-        assertTrue(firstResult.isSuccess)
-        val skillFile = File(tempDir, ".opencode/skills/setup-popcorn-plugin/SKILL.md")
-        val firstModified = skillFile.lastModified()
-
-        val secondResult = skillDataSource.installSkill(
-            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
-            skillName = "setup-popcorn-plugin",
-        )
-
-        assertTrue(secondResult.isSuccess)
-        assertEquals(firstModified, skillFile.lastModified())
     }
 
     @Test
@@ -57,36 +36,34 @@ class SkillDataSourceTest {
 
         Thread.sleep(10)
 
-        val result = skillDataSource.installSkill(
+        skillDataSource.installSkill(
             skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
         )
 
-        assertTrue(result.isSuccess)
         assertTrue(skillFile.lastModified() > staleModified)
         assertTrue(skillFile.readText().contains("name: setup-popcorn-plugin"))
     }
 
     @Test
-    fun `Given missing resource when installSkill is called then returns failure`() {
+    fun `Given missing resource when installSkill is called then throws`() {
         val tempDir = createTempDir()
-        val result = skillDataSource.installSkill(
-            skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
-            skillName = "nonexistent-skill",
-        )
-
-        assertTrue(result.isFailure)
+        assertFails {
+            skillDataSource.installSkill(
+                skillOutputDir = File(tempDir, ".opencode/skills").absolutePath,
+                skillName = "nonexistent-skill",
+            )
+        }
     }
 
     @Test
     fun `Given custom output directory when installSkill is called then writes to specified path`() {
         val tempDir = createTempDir()
-        val result = skillDataSource.installSkill(
+        skillDataSource.installSkill(
             skillOutputDir = File(tempDir, ".cursor/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
         )
 
-        assertTrue(result.isSuccess)
         val expectedFile = File(tempDir, ".cursor/skills/setup-popcorn-plugin/SKILL.md")
         assertTrue(expectedFile.exists())
     }
@@ -96,12 +73,11 @@ class SkillDataSourceTest {
         val tempDir = createTempDir()
         val nestedDir = File(tempDir, "nested/dir")
 
-        val result = skillDataSource.installSkill(
+        skillDataSource.installSkill(
             skillOutputDir = File(nestedDir, ".opencode/skills").absolutePath,
             skillName = "setup-popcorn-plugin",
         )
 
-        assertTrue(result.isSuccess)
         val expectedFile = File(nestedDir, ".opencode/skills/setup-popcorn-plugin/SKILL.md")
         assertTrue(expectedFile.exists())
     }

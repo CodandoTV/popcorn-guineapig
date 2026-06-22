@@ -13,11 +13,9 @@ import com.github.codandotv.popcorn.domain.usecases.check.CheckArchitectureUseCa
 import com.github.codandotv.popcorn.domain.usecases.check.CheckArchitectureUseCaseImpl
 import com.github.codandotv.popcorn.domain.usecases.metric.CollectModuleMetricsUseCase
 import com.github.codandotv.popcorn.domain.usecases.metric.CollectModuleMetricsUseCaseImpl
-import com.github.codandotv.popcorn.domain.usecases.check.GenerateArchitectureViolationReport
 import com.github.codandotv.popcorn.domain.usecases.check.GenerateArchitectureViolationReportImpl
 import com.github.codandotv.popcorn.domain.usecases.metric.GenerateMetricsReportUseCase
 import com.github.codandotv.popcorn.domain.usecases.metric.GenerateMetricsReportUseCaseImpl
-import kotlin.math.log
 
 internal object ServiceLocator {
 
@@ -34,10 +32,6 @@ internal object ServiceLocator {
         CheckArchitectureUseCaseImpl()
     }
 
-    val generateArchitectureViolationReport: GenerateArchitectureViolationReport by lazy {
-        GenerateArchitectureViolationReportImpl(repository)
-    }
-
     val collectModuleMetricsUseCase: CollectModuleMetricsUseCase by lazy {
         CollectModuleMetricsUseCaseImpl()
     }
@@ -45,7 +39,10 @@ internal object ServiceLocator {
     fun provideAnalyseArchitectureUseCase(logger: Logger): AnalyseArchitectureUseCase {
         return AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = checkArchitectureUseCase,
-            generateArchitectureViolationReport = generateArchitectureViolationReport,
+            generateArchitectureViolationReport = GenerateArchitectureViolationReportImpl(
+                logger = logger,
+                repository = repository,
+            ),
             logger = logger,
         )
     }
