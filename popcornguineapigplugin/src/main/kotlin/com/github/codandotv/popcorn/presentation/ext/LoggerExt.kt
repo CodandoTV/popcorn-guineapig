@@ -21,12 +21,6 @@ internal fun Logger.popcornLoggerInfo(message: String) {
     )
 }
 
-internal fun Logger.popcornLoggerWarn(message: String) {
-    warn(
-        LOGGER_PREFIX + YELLOW_COLOR + message + RESET_COLOR
-    )
-}
-
 internal fun Logger.popcornLoggerError(message: String) {
     error(
         LOGGER_PREFIX + RED_COLOR + message + RESET_COLOR
