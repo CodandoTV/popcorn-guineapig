@@ -53,7 +53,7 @@ internal class AnalyseArchitectureUseCaseImpl(
         if(shouldTriggerError) {
             error("Something went wrong. Check the logs above for more details.")
         } else {
-            logger.logSuccess("No violation issues founded!")
+            logger.logSuccess("No violation issues found!")
         }
     }
 }

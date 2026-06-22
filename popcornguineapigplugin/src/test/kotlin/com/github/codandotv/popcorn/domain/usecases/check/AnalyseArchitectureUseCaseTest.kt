@@ -2,7 +2,6 @@
 
 package com.github.codandotv.popcorn.domain.usecases.check
 
-import com.android.tools.r8.internal.su
 import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
