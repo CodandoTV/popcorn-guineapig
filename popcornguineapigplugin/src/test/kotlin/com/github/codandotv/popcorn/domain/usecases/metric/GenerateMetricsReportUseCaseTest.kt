@@ -1,3 +1,5 @@
+@file:Suppress("TooGenericExceptionThrown")
+
 package com.github.codandotv.popcorn.domain.usecases.metric
 
 import com.github.codandotv.popcorn.domain.models.ModuleMetric

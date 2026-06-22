@@ -1,3 +1,5 @@
+@file:Suppress("TooGenericExceptionThrown")
+
 package com.github.codandotv.popcorn.domain.usecases
 
 import com.github.codandotv.popcorn.fakes.FakeLogger

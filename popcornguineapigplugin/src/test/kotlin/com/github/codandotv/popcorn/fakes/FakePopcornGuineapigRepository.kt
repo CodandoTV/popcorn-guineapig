@@ -1,3 +1,5 @@
+@file:Suppress("TooGenericExceptionThrown")
+
 package com.github.codandotv.popcorn.fakes
 
 import com.github.codandotv.popcorn.domain.PopcornGuineapigRepository
