@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.3]
+
+### Added
+
+- New `installPopcornSkill` Gradle task — copies a bundled AI skill file from the plugin JAR into the project, enabling AI coding tools (OpenCode, Claude Code, Cursor) to automatically configure the plugin.
+- New `skillOutputDir` DSL extension field (`popcornGuineapigParentConfig { skillOutputDir = ... }`) to customize the skill installation destination.
+- Bundled `setup-popcorn-plugin` AI skill embedded in the plugin resources.
+- New `open-pr` AI skill in the project's `ai/skills/` directory for automated pull request creation.
+
+### Changed
+
+- Minor readability improvement in `JustWithRule` — replaced `!matchesAnyPattern` with Kotlin-idiomatic `matchesAnyPattern.not()`.
+- Updated documentation — new [AI Skill Installation](https://codandotv.github.io/popcorn-guineapig/8-ai-skill-installation/) page and AI-assisted setup section in Getting Started.
+
+---
+
 ## [3.2.2]
 
 ### Changed
