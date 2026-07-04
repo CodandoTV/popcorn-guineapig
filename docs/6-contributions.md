@@ -116,16 +116,16 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-- Install mkdocs-material:
+- Install zensical:
 
 ```shell
-pip install mkdocs-material
+pip install zensical
 ```
 
 - Start the local server:
 
 ```shell
-mkdocs serve --watch .
+zensical serve
 ```
 
 Access your documentation at `http://127.0.0.1:8000/`
