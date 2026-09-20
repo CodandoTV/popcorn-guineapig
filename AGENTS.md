@@ -1,86 +1,79 @@
 # Popcorn GuineaPig — AI Context
 
-A Gradle plugin that enforces architectural rules in multi-module projects.
-Validates module dependency graphs against user-defined rules (NoDependency, JustWith, DoNotWith)
-and generates error/metrics reports.
+Gradle plugin that enforces architectural rules in multi-module projects.
+Validates module dependency graphs against user rules (`NoDependency`, `JustWith`,
+`DoNotWith`) and generates error/metrics reports. Published to Maven Central as
+`io.github.codandotv:popcornguineapig`; Gradle plugin id `io.github.codandotv.popcorngpparent`.
 
-## Project Structure
+## Repo shape
 
+- Single Gradle module: `popcornguineapigplugin/`, wired as an included build from
+  `settings.gradle.kts` via `includeBuild(...)`. There is no detekt-rule module.
+- Detekt is config-only: `config/detekt/detekt.yml`, run via `scripts/detektcheck.sh`.
+- `docs/` is built with Zensical (reads `mkdocs.yml`) and deployed to GitHub Pages.
+- Version catalog `gradle/libs.versions.toml`; publishing props in
+  `popcornguineapigplugin/gradle.properties`.
+
+## Layers
+
+`presentation/` (Gradle API, tasks, DSL) → `domain/` (pure Kotlin) → `data/`
+(I/O, formatting). `data` implements `domain/PopcornGuineapigRepository.kt`.
+
+| File type | Location |
+|-----------|----------|
+| Validation rule | `domain/rules/` |
+| Use case | `domain/usecases/` |
+| Pure / report model | `domain/models/` |
+| Repository interface | `domain/PopcornGuineapigRepository.kt` |
+| Repository impl / formatting | `data/`, `data/report/` |
+| Gradle integration | `presentation/` |
+| Dependency wiring | `ServiceLocator.kt` |
+
+Entry points: plugin `presentation/PopcornGpParentPlugin.kt`, task
+`presentation/tasks/PopcornParentTask.kt`.
+
+## Commands
+
+```bash
+./gradlew popcornguineapigplugin:build            # compile (no separate lint/typecheck task)
+./gradlew popcornguineapigplugin:koverHtmlReport  # tests + coverage — the CI gate (pr.yml)
+./gradlew popcornguineapigplugin:test --tests "com.github.codandotv.popcorn.domain.rules.NoDependencyRuleTest"
+bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter uses same config)
 ```
-popcorn-guineapig/                          # Root — Gradle aggregator
-├── popcornguineapigplugin/                 # Plugin source (single module)
-│   ├── src/main/kotlin/com/github/codandotv/popcorn/
-│   │   ├── presentation/  (Gradle API, tasks, DSL)
-│   │   ├── domain/        (Pure business logic — no Gradle imports)
-│   │   └── data/          (I/O, file writing, formatting)
-│   └── src/test/kotlin/
-│       ├── domain/        (Rule and use case tests)
-│       ├── data/          (DTO and formatting tests)
-│       ├── presentation/  (Gradle integration tests)
-│       └── fakes/         (Fake repository for testing)
-├── popcornguineapig-detekt-rule/           # Detekt custom rule (separate module)
-├── docs/                                    # User documentation (MkDocs)
-└── ai/                                      # AI context (this directory)
-```
 
-## Platform Context
+- `koverHtmlReport` depends on `test`; run it before `build` when checking a change.
+- Release: bump `VERSION` in `popcornguineapigplugin/version.properties` (currently 3.2.3),
+  prepend to `CHANGELOG.md`, then dispatch `publish.yml` manually.
 
-Load the platform-specific file from `ai/instructions/` before starting work:
+## Hard rules
 
-| Platform              | File                              |
-|-----------------------|-----------------------------------|
-| OpenCode              | `ai/instructions/opencode.md`    |
-| Claude Code           | `ai/instructions/claude.md`      |
-| Cursor                | `ai/instructions/cursor.md`      |
-| GitHub Copilot        | `ai/instructions/copilot.md`     |
-| Gemini Code Assist    | `ai/instructions/gemini.md`      |
+1. Layer direction `presentation → domain → data`; `data` implements domain interfaces. No cycles.
+2. `domain/` is pure Kotlin — NEVER import `org.gradle.api.*` there.
+3. Explicit API mode (`explicitApi()`): every public declaration needs `public` + explicit return type.
+4. Update `ServiceLocator.kt` whenever you add a repository/use-case dependency.
 
-## Available Skills
+## Testing
 
-Before starting any task, list files in `ai/skills/`, identify which covers
-the task, and read it in full before proceeding.
+- JUnit 4 + `kotlin.test`; tests mirror `src/main` under `src/test/kotlin/`.
+- Use fakes in `src/test/kotlin/.../fakes/` (e.g. `FakePopcornGuineapigRepository`) instead of real Gradle projects.
+- `kotlin.native.disableCompilerDaemon=true` is intentional (KT-65761) — daemon errors are expected.
 
-| Skill                  | When to use                                      |
-|------------------------|--------------------------------------------------|
-| `popcorn-reference`    | General project reference (architecture, FAQ)    |
-| `build-and-check`      | Compiling, validating build config               |
-| `validate-architecture`| Analyzing code structure, layer violations       |
-| `documentation-review` | Validating docs/ content, links, examples        |
-| `release-notes`        | Version bumping, changelog generation            |
-| `review-pr`            | Pull request review checklist                    |
-| `open-pr`              | Opening pull requests, auto-generated description|
-| `run-tests`            | Running tests, checking coverage                 |
-| `minimum-requirements` | Analyzing deps, updating README requirements     |
+## Plugin behavior (consumer-facing)
 
-## Critical Architectural Rules
+- Tasks: `popcornParent`, `popcornModuleMetrics`, `installPopcornSkill`.
+- `popcornParent` reads `-PerrorReportEnabled`; on projects with configuration cache run
+  with `--no-configuration-cache` (see README).
 
-1. **Three-layer clean architecture**: presentation → domain → data (presentation depends on domain; data implements domain interfaces)
-2. **Domain is pure Kotlin**: NEVER import `org.gradle.api.*` in domain/
-3. **Explicit API mode**: all public declarations must have explicit visibility and type annotations (`explicitApi()` in build.gradle.kts)
-4. **No circular dependencies** between layers
-5. **ServiceLocator.kt** wires dependencies — update it when adding new dependencies
+## OpenCode setup
 
-## Implementation Workflow
+`opencode.json` loads this file and discovers skills in `.opencode/skills/`.
+Load the matching skill before a task: `popcorn-reference`, `build-and-check`,
+`run-tests`, `validate-architecture`, `documentation-review`, `release-notes`,
+`review-pr`, `open-pr`, `minimum-requirements`.
 
-1. Understand which layer the change belongs to
-2. Implement: Domain (pure logic) → Data (I/O) → Presentation (Gradle integration)
-3. Write/update tests (mirror source structure under `src/test/kotlin/`)
-4. Validate: `./gradlew popcornguineapigplugin:koverHtmlReport`
-5. Build: `./gradlew popcornguineapigplugin:build`
-6. Mark task done only after tests pass and build compiles
+## PR checklist
 
-## CI / Automation
-
-| Workflow | Trigger | Action |
-|----------|---------|--------|
-| `pr.yml` | PR to main | `koverHtmlReport` on JDK 17 |
-| `publish.yml` | Manual dispatch | Publish to Maven Central |
-| `documentation.yml` | PR to main (docs changed) | Deploy MkDocs to GitHub Pages |
-| `mega-linter.yml` | PR to main | MegaLinter Java flavor |
-
-## PR Review Checklist
-
-- [ ] **Architecture**: files in correct layer? No Gradle imports in domain? `ServiceLocator` updated?
-- [ ] **Tests**: new tests added? Success AND failure cases? Coverage maintained?
-- [ ] **Code quality**: descriptive names? Kotlin conventions? Explicit API annotations present?
-- [ ] **Build**: `./gradlew popcornguineapigplugin:build` and `koverHtmlReport` pass?
+- [ ] Architecture: correct layer, no Gradle imports in `domain/`, `ServiceLocator` updated
+- [ ] Tests added for success AND failure cases; coverage maintained
+- [ ] Explicit API annotations present; descriptive names
+- [ ] `./gradlew popcornguineapigplugin:build` and `koverHtmlReport` pass

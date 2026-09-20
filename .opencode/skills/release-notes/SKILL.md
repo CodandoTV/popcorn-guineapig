@@ -82,7 +82,7 @@ Review both the commit messages AND the `git diff --stat` output to write meanin
 Tips:
 - Look at the diff of key source files to understand new features at the architectural level (domain/data/presentation)
 - New files under `docs/` → documentation updates
-- New files under `ai/skills/` → new AI skills
+- New files under `.opencode/skills/` → new AI skills
 - Changes in `ServiceLocator.kt` → new dependencies wired in
 
 ### 8. Increment version

@@ -26,20 +26,22 @@ popcornguineapigplugin/
 │   └── ServiceLocator.kt    # Wires repository and use cases
 │
 ├── src/test/kotlin/
-│   ├── domain/              # Rule and use case tests
-│   ├── data/                # DTO and formatting tests
-│   ├── presentation/        # Gradle integration tests
+│   ├── domain/              # Rule, use case, and model tests
+│   ├── data/                # Formatting tests
 │   └── fakes/               # FakeRepository for testing
 │
 ├── build.gradle.kts
-├── version.properties
-└── src/
+└── version.properties
 
-docs/                        # User documentation (MkDocs)
+docs/                        # User documentation (Zensical; config in mkdocs.yml)
 ├── 1-getting-started.md
 ├── 2-existing-rules.md
 ├── 3-custom-rules.md
-└── 4-error-report.md
+├── 4-error-report.md
+├── 5-metrics-report.md
+├── 6-contributions.md
+├── 7-automating-popcorngp-with-github-cicd.md
+└── 8-ai-skill-installation.md
 ```
 
 ## Build Configuration
@@ -50,7 +52,7 @@ docs/                        # User documentation (MkDocs)
 - **JVM args**: `-Xmx4608m` in `gradle.properties`
 - **Kotlin Compiler Daemon**: intentionally disabled (KT-65761)
 - **Dependencies**: centralized in TOML catalog
-- **Version**: `popcornguineapigplugin/version.properties` (current: 3.2.1)
+- **Version**: `popcornguineapigplugin/version.properties` (current: 3.2.3)
 
 ## Testing
 
