@@ -66,10 +66,16 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 
 ## OpenCode setup
 
-`opencode.json` loads this file and discovers skills in `.opencode/skills/`.
-Load the matching skill before a task: `popcorn-reference`, `build-and-check`,
-`run-tests`, `validate-architecture`, `documentation-review`, `release-notes`,
-`review-pr`, `open-pr`, `minimum-requirements`.
+`opencode.json` loads this file (`instructions`) and discovers skills in
+`.opencode/skills/` (`skills.paths`). Load the matching skill before a task:
+`popcorn-reference`, `build-and-check`, `run-tests`, `validate-architecture`,
+`documentation-review`, `release-notes`, `review-pr`, `open-pr`,
+`minimum-requirements`.
+
+To add a skill, create `.opencode/skills/<name>/SKILL.md` (discovery via the
+configured path is automatic) and add it to the list above. This repo is
+OpenCode-only — do not add per-assistant files (Claude Code, Cursor, Copilot,
+Gemini, …).
 
 ## PR checklist
 
