@@ -73,9 +73,23 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 `minimum-requirements`.
 
 To add a skill, create `.opencode/skills/<name>/SKILL.md` (discovery via the
-configured path is automatic) and add it to the list above. This repo is
-OpenCode-only — do not add per-assistant files (Claude Code, Cursor, Copilot,
-Gemini, …).
+configured path is automatic) and add it to the list above. This repo carries no
+per-assistant files (Claude Code, Cursor, Copilot, Gemini, …) beyond the DSH
+bridge below.
+
+## DeepSeek Harness setup
+
+`.dsh/skills` is a relative symlink to `.opencode/skills`, so DSH discovers the
+same bundles at `<projectRoot>/.dsh/skills/<name>/SKILL.md` with no duplicated
+content and no machine-specific configuration (the project root is the nearest
+`.git` ancestor). Keep it a committed symlink; never copy skills under `.dsh/`.
+The DSH watcher picks up new skills without a restart.
+
+Frontmatter must stay portable: both tools require `name` (kebab-case) and
+`description`. Avoid other keys where possible — `disable-model-invocation` is
+DSH-only and `permission` blocks are OpenCode-only. `popcorn-reference`'s
+"automatically loaded on session start" holds for OpenCode only; in DSH it is
+loaded on demand like every other skill.
 
 ## PR checklist
 
