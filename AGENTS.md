@@ -42,7 +42,7 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 ```
 
 - `koverHtmlReport` depends on `test`; run it before `build` when checking a change.
-- Release: bump `VERSION` in `popcornguineapigplugin/version.properties` (currently 3.2.3),
+- Release: bump `VERSION` in `popcornguineapigplugin/version.properties` (currently 3.3.0),
   prepend to `CHANGELOG.md`, then dispatch `publish.yml` manually.
 
 ## Hard rules

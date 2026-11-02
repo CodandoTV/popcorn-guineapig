@@ -14,5 +14,5 @@ After you run the task, you can see a new report at
 
 This report offers a comprehensive analysis of the errors detected in your module.
 
-!!!note "Scoped reports"
-    When `popcornParent` runs with `--modules`, the report contains only the modules evaluated in that run. See [Evaluating only selected modules](./1-getting-started.md#evaluating-only-selected-modules).
+!!!note "Scoped reports available >= 3.3.0"
+    When `popcornParent` 3.3.0 or later runs with `--modules`, the report contains only the modules evaluated in that run. See [Evaluating only selected modules](./1-getting-started.md#evaluating-only-selected-modules).

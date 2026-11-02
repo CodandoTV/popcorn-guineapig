@@ -52,7 +52,7 @@ docs/                        # User documentation (Zensical; config in mkdocs.ym
 - **JVM args**: `-Xmx4608m` in `gradle.properties`
 - **Kotlin Compiler Daemon**: intentionally disabled (KT-65761)
 - **Dependencies**: centralized in TOML catalog
-- **Version**: `popcornguineapigplugin/version.properties` (current: 3.2.3)
+- **Version**: `popcornguineapigplugin/version.properties` (current: 3.3.0)
 
 ## Testing
 

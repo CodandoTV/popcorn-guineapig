@@ -82,6 +82,9 @@ plugins {
 
 #### Evaluating only selected modules
 
+!!!note "Module selection available >= 3.3.0"
+    Starting from version `3.3.0`, `popcornParent` accepts `--modules` to evaluate only selected modules.
+
 For large builds, evaluate only the modules affected by a change by passing their Gradle project paths:
 
 ```sh

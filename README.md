@@ -47,7 +47,7 @@ naming conventions to your advantage.
 ./gradlew popcornParent
 ```
 
-To evaluate only selected modules, pass their Gradle project paths:
+To evaluate only selected modules (available from `3.3.0`), pass their Gradle project paths:
 
 ```sh
 ./gradlew popcornParent --modules=":app,:core:network"

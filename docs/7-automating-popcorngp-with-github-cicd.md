@@ -12,6 +12,9 @@ To run PopcornGP architecture validation in your CI pipeline, use the custom com
 
 ## Running only affected modules
 
+!!!note "Module selection available >= 3.3.0"
+    The action's `modules` input requires PopcornGP `3.3.0` or later.
+
 On large builds, pass the Gradle project paths of the modules touched by the pull request through the action's `modules` input:
 
 ```yaml
