@@ -225,6 +225,9 @@ After setup, validate:
 # Generate error report
 ./gradlew popcornParent -PerrorReportEnabled
 
+# Evaluate only selected modules (useful in CI)
+./gradlew popcornParent --modules=":app,:core:network"
+
 # Generate module metrics
 ./gradlew popcornModuleMetrics
 
@@ -233,6 +236,8 @@ After setup, validate:
 ```
 
 Error reports are placed at `<module>/build/reports/popcornguineapig/errorReport.md`.
+
+`--modules` (available from `3.3.0`) accepts comma-separated Gradle project paths. Unknown paths fail the build; selected modules without a matching `PopcornChildConfiguration` are skipped with a warning.
 
 ## Red flags
 

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.3.0]
+
+### Added
+
+- `popcornParent` accepts `--modules=":app,:core:network"` to evaluate only the given Gradle project paths, skipping dependency inspection and rule evaluation for the remaining modules. Unknown paths fail fast; selected modules without a matching `PopcornChildConfiguration` are skipped with a warning.
+- The GitHub composite action now accepts an optional `modules` input and forwards it to `popcornParent`, enabling scoped architecture checks in CI. With `-PerrorReportEnabled`, the error report contains only the evaluated modules.
+
+### Changed
+
+- Documentation now covers scoped runs, scoped error reports, the `popcornModuleMetrics` limitation, and CI usage.
+- Repository tooling improvements: Renovate dependency automation, Zensical documentation, and consolidated OpenCode/DeepSeek Harness AI context in `AGENTS.md`.
+
+---
+
 ## [3.2.3]
 
 ### Added

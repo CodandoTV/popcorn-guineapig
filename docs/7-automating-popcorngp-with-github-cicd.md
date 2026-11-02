@@ -7,7 +7,25 @@ To run PopcornGP architecture validation in your CI pipeline, use the custom com
   uses: CodandoTV/popcorn-guineapig/.github/actions/popcorn@main
   with:
     working-directory: ./src
+    modules: ":app,:core:network" # optional; omit to evaluate all modules
 ```
+
+## Running only affected modules
+
+!!!note "Module selection available >= 3.3.0"
+    The action's `modules` input requires PopcornGP `3.3.0` or later.
+
+On large builds, pass the Gradle project paths of the modules touched by the pull request through the action's `modules` input:
+
+```yaml
+- name: Run Popcorn
+  uses: CodandoTV/popcorn-guineapig/.github/actions/popcorn@main
+  with:
+    working-directory: ./src
+    modules: ":feature:login,:core:network"
+```
+
+The action forwards the value as `--modules=...` to `popcornParent`. The error report will contain only the evaluated modules. If `modules` is omitted or empty, all modules are evaluated. See [Evaluating only selected modules](./1-getting-started.md#evaluating-only-selected-modules) for path syntax and behavior.
 
 ## Prerequisites
 - Gradle project with the PopcornGP plugin (https://github.com/CodandoTV/popcorn-guineapig) applied and configured

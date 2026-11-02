@@ -47,6 +47,16 @@ naming conventions to your advantage.
 ./gradlew popcornParent
 ```
 
+To evaluate only selected modules (available from `3.3.0`), pass their Gradle project paths:
+
+```sh
+./gradlew popcornParent --modules=":app,:core:network"
+```
+
+This is useful in CI to check just the modules affected by a change. See
+[Evaluating only selected modules](https://codandotv.github.io/popcorn-guineapig/1-getting-started/#evaluating-only-selected-modules)
+for details.
+
 ⚠️ If your project is using cache for **configuration phase**, it is necessary to run popcorngp in this way:
 
 ```sh
