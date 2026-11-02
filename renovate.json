@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "America/Sao_Paulo",
+  "schedule": ["before 6am on Monday"],
+  "osvVulnerabilityAlerts": true,
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "matchManagers": ["gradle-wrapper"],
+      "groupName": "Gradle wrapper"
+    },
+    {
+      "matchManagers": ["gradle"],
+      "matchPackageNames": ["/^org\\.jetbrains\\.kotlin(\\.|:)/"],
+      "groupName": "Kotlin"
+    },
+    {
+      "matchManagers": ["gradle"],
+      "matchPackageNames": ["/^org\\.jetbrains\\.kotlinx\\.kover/"],
+      "groupName": "Kover"
+    },
+    {
+      "matchManagers": ["gradle"],
+      "matchPackageNames": ["com.android.tools.build:gradle"],
+      "groupName": "Android Gradle Plugin"
+    },
+    {
+      "matchManagers": ["gradle"],
+      "matchPackageNames": ["com.vanniktech.maven.publish"],
+      "groupName": "Maven Publish plugin"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github/workflows/documentation\\.yml$/"],
+      "matchStrings": ["pip install zensical==(?<currentValue>[^\\s]+)"],
+      "datasourceTemplate": "pypi",
+      "depNameTemplate": "zensical"
+    }
+  ]
+}
