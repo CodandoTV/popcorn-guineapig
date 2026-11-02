@@ -6,6 +6,10 @@ inputs:
     description: "Directory where gradlew is located"
     required: false
     default: "."
+  modules:
+    description: "Comma-separated Gradle project paths to evaluate. Empty evaluates all modules."
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -20,7 +24,14 @@ runs:
       id: module_analysis
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: ./gradlew popcornParent -PerrorReportEnabled
+      env:
+        POPCORN_MODULES: ${{ inputs.modules }}
+      run: |
+        if [ -n "$POPCORN_MODULES" ]; then
+          ./gradlew popcornParent -PerrorReportEnabled --modules="$POPCORN_MODULES"
+        else
+          ./gradlew popcornParent -PerrorReportEnabled
+        fi
 
     - name: Read Markdown file
       if: failure()

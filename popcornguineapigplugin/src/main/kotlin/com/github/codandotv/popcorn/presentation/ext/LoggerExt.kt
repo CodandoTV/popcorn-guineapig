@@ -33,6 +33,12 @@ internal fun Logger.popcornLoggerDebug(message: String) {
     )
 }
 
+internal fun Logger.popcornLoggerWarn(message: String) {
+    warn(
+        LOGGER_PREFIX + YELLOW_COLOR + message + RESET_COLOR
+    )
+}
+
 internal fun Logger.toPopcornGPLogger(): com.github.codandotv.popcorn.domain.Logger {
     return object : com.github.codandotv.popcorn.domain.Logger {
         override fun log(message: String) {

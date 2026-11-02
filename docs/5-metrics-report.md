@@ -16,6 +16,9 @@ Run the following command from the project root:
 
 > **Prerequisite:** The Popcorn Gradle Plugin must be applied with a `type` configured in your root `build.gradle.kts`. The task relies on the same project group name used by `internalProjectDependencies()` to discover inter-module dependencies.
 
+!!!note "Module selection"
+    `--modules` is not supported by `popcornModuleMetrics`. Metrics must analyze the full project graph to compute accurate FanIn and FanOut values.
+
 The report is generated at:
 
 ```

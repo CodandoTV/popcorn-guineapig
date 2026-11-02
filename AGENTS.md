@@ -61,8 +61,9 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 ## Plugin behavior (consumer-facing)
 
 - Tasks: `popcornParent`, `popcornModuleMetrics`, `installPopcornSkill`.
-- `popcornParent` reads `-PerrorReportEnabled`; on projects with configuration cache run
-  with `--no-configuration-cache` (see README).
+- `popcornParent` reads `-PerrorReportEnabled` and accepts
+  `--modules=<comma-separated project paths>` to evaluate a subset of modules; on
+  projects with configuration cache run with `--no-configuration-cache` (see README).
 
 ## OpenCode setup
 

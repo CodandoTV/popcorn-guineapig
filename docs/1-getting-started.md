@@ -80,6 +80,30 @@ plugins {
 ./gradlew popcornParent
 ```
 
+#### Evaluating only selected modules
+
+For large builds, evaluate only the modules affected by a change by passing their Gradle project paths:
+
+```sh
+./gradlew popcornParent --modules=":app,:core:network"
+```
+
+- Paths are comma-separated; the leading `:` is optional (`app` becomes `:app`).
+- Duplicate and blank entries are ignored.
+- Unknown project paths fail the build before any analysis starts.
+- Selected modules that don't match any `PopcornChildConfiguration` are skipped with a warning.
+- With `-PerrorReportEnabled`, the error report contains only the evaluated modules.
+- Omit `--modules` to keep evaluating every configured module.
+
+The option reduces dependency inspection and rule evaluation for unselected modules, but Gradle still configures the whole build. If your project uses the configuration cache, combine it with `--no-configuration-cache`:
+
+```sh
+./gradlew popcornParent --modules=":app,:core:network" --no-configuration-cache
+```
+
+!!!note "Metrics task"
+    `--modules` applies to `popcornParent` only. `popcornModuleMetrics` must analyze the full graph to compute accurate FanIn/FanOut values.
+
 !!!warning "For Gradle projects with Cache enabled for the  Configuration Phase"
     In case your project has cache enabled for the Gradle configuration phase, you need to disable that for popcorngp. So your command should be:
     ```sh
