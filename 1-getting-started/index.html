@@ -384,6 +384,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#evaluating-only-selected-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Evaluating only selected modules
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -703,6 +714,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#evaluating-only-selected-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Evaluating only selected modules
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -772,7 +794,7 @@
 </table>
 <h2 id="1-add-the-plugin-dependency">1. Add the Plugin Dependency<a class="headerlink" href="#1-add-the-plugin-dependency" title="Permanent link">&para;</a></h2>
 <p>Go to your build-logic folder, in the <code>build-logic/build.gradle.kts</code>, add the following dependency:</p>
-<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="p">(</span><span class="s">&quot;io.github.codandotv:popcornguineapig:&lt;version&gt;&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="p">(</span><span class="s">"io.github.codandotv:popcornguineapig:&lt;version&gt;"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="2-apply-the-plugin">2. Apply the Plugin<a class="headerlink" href="#2-apply-the-plugin" title="Permanent link">&para;</a></h2>
 <p>You can use the parent plugin to define all your rules in a centralized place.</p>
@@ -782,7 +804,7 @@
 <div class="highlight"><pre><span></span><code><span class="c1">// build-logic/popcorngp-setup-plugin.gradle.kts</span>
 <span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="p">...</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;io.github.codandotv.popcorngpparent&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"io.github.codandotv.popcorngpparent"</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 <h4 id="configure-all-your-architecture-rules">Configure All Your Architecture Rules<a class="headerlink" href="#configure-all-your-architecture-rules" title="Permanent link">&para;</a></h4>
@@ -793,16 +815,16 @@
 
 <span class="w">    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:util:[a-z]+&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":util:[a-z]+"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                </span><span class="n">NoDependencyRule</span><span class="p">(),</span>
 <span class="w">            </span><span class="p">),</span>
 <span class="w">        </span><span class="p">),</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:feature:[a-z]+&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":feature:[a-z]+"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                </span><span class="n">DoNotWithRule</span><span class="p">(</span>
-<span class="w">                    </span><span class="n">notWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">),</span>
+<span class="w">                    </span><span class="n">notWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"data"</span><span class="p">),</span>
 <span class="w">                </span><span class="p">),</span>
 <span class="w">            </span><span class="p">),</span>
 <span class="w">        </span><span class="p">),</span>
@@ -813,13 +835,36 @@
 <p>Don&rsquo;t forget to apply the plugin to the root build.gradle file:</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// root/build.gradle.kts</span>
 <span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;popcorngp-setup-plugin&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">id</span><span class="p">(</span><span class="s">"popcorngp-setup-plugin"</span><span class="p">)</span>
 <span class="w">    </span><span class="p">...</span>
 <span class="p">}</span>
 </code></pre></div>
 <h4 id="run-the-task"><strong>Run the task</strong><a class="headerlink" href="#run-the-task" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>popcornParent
 </code></pre></div>
+<h4 id="evaluating-only-selected-modules">Evaluating only selected modules<a class="headerlink" href="#evaluating-only-selected-modules" title="Permanent link">&para;</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Module selection available &gt;= 3.3.0</p>
+<p>Starting from version <code>3.3.0</code>, <code>popcornParent</code> accepts <code>--modules</code> to evaluate only selected modules.</p>
+</div>
+<p>For large builds, evaluate only the modules affected by a change by passing their Gradle project paths:</p>
+<div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>popcornParent<span class="w"> </span>--modules<span class="o">=</span><span class="s2">":app,:core:network"</span>
+</code></pre></div>
+<ul>
+<li>Paths are comma-separated; the leading <code>:</code> is optional (<code>app</code> becomes <code>:app</code>).</li>
+<li>Duplicate and blank entries are ignored.</li>
+<li>Unknown project paths fail the build before any analysis starts.</li>
+<li>Selected modules that don&rsquo;t match any <code>PopcornChildConfiguration</code> are skipped with a warning.</li>
+<li>With <code>-PerrorReportEnabled</code>, the error report contains only the evaluated modules.</li>
+<li>Omit <code>--modules</code> to keep evaluating every configured module.</li>
+</ul>
+<p>The option reduces dependency inspection and rule evaluation for unselected modules, but Gradle still configures the whole build. If your project uses the configuration cache, combine it with <code>--no-configuration-cache</code>:</p>
+<div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>popcornParent<span class="w"> </span>--modules<span class="o">=</span><span class="s2">":app,:core:network"</span><span class="w"> </span>--no-configuration-cache
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Metrics task</p>
+<p><code>--modules</code> applies to <code>popcornParent</code> only. <code>popcornModuleMetrics</code> must analyze the full graph to compute accurate FanIn/FanOut values.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">For Gradle projects with Cache enabled for the  Configuration Phase</p>
 <p>In case your project has cache enabled for the Gradle configuration phase, you need to disable that for popcorngp. So your command should be:

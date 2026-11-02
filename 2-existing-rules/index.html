@@ -661,10 +661,10 @@
 
 <span class="w">    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:feature:feature-[a-z]+&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":feature:feature-[a-z]+"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                </span><span class="n">DoNotWithRule</span><span class="p">(</span>
-<span class="w">                    </span><span class="n">notWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">&quot;[a-z]+-data&quot;</span><span class="p">)</span>
+<span class="w">                    </span><span class="n">notWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"[a-z]+-data"</span><span class="p">)</span>
 <span class="w">                </span><span class="p">)</span>
 <span class="w">            </span><span class="p">)</span>
 <span class="w">        </span><span class="p">),</span>
@@ -681,10 +681,10 @@
 <span class="w">    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">        </span><span class="p">...</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:[a-z]+:data&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":[a-z]+:data"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                </span><span class="n">JustWithRule</span><span class="p">(</span>
-<span class="w">                    </span><span class="n">justWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">&quot;domain&quot;</span><span class="p">)</span>
+<span class="w">                    </span><span class="n">justWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"domain"</span><span class="p">)</span>
 <span class="w">                </span><span class="p">)</span>
 <span class="w">            </span><span class="p">)</span>
 <span class="w">        </span><span class="p">)</span>
@@ -698,7 +698,7 @@
 <p><strong>Note:</strong> Regex pattern support in <code>JustWithRule.justWith</code> is available from version 3.2.2 onward.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><span class="n">JustWithRule</span><span class="p">(</span>
-<span class="w">    </span><span class="n">justWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">&quot;domain&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;feature-.*&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">justWith</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span><span class="s">"domain"</span><span class="p">,</span><span class="w"> </span><span class="s">"feature-.*"</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>Each dependency must match at least one <code>justWith</code> pattern. Like the <code>DoNotWithRule</code>, each entry is treated as a regular expression — so <code>"domain"</code> matches exactly, while <code>"feature-.*"</code> matches any module name starting with <code>feature-</code>. Dependencies that don&rsquo;t match any <code>justWith</code> pattern are flagged as violations.</p>
@@ -710,7 +710,7 @@
 <span class="w">    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">        </span><span class="p">...</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:util:[a-z]+&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":util:[a-z]+"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                </span><span class="n">NoDependencyRule</span><span class="p">(),</span>
 <span class="w">            </span><span class="p">),</span>

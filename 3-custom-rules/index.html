@@ -612,7 +612,7 @@
 <h2 id="create-your-rule">Create your rule<a class="headerlink" href="#create-your-rule" title="Permanent link">&para;</a></h2>
 <p>You also can create custom rules:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MyRule</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">PopcornGuineaPigRule</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">deps</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">InternalDependenciesMetadata</span><span class="o">&gt;</span><span class="p">):</span><span class="w"> </span><span class="n">ArchitectureViolationError? </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">deps</span><span class="p">:</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">InternalDependenciesMetadata</span><span class="o">&gt;</span><span class="p">):</span><span class="w"> </span><span class="n">ArchitectureViolationError?</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
@@ -625,7 +625,7 @@
 <span class="w">    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">        </span><span class="p">...</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:target-module&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":target-module"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                 </span><span class="n">MyRule</span><span class="p">(),</span>
 <span class="w">            </span><span class="p">)</span>

@@ -473,6 +473,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#running-only-affected-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running only affected modules
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -569,6 +580,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#running-only-affected-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running only affected modules
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -614,7 +636,21 @@
 <span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CodandoTV/popcorn-guineapig/.github/actions/popcorn@main</span>
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">working-directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./src</span>
+<span class="w">    </span><span class="nt">modules</span><span class="p">:</span><span class="w"> </span><span class="s">":app,:core:network"</span><span class="w"> </span><span class="c1"># optional; omit to evaluate all modules</span>
 </code></pre></div>
+<h2 id="running-only-affected-modules">Running only affected modules<a class="headerlink" href="#running-only-affected-modules" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Module selection available &gt;= 3.3.0</p>
+<p>The action&rsquo;s <code>modules</code> input requires PopcornGP <code>3.3.0</code> or later.</p>
+</div>
+<p>On large builds, pass the Gradle project paths of the modules touched by the pull request through the action&rsquo;s <code>modules</code> input:</p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Popcorn</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CodandoTV/popcorn-guineapig/.github/actions/popcorn@main</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">working-directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./src</span>
+<span class="w">    </span><span class="nt">modules</span><span class="p">:</span><span class="w"> </span><span class="s">":feature:login,:core:network"</span>
+</code></pre></div>
+<p>The action forwards the value as <code>--modules=...</code> to <code>popcornParent</code>. The error report will contain only the evaluated modules. If <code>modules</code> is omitted or empty, all modules are evaluated. See <a href=".././1-getting-started/#evaluating-only-selected-modules">Evaluating only selected modules</a> for path syntax and behavior.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Gradle project with the PopcornGP plugin (<a href="https://github.com/CodandoTV/popcorn-guineapig">https://github.com/CodandoTV/popcorn-guineapig</a>) applied and configured</li>
@@ -637,7 +673,7 @@
 <span class="w">    </span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">        </span><span class="p">..</span>
 <span class="w">        </span><span class="n">PopcornChildConfiguration</span><span class="p">(</span>
-<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;:domain&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">moduleNameRegex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">":domain"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">rules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
 <span class="w">                </span><span class="n">NoDependencyRule</span><span class="p">(),</span>
 <span class="w">            </span><span class="p">),</span>
