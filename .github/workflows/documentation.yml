@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      - run: pip install zensical==0.0.46
+      - run: pip install zensical==0.1.0
       - run: zensical build
       - uses: peaceiris/actions-gh-pages@v4
         with:
