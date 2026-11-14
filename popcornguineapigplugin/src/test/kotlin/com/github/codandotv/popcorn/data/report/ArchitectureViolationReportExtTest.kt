@@ -5,6 +5,7 @@ import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import org.junit.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -188,4 +189,64 @@ class ArchitectureViolationReportExtTest {
         assertTrue(result.contains("## Analysis: :car:data Module"))
         assertTrue(result.contains("## Analysis: :rent:data Module"))
     }
+
+    @Test
+    fun `Given a rule pattern with a pipe when toMarkdownReport is called then the description stays in one cell`() {
+        val report = ArchitectureViolationReport(
+            modulePath = ":feature-home",
+            analysisTable = listOf(
+                ViolationReportItem(
+                    internalDependencyName = ":data",
+                    ruleChecked = "DoNotWithRule",
+                    ruleDescription = "This module should not depends on [(data|network)]",
+                    result = ViolationReportType.FAILED,
+                ),
+            ),
+        )
+
+        val result = listOf(report).toMarkdownReport()
+
+        val row = result.rowStartingWith("| 1 |")
+        assertEquals(6, row.cellCount())
+        assertContains(row, "| This module should not depends on [(data\\|network)] |")
+    }
+
+    @Test
+    fun `Given a description with a backtick and a line break when toMarkdownReport is called then both stay in one cell`() {
+        val report = ArchitectureViolationReport(
+            modulePath = ":feature-home",
+            analysisTable = listOf(
+                ViolationReportItem(
+                    internalDependencyName = ":data",
+                    ruleChecked = "DoNotWithRule",
+                    ruleDescription = "Pattern `a|b`\nand more",
+                    result = ViolationReportType.FAILED,
+                ),
+            ),
+        )
+
+        val row = listOf(report).toMarkdownReport().rowStartingWith("| 1 |")
+
+        assertEquals(6, row.cellCount())
+        assertContains(row, "Pattern \\`a\\|b\\` and more")
+    }
+
+    /**
+     * Backslashes are escaped before pipes, otherwise a value that already contains `\|` would turn
+     * into an escaped backslash followed by a raw pipe and still break the table. The expectation
+     * holds three backslashes and a pipe: two escape the backslash, one escapes the pipe.
+     */
+    @Test
+    fun `Given a value with a backslash escaped pipe when escaped then the pipe stays escaped`() {
+        assertEquals("a\\\\\\|b", "a\\|b".escapeMarkdownCell())
+    }
+
+    private fun String.rowStartingWith(prefix: String): String = lines().first { it.startsWith(prefix) }
+
+    /** Cells of a Markdown table row, splitting on every pipe that is not escaped with a backslash. */
+    private fun String.cellCount(): Int = trim()
+        .removePrefix("|")
+        .removeSuffix("|")
+        .split(Regex("(?<!\\\\)\\|"))
+        .size
 }
