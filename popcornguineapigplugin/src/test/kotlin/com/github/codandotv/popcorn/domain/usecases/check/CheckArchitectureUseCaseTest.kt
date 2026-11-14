@@ -23,6 +23,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a data layer + invalid relation when do not with rule is checked then fails`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":data",
             moduleName = "data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "domain"),
@@ -42,6 +43,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a data layer + invalid relation + regex when do not with rule is checked then fails`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":user-data",
             moduleName = "user-data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "user-presentation"),
@@ -60,6 +62,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a data layer + valid relation when do not with rule is checked then passes`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":data",
             moduleName = "data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "domain")
@@ -78,6 +81,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a domain layer + no relationship when no relationship rule is checked then passes`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":domain",
             moduleName = "domain",
             rules = listOf(NoDependencyRule()),
             internalDependencies = emptyList(),
@@ -94,6 +98,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a domain layer + some relationship when no relationship rule is checked then fails`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":domain",
             moduleName = "domain",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(
@@ -115,6 +120,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + some relations when just with rule is checked then passes`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":presentation",
             moduleName = "presentation",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, "domain"),
@@ -138,6 +144,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + some relations + 2 domains when just with rule is checked then passes`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":presentation",
             moduleName = "presentation",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, "domain"),
@@ -158,6 +165,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + some relations (not sorted) when just with rule is checked then passes`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":presentation",
             moduleName = "presentation",
             rules = listOf(JustWithRule(justWith = listOf("resources", "domain"))),
             internalDependencies = listOf(
@@ -177,6 +185,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + missing relation when just with rule is checked then fails`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":presentation",
             moduleName = "presentation",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),
@@ -196,6 +205,7 @@ class CheckArchitectureUseCaseTest {
     fun `Given a presentation layer + missing relation + regex rule when just with rule is checked then fails`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":referral-presentation",
             moduleName = "referral-presentation",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(group = null, moduleName = "resources"),

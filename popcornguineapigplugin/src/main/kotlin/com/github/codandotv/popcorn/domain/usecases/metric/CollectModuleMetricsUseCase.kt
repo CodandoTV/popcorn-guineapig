@@ -1,5 +1,6 @@
 package com.github.codandotv.popcorn.domain.usecases.metric
 
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.ModuleMetric
 import com.github.codandotv.popcorn.domain.models.TargetModule
 
@@ -13,14 +14,9 @@ internal class CollectModuleMetricsUseCaseImpl : CollectModuleMetricsUseCase {
         val moduleMetrics = mutableListOf<ModuleMetric>()
 
         modules.forEach { currentModule ->
-            var fanIn = 0
-
-            modules.forEach { module ->
-                val isCurrentModuleDependent = module.internalDependencies.any { internalDep ->
-                    internalDep.moduleName.equals(currentModule.moduleName, ignoreCase = true)
-                }
-                if (isCurrentModuleDependent) {
-                    fanIn++
+            val fanIn = modules.count { module ->
+                module.internalDependencies.any { internalDep ->
+                    internalDep.references(currentModule)
                 }
             }
 
@@ -41,11 +37,21 @@ internal class CollectModuleMetricsUseCaseImpl : CollectModuleMetricsUseCase {
                     name = currentModule.moduleName,
                     fanIn = fanIn,
                     fanOut = fanOut,
-                    instability = instability
+                    instability = instability,
+                    modulePath = currentModule.modulePath,
                 )
             )
         }
 
         return moduleMetrics
+    }
+}
+
+private fun InternalDependenciesMetadata.references(module: TargetModule): Boolean {
+    val dependencyPath = modulePath
+    return if (dependencyPath != null) {
+        dependencyPath == module.modulePath
+    } else {
+        moduleName.equals(module.moduleName, ignoreCase = true)
     }
 }

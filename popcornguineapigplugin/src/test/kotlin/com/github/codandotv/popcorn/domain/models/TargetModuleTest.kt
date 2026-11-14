@@ -9,6 +9,7 @@ class TargetModuleTest {
     fun `Given a target module when logMessage is called then returns a formatted message`() {
         // Arrange
         val targetModule = TargetModule(
+            modulePath = ":feature:feature-data",
             moduleName = "feature-data",
             internalDependencies = listOf(
                 InternalDependenciesMetadata(
@@ -33,6 +34,7 @@ class TargetModuleTest {
         // Assert
         assertEquals(
             "\n----------------------\n" +
+                    "Module path: :feature:feature-data\n" +
                     "Module name: feature-data\n" +
                     "Internal dependencies: design-system,core-system,util\n" +
                     "----------------------", logMessage

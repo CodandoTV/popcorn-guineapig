@@ -4,7 +4,7 @@ import com.github.codandotv.popcorn.domain.models.ModuleMetric
 
 internal fun List<ModuleMetric>.toMetricsReport(): String {
     val reportContent = map {
-        "${it.name},${it.fanIn},${it.fanOut},${it.instability}"
+        "${it.name},${it.fanIn},${it.fanOut},${it.instability},${it.modulePath}"
     }.reduceOrNull { acc, item ->
         "$acc\n$item"
     }
@@ -12,7 +12,7 @@ internal fun List<ModuleMetric>.toMetricsReport(): String {
     return if (reportContent.isNullOrEmpty()) {
         ""
     } else {
-        val header = "name,fanIn,fanOut,instability\n"
+        val header = "name,fanIn,fanOut,instability,path\n"
         header.plus(reportContent)
     }
 }
