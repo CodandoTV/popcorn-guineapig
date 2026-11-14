@@ -431,4 +431,45 @@ class CollectModuleMetricsUseCaseTest {
         assertEquals(0, result.single { it.modulePath == ":car:data" }.fanOut)
         assertEquals(1, result.single { it.modulePath == ":rent:data" }.fanOut)
     }
+
+    @Test
+    fun `Given coordinate-only dependency and modules sharing a name when invoke then fanIn is counted for both`() {
+        // Arrange - A dependency declared only by coordinates has no modulePath, so it falls back to
+        // leaf-name matching. This double attribution is intentional backward compatibility and is
+        // documented in docs/5-metrics-report.md.
+        val modules = listOf(
+            TargetModule(
+                modulePath = ":car:data",
+                moduleName = "data",
+                internalDependencies = emptyList(),
+                rules = emptyList()
+            ),
+            TargetModule(
+                modulePath = ":rent:data",
+                moduleName = "data",
+                internalDependencies = emptyList(),
+                rules = emptyList()
+            ),
+            TargetModule(
+                modulePath = ":app",
+                moduleName = "app",
+                internalDependencies = listOf(
+                    InternalDependenciesMetadata(
+                        group = "com.popcorn",
+                        moduleName = "data",
+                        modulePath = null
+                    )
+                ),
+                rules = emptyList()
+            )
+        )
+
+        // Act
+        val result = useCase.invoke(modules)
+
+        // Assert
+        assertEquals(1, result.single { it.modulePath == ":car:data" }.fanIn)
+        assertEquals(1, result.single { it.modulePath == ":rent:data" }.fanIn)
+        assertEquals(1, result.single { it.modulePath == ":app" }.fanOut)
+    }
 }
