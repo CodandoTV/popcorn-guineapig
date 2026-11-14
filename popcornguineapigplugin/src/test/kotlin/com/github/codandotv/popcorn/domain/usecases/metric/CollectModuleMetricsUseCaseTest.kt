@@ -33,6 +33,7 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":data",
                 moduleName = "data",
                 internalDependencies = emptyList(),
                 rules = emptyList()
@@ -55,6 +56,7 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":presentation",
                 moduleName = "presentation",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "domain"),
@@ -79,11 +81,13 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":domain",
                 moduleName = "domain",
                 internalDependencies = emptyList(),
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":data",
                 moduleName = "data",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "domain")
@@ -112,6 +116,7 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":moduleA",
                 moduleName = "moduleA",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "moduleB")
@@ -119,6 +124,7 @@ class CollectModuleMetricsUseCaseTest {
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":moduleB",
                 moduleName = "moduleB",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "moduleC")
@@ -126,6 +132,7 @@ class CollectModuleMetricsUseCaseTest {
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":moduleC",
                 moduleName = "moduleC",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "moduleA")
@@ -150,11 +157,13 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":core",
                 moduleName = "core",
                 internalDependencies = emptyList(),
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":data",
                 moduleName = "data",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "core")
@@ -162,6 +171,7 @@ class CollectModuleMetricsUseCaseTest {
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":domain",
                 moduleName = "domain",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "core"),
@@ -198,11 +208,13 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":Domain",
                 moduleName = "Domain",
                 internalDependencies = emptyList(),
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":Data",
                 moduleName = "Data",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "domain") // lowercase
@@ -224,11 +236,13 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":utils",
                 moduleName = "utils",
                 internalDependencies = emptyList(),
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":module1",
                 moduleName = "module1",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "utils")
@@ -236,6 +250,7 @@ class CollectModuleMetricsUseCaseTest {
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":module2",
                 moduleName = "module2",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "utils")
@@ -243,6 +258,7 @@ class CollectModuleMetricsUseCaseTest {
                 rules = emptyList()
             ),
             TargetModule(
+                modulePath = ":module3",
                 moduleName = "module3",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "utils")
@@ -266,6 +282,7 @@ class CollectModuleMetricsUseCaseTest {
         // This test validates current behavior
         val modules = listOf(
             TargetModule(
+                modulePath = ":core",
                 moduleName = "core",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "utils"),
@@ -288,6 +305,7 @@ class CollectModuleMetricsUseCaseTest {
         val moduleCount = 10
         val modules = (0 until moduleCount).map { i ->
             TargetModule(
+                modulePath = ":module$i",
                 moduleName = "module$i",
                 internalDependencies = if (i > 0) {
                     listOf(
@@ -313,6 +331,7 @@ class CollectModuleMetricsUseCaseTest {
         // Arrange
         val modules = listOf(
             TargetModule(
+                modulePath = ":presentation",
                 moduleName = "presentation",
                 internalDependencies = listOf(
                     InternalDependenciesMetadata(group = null, moduleName = "domain"),
@@ -332,5 +351,84 @@ class CollectModuleMetricsUseCaseTest {
         assertEquals(3, metric.fanOut)
         assertEquals(0, metric.fanIn)
         assertEquals(1f, metric.instability) // 3 / (0 + 3) = 1.0
+    }
+
+    @Test
+    fun `Given two modules sharing a name when invoke then fanIn is attributed by module path`() {
+        // Arrange
+        val modules = listOf(
+            TargetModule(
+                modulePath = ":car:data",
+                moduleName = "data",
+                internalDependencies = emptyList(),
+                rules = emptyList()
+            ),
+            TargetModule(
+                modulePath = ":rent:data",
+                moduleName = "data",
+                internalDependencies = emptyList(),
+                rules = emptyList()
+            ),
+            TargetModule(
+                modulePath = ":car:app",
+                moduleName = "app",
+                internalDependencies = listOf(
+                    InternalDependenciesMetadata(
+                        group = "com.popcorn",
+                        moduleName = "data",
+                        modulePath = ":car:data"
+                    )
+                ),
+                rules = emptyList()
+            )
+        )
+
+        // Act
+        val result = useCase.invoke(modules)
+
+        // Assert
+        assertEquals(3, result.size)
+
+        val carDataMetric = result.single { it.modulePath == ":car:data" }
+        assertEquals("data", carDataMetric.name)
+        assertEquals(1, carDataMetric.fanIn)
+        assertEquals(0, carDataMetric.fanOut)
+
+        val rentDataMetric = result.single { it.modulePath == ":rent:data" }
+        assertEquals("data", rentDataMetric.name)
+        assertEquals(0, rentDataMetric.fanIn)
+        assertEquals(0, rentDataMetric.fanOut)
+    }
+
+    @Test
+    fun `Given two modules sharing a name when invoke then each module gets its own metric`() {
+        // Arrange
+        val modules = listOf(
+            TargetModule(
+                modulePath = ":car:data",
+                moduleName = "data",
+                internalDependencies = emptyList(),
+                rules = emptyList()
+            ),
+            TargetModule(
+                modulePath = ":rent:data",
+                moduleName = "data",
+                internalDependencies = listOf(
+                    InternalDependenciesMetadata(
+                        group = null,
+                        moduleName = "domain"
+                    )
+                ),
+                rules = emptyList()
+            )
+        )
+
+        // Act
+        val result = useCase.invoke(modules)
+
+        // Assert
+        assertEquals(setOf(":car:data", ":rent:data"), result.map { it.modulePath }.toSet())
+        assertEquals(0, result.single { it.modulePath == ":car:data" }.fanOut)
+        assertEquals(1, result.single { it.modulePath == ":rent:data" }.fanOut)
     }
 }

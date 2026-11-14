@@ -47,8 +47,8 @@ class GenerateMetricsReportUseCaseTest {
         )
 
         val expectedModules = listOf(
-            TargetModule("data", emptyList(), emptyList()),
-            TargetModule("domain", emptyList(), emptyList())
+            TargetModule(":data", "data", emptyList(), emptyList()),
+            TargetModule(":domain", "domain", emptyList(), emptyList())
         )
 
         generateMetricsReportUseCase.invoke(
@@ -78,7 +78,15 @@ class GenerateMetricsReportUseCaseTest {
 
         val fakeCollectMetricsUseCase = object : CollectModuleMetricsUseCase {
             override fun invoke(modules: List<TargetModule>): List<ModuleMetric> {
-                return listOf(ModuleMetric(":module", 1, 0, 1.0f))
+                return listOf(
+                    ModuleMetric(
+                        name = ":module",
+                        fanIn = 1,
+                        fanOut = 0,
+                        instability = 1.0f,
+                        modulePath = ":module",
+                    )
+                )
             }
         }
 
@@ -90,7 +98,7 @@ class GenerateMetricsReportUseCaseTest {
 
         generateMetricsReportUseCase.invoke(
             metricsReportPath = "/tmp/report.csv",
-            modules = listOf(TargetModule(":module", emptyList(), emptyList()))
+            modules = listOf(TargetModule(":module", "module", emptyList(), emptyList()))
         )
 
         assertTrue(errorMessages.isNotEmpty())

@@ -19,9 +19,12 @@ internal class CheckArchitectureUseCaseImpl : CheckArchitectureUseCase {
         val internalDependencies = targetModule.internalDependencies
         val sortedInternalProjectDependencies = internalDependencies
             .distinct()
-            .sortedBy {
-                it.moduleName
-            }
+            .sortedWith(
+                compareBy(
+                    { it.moduleName },
+                    { it.modulePath ?: "" },
+                )
+            )
 
         val errors = mutableListOf<ArchitectureViolationError>()
 

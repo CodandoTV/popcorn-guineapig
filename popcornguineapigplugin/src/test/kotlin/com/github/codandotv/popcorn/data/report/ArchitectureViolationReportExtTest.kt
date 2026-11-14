@@ -6,6 +6,7 @@ import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ArchitectureViolationReportExtTest {
     @Test
@@ -24,7 +25,7 @@ class ArchitectureViolationReportExtTest {
             result = ViolationReportType.FAILED,
         )
         val report = ArchitectureViolationReport(
-            moduleName = ":feature-home",
+            modulePath = ":feature-home",
             analysisTable = listOf(analysisItem),
         )
         val result = listOf(report).toMarkdownReport()
@@ -67,7 +68,7 @@ class ArchitectureViolationReportExtTest {
             result = ViolationReportType.FAILED,
         )
         val report = ArchitectureViolationReport(
-            moduleName = ":feature-home",
+            modulePath = ":feature-home",
             analysisTable = listOf(analysisItem1, analysisItem2),
         )
         val result = listOf(report).toMarkdownReport()
@@ -99,7 +100,7 @@ class ArchitectureViolationReportExtTest {
     @Test
     fun `Given multiple modules with failed violations when toMarkdownReport is called then each module has its own section`() {
         val homeReport = ArchitectureViolationReport(
-            moduleName = ":feature-home",
+            modulePath = ":feature-home",
             analysisTable = listOf(
                 ViolationReportItem(
                     internalDependencyName = ":shared",
@@ -110,7 +111,7 @@ class ArchitectureViolationReportExtTest {
             ),
         )
         val loginReport = ArchitectureViolationReport(
-            moduleName = ":feature-login",
+            modulePath = ":feature-login",
             analysisTable = listOf(
                 ViolationReportItem(
                     internalDependencyName = ":network",
@@ -160,5 +161,31 @@ class ArchitectureViolationReportExtTest {
 
 """
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun `Given modules sharing a name when toMarkdownReport is called then each path has its own section`() {
+        val carDataItem = ViolationReportItem(
+            internalDependencyName = ":car:domain",
+            ruleChecked = "DoNotWithRule",
+            ruleDescription = "Module cannot depend on :car:domain",
+            result = ViolationReportType.FAILED,
+        )
+        val rentDataItem = ViolationReportItem(
+            internalDependencyName = ":rent:domain",
+            ruleChecked = "DoNotWithRule",
+            ruleDescription = "Module cannot depend on :rent:domain",
+            result = ViolationReportType.FAILED,
+        )
+        val reports = listOf(
+            ArchitectureViolationReport(modulePath = ":car:data", analysisTable = listOf(carDataItem)),
+            ArchitectureViolationReport(modulePath = ":rent:data", analysisTable = listOf(rentDataItem)),
+        )
+
+        val result = reports.toMarkdownReport()
+
+        assertEquals(2, result.split("## Analysis:").size - 1)
+        assertTrue(result.contains("## Analysis: :car:data Module"))
+        assertTrue(result.contains("## Analysis: :rent:data Module"))
     }
 }

@@ -7,12 +7,13 @@ import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.CheckResult
+import com.github.codandotv.popcorn.domain.models.ModuleAnalysis
 import kotlin.collections.map
 
 internal interface GenerateArchitectureViolationReport {
     fun execute(
         reportPath: String,
-        results: Map<String, CheckResult>
+        results: List<ModuleAnalysis>
     )
 }
 
@@ -23,33 +24,29 @@ internal class GenerateArchitectureViolationReportImpl(
 
     override fun execute(
         reportPath: String,
-        results: Map<String, CheckResult>,
+        results: List<ModuleAnalysis>,
     ) {
         val failureResults = results.filter {
-            it.value is CheckResult.Failure
+            it.result is CheckResult.Failure
         }
 
         val architectureViolationReportData = mutableListOf<ArchitectureViolationReport>()
 
-        failureResults.forEach { (moduleName, result) ->
-            val analysisTable = mutableListOf<ViolationReportItem>()
-            if (result is CheckResult.Failure) {
-                val tableItems = result.errors.map { arcViolation ->
-                    arcViolation.affectedRelationship?.map { affectedRelationship ->
-                        ViolationReportItem(
-                            internalDependencyName = affectedRelationship.toName(),
-                            ruleChecked = arcViolation.rule::class.simpleName.toString(),
-                            ruleDescription = arcViolation.message,
-                            result = ViolationReportType.FAILED,
-                        )
-                    }.orEmpty()
-                }.flatten()
-
-                analysisTable.addAll(tableItems)
+        failureResults.forEach { analysis ->
+            val failure = analysis.result as CheckResult.Failure
+            val analysisTable = failure.errors.flatMap { arcViolation ->
+                arcViolation.affectedRelationship.orEmpty().map { affectedRelationship ->
+                    ViolationReportItem(
+                        internalDependencyName = affectedRelationship.toName(),
+                        ruleChecked = arcViolation.rule::class.simpleName.toString(),
+                        ruleDescription = arcViolation.message,
+                        result = ViolationReportType.FAILED,
+                    )
+                }
             }
             architectureViolationReportData.add(
                 ArchitectureViolationReport(
-                    moduleName = moduleName,
+                    modulePath = analysis.modulePath,
                     analysisTable = analysisTable
                 )
             )

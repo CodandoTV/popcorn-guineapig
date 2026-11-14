@@ -5,12 +5,14 @@ import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.domain.input.configurationNames
 import com.github.codandotv.popcorn.domain.models.TargetModule
+import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 import com.github.codandotv.popcorn.domain.usecases.check.AnalyseArchitectureUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerWarn
 import com.github.codandotv.popcorn.presentation.ext.toPopcornGPLogger
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
@@ -89,28 +91,8 @@ public open class PopcornParentTask : DefaultTask() {
             }
         )
 
-        val targetModules = mutableListOf<TargetModule>()
         val evaluatedProjectPaths = mutableSetOf<String>()
-
-        children.forEach { child ->
-            val moduleNameRegex = child.moduleNameRegex.toRegex()
-            projectsToEvaluate
-                .filter { moduleNameRegex.matches(it.path) }
-                .forEach { gradleMatchedProject ->
-                    evaluatedProjectPaths.add(gradleMatchedProject.path)
-                    val internalProjectDependencies = gradleMatchedProject.internalProjectDependencies(
-                        configurationNames = type.configurationNames(),
-                        groupName = _groupName
-                    )
-                    targetModules.add(
-                        TargetModule(
-                            moduleName = gradleMatchedProject.name,
-                            internalDependencies = internalProjectDependencies,
-                            rules = child.rules
-                        )
-                    )
-                }
-        }
+        val targetModules = buildTargetModules(projectsToEvaluate, evaluatedProjectPaths)
 
         val skippedModules = skippedSelectedModules(requestedModules, evaluatedProjectPaths)
         if (skippedModules.isNotEmpty()) {
@@ -127,4 +109,50 @@ public open class PopcornParentTask : DefaultTask() {
             errorReportPath = if (_errorReportEnabled) _reportPath else null
         )
     }
+
+    private fun buildTargetModules(
+        projectsToEvaluate: List<Project>,
+        evaluatedProjectPaths: MutableSet<String>,
+    ): List<TargetModule> {
+        val projectsByPath = projectsToEvaluate.associateBy { it.path }
+        val rulesByProjectPath = resolveRulesByProjectPath(
+            children = children,
+            projectPaths = projectsToEvaluate.map { it.path },
+        )
+        evaluatedProjectPaths.addAll(rulesByProjectPath.keys)
+
+        val configurationNames = type.configurationNames()
+        return rulesByProjectPath.map { (modulePath, rules) ->
+            val gradleMatchedProject = projectsByPath.getValue(modulePath)
+            TargetModule(
+                modulePath = modulePath,
+                moduleName = gradleMatchedProject.name,
+                internalDependencies = gradleMatchedProject.internalProjectDependencies(
+                    configurationNames = configurationNames,
+                    groupName = _groupName,
+                ),
+                rules = rules,
+            )
+        }
+    }
+}
+
+internal fun resolveRulesByProjectPath(
+    children: List<PopcornChildConfiguration>,
+    projectPaths: List<String>,
+): Map<String, List<PopcornGuineaPigRule>> {
+    val rulesByProjectPath = linkedMapOf<String, MutableList<PopcornGuineaPigRule>>()
+
+    children.forEach { child ->
+        val moduleNameRegex = child.moduleNameRegex.toRegex()
+        projectPaths
+            .filter { moduleNameRegex.matches(it) }
+            .forEach { projectPath ->
+                rulesByProjectPath
+                    .getOrPut(projectPath) { mutableListOf() }
+                    .addAll(child.rules)
+            }
+    }
+
+    return rulesByProjectPath.mapValues { (_, rules) -> rules.distinct() }
 }

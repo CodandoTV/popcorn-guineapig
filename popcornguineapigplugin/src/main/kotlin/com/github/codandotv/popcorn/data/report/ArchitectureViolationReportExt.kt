@@ -13,7 +13,7 @@ internal fun List<ArchitectureViolationReport>.toMarkdownReport(): String {
         )
 
         val summary = groupBy {
-            it.moduleName
+            it.modulePath
         }
 
         for (entry in summary) {

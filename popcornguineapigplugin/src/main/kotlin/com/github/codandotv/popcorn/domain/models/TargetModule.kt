@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.domain.models
 import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 
 internal data class TargetModule(
+    val modulePath: String,
     val moduleName: String,
     val internalDependencies: List<InternalDependenciesMetadata>,
     val rules: List<PopcornGuineaPigRule>,
@@ -14,7 +15,8 @@ internal data class TargetModule(
                 "$acc,$s"
             } ?: ""
 
-        return separator + "\nModule name: $moduleName\n" +
+        return separator + "\nModule path: $modulePath\n" +
+                "Module name: $moduleName\n" +
                 "Internal dependencies: " + internalDepsReport + separator
     }
 }

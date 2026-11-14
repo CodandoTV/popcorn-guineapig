@@ -5,7 +5,7 @@
 | Requirement | Minimum version |
 |-------------|----------------|
 | Java | 17 |
-| Gradle | 8.7 |
+| Gradle | 8.11 |
 | Kotlin | 2.2.0 |
 | Android Gradle Plugin | 8.7.3 (for Android projects) |
 
