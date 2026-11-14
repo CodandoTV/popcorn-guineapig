@@ -528,6 +528,7 @@
 <code>/yourproject/yourmodule/build/reports/popcornguineapig/errorReport.md</code>.</p>
 <p>This report offers a comprehensive analysis of the errors detected in your module.</p>
 <p>Each analysis section is labeled with the module&rsquo;s Gradle project path (for example <code>:car:data</code>), not only with its leaf name. Modules that share the same name — such as <code>:car:data</code> and <code>:rent:data</code> — are evaluated and reported independently, so a violation in one of them can never be hidden by the other.</p>
+<p>Dependency rows follow the same rule: a dependency that is a Gradle project dependency is shown by its project path (for example <code>:car:domain</code>), so a module depending on two same-named modules makes clear which one triggered the violation. A dependency known only by coordinates is shown as <code>group:name</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Scoped reports available &gt;= 3.3.0</p>
 <p>When <code>popcornParent</code> 3.3.0 or later runs with <code>--modules</code>, the report contains only the modules evaluated in that run. See <a href=".././1-getting-started/#evaluating-only-selected-modules">Evaluating only selected modules</a>.</p>
