@@ -131,8 +131,49 @@ class GenerateArchitectureViolationReportTest {
         )
         assertTrue(capturedReports.all { it.analysisTable.size == 1 })
         assertEquals(
-            "com.popcorn:domain",
+            ":car:domain",
             capturedReports.first().analysisTable.first().internalDependencyName
+        )
+    }
+
+    @Test
+    fun `Given a coordinate-only failing dependency when report is generated then it is labeled by group and name`() {
+        val fakeLogger = FakeLogger(
+            logMessages = mutableListOf(),
+            successMessages = mutableListOf(),
+            errorMessages = mutableListOf(),
+        )
+        var capturedReports: List<ArchitectureViolationReport> = emptyList()
+        val fakeRepository = fakePopcornGuineapigRepositoryWithCallbacks(
+            onErrorReportDataCallback = { reports -> capturedReports = reports }
+        )
+        val failure = CheckResult.Failure(
+            errors = listOf(
+                ArchitectureViolationError(
+                    message = "This module should not have dependencies",
+                    affectedRelationship = listOf(
+                        InternalDependenciesMetadata(
+                            group = "com.popcorn",
+                            moduleName = "domain",
+                            modulePath = null,
+                        )
+                    ),
+                    rule = NoDependencyRule(),
+                )
+            )
+        )
+
+        generateArchitectureViolationReport =
+            GenerateArchitectureViolationReportImpl(fakeLogger, fakeRepository)
+
+        generateArchitectureViolationReport.execute(
+            reportPath = "some/path",
+            results = listOf(ModuleAnalysis(modulePath = ":car:data", result = failure))
+        )
+
+        assertEquals(
+            "com.popcorn:domain",
+            capturedReports.single().analysisTable.single().internalDependencyName
         )
     }
 }

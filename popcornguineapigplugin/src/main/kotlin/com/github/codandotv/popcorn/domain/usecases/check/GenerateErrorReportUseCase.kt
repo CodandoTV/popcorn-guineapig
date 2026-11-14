@@ -37,7 +37,7 @@ internal class GenerateArchitectureViolationReportImpl(
             val analysisTable = failure.errors.flatMap { arcViolation ->
                 arcViolation.affectedRelationship.orEmpty().map { affectedRelationship ->
                     ViolationReportItem(
-                        internalDependencyName = affectedRelationship.toName(),
+                        internalDependencyName = affectedRelationship.reportName(),
                         ruleChecked = arcViolation.rule::class.simpleName.toString(),
                         ruleDescription = arcViolation.message,
                         result = ViolationReportType.FAILED,
@@ -65,6 +65,11 @@ internal class GenerateArchitectureViolationReportImpl(
     }
 }
 
-internal fun InternalDependenciesMetadata.toName(): String {
-    return group?.plus(":")?.plus(moduleName) ?: moduleName
+/**
+ * Display label for a dependency row. Project dependencies are identified by their Gradle project
+ * path so two dependencies that share a leaf name stay distinguishable; dependencies known only by
+ * coordinates fall back to their `group:name` coordinates.
+ */
+internal fun InternalDependenciesMetadata.reportName(): String {
+    return modulePath ?: group?.plus(":")?.plus(moduleName) ?: moduleName
 }

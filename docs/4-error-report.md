@@ -16,5 +16,7 @@ This report offers a comprehensive analysis of the errors detected in your modul
 
 Each analysis section is labeled with the module's Gradle project path (for example `:car:data`), not only with its leaf name. Modules that share the same name — such as `:car:data` and `:rent:data` — are evaluated and reported independently, so a violation in one of them can never be hidden by the other.
 
+Dependency rows follow the same rule: a dependency that is a Gradle project dependency is shown by its project path (for example `:car:domain`), so a module depending on two same-named modules makes clear which one triggered the violation. A dependency known only by coordinates is shown as `group:name`.
+
 !!!note "Scoped reports available >= 3.3.0"
     When `popcornParent` 3.3.0 or later runs with `--modules`, the report contains only the modules evaluated in that run. See [Evaluating only selected modules](./1-getting-started.md#evaluating-only-selected-modules).

@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Minimum supported Gradle version is now 8.11, required to read `ProjectDependency.path`. The plugin fails fast with a clear message on older Gradle versions.
 - Documentation covers project-path module identity, the metrics `path` column and `InternalDependenciesMetadata.modulePath`.
+- Error report rows identify a dependency by its Gradle project path when it is a project dependency, so a module depending on two same-named modules shows which one triggered the violation. Coordinate-only dependencies keep the `group:name` label.
 
 ---
 
