@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.presentation
 import com.github.codandotv.popcorn.domain.input.PopcornChildConfiguration
 import com.github.codandotv.popcorn.domain.input.ProjectType
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
+import com.github.codandotv.popcorn.presentation.ext.requireMinimumGradleVersion
 import com.github.codandotv.popcorn.presentation.tasks.InstallPopcornSkillTask
 import com.github.codandotv.popcorn.presentation.tasks.PopcornModuleMetricsTask
 import com.github.codandotv.popcorn.presentation.tasks.PopcornParentTask
@@ -13,6 +14,8 @@ import org.gradle.kotlin.dsl.register
 public class PopcornGpParentPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
+        requireMinimumGradleVersion()
+
         val reportPath = target.project.layout.buildDirectory.asFile.get().path
 
         val extension = target.extensions.create(

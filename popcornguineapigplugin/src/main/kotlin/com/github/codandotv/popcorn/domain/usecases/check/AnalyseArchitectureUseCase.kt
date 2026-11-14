@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.domain.usecases.check
 import com.github.codandotv.popcorn.domain.Logger
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.models.CheckResult
+import com.github.codandotv.popcorn.domain.models.ModuleAnalysis
 
 internal interface AnalyseArchitectureUseCase {
     fun execute(
@@ -20,21 +21,26 @@ internal class AnalyseArchitectureUseCaseImpl(
         modules: List<TargetModule>,
         errorReportPath: String?,
     ) {
-        val results = mutableMapOf<String, CheckResult>()
+        val results = mutableListOf<ModuleAnalysis>()
 
         modules.forEach {
-            logger.log("Process popcorn task over ${it.moduleName}")
+            logger.log("Process popcorn task over ${it.modulePath}")
             logger.log(it.toString())
 
             val result = checkArchitectureUseCase.execute(
                 targetModule = it,
             )
-            results[it.moduleName] = result
+            results.add(
+                ModuleAnalysis(
+                    modulePath = it.modulePath,
+                    result = result,
+                )
+            )
 
             if (result is CheckResult.Failure) {
                 result.errors.forEach { error ->
                     logger.logError(
-                        "${it.moduleName} is violating the rule " +
+                        "${it.modulePath} is violating the rule " +
                                 error.rule::class.simpleName
                                 + "(${error.message})"
                     )
@@ -49,7 +55,7 @@ internal class AnalyseArchitectureUseCaseImpl(
             )
         }
 
-        val shouldTriggerError = results.any { it.value is CheckResult.Failure }
+        val shouldTriggerError = results.any { it.result is CheckResult.Failure }
         if(shouldTriggerError) {
             error("Something went wrong. Check the logs above for more details.")
         } else {

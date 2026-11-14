@@ -3,9 +3,9 @@ package com.github.codandotv.popcorn.fakes
 import com.github.codandotv.popcorn.domain.Logger
 
 internal class FakeLogger(
-    private val logMessages: MutableList<String>,
-    private val successMessages: MutableList<String>,
-    private val errorMessages: MutableList<String>,
+    internal val logMessages: MutableList<String>,
+    internal val successMessages: MutableList<String>,
+    internal val errorMessages: MutableList<String>,
 ) : Logger {
     override fun logSuccess(message: String) {
         successMessages.add(message)

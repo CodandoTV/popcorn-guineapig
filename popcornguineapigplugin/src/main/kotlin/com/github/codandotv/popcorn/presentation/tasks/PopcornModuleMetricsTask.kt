@@ -39,6 +39,7 @@ public open class PopcornModuleMetricsTask : DefaultTask() {
         val configurationNames = type.configurationNames()
         val modules = gradleProjects.map { gradleMatchedProject ->
             TargetModule(
+                modulePath = gradleMatchedProject.path,
                 moduleName = gradleMatchedProject.name,
                 internalDependencies = gradleMatchedProject.internalProjectDependencies(
                     configurationNames = configurationNames,

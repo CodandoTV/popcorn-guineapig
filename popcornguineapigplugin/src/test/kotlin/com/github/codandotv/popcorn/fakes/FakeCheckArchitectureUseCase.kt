@@ -8,7 +8,7 @@ internal class FakeCheckArchitectureUseCase(
     internal val modulesResults: Map<String, CheckResult>,
 ) : CheckArchitectureUseCase {
     override fun execute(targetModule: TargetModule): CheckResult {
-        return modulesResults[targetModule.moduleName]
+        return modulesResults[targetModule.modulePath]
             ?: CheckResult.Success
     }
 }

@@ -45,6 +45,7 @@ internal val fakePopcornGuineapigRepositoryWithError = object : PopcornGuineapig
 
 internal fun fakePopcornGuineapigRepositoryWithCallbacks(
     onErrorReportCallback: () -> Unit = {},
+    onErrorReportDataCallback: (List<ArchitectureViolationReport>) -> Unit = {},
     onMetricsReportCallback: () -> Unit = {},
     onInstallSkillCallback: () -> Unit = {},
 ) : PopcornGuineapigRepository {
@@ -53,6 +54,7 @@ internal fun fakePopcornGuineapigRepositoryWithCallbacks(
             reportPath: String,
             architectureViolationReportData: List<ArchitectureViolationReport>
         ) {
+            onErrorReportDataCallback(architectureViolationReportData)
             onErrorReportCallback()
         }
 

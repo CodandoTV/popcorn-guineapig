@@ -6,6 +6,7 @@ import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
 import com.github.codandotv.popcorn.domain.models.CheckResult
+import com.github.codandotv.popcorn.domain.models.ModuleAnalysis
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import com.github.codandotv.popcorn.fakes.FakeCheckArchitectureUseCase
 import com.github.codandotv.popcorn.fakes.FakeGenerateArchitectureViolationReport
@@ -27,12 +28,14 @@ class AnalyseArchitectureUseCaseTest {
     )
     private val someModules = listOf(
         TargetModule(
+            modulePath = ":data",
             moduleName = "data",
             internalDependencies = emptyList(),
             rules = listOf(fakeRule),
         )
     )
     private val aModuleWithFailure = TargetModule(
+        modulePath = ":presentation",
         moduleName = "presentation",
         internalDependencies = listOf(
             InternalDependenciesMetadata(group = null, moduleName = "domain"),
@@ -40,21 +43,22 @@ class AnalyseArchitectureUseCaseTest {
         rules = listOf(fakeRule),
     )
 
+    private fun fakeLogger(): FakeLogger {
+        return FakeLogger(
+            logMessages = mutableListOf(),
+            errorMessages = mutableListOf(),
+            successMessages = mutableListOf(),
+        )
+    }
+
     @Test
     fun `Given all modules passing when execute with no report path then no error is thrown and no log error is called`() {
         // Arrange
-        val loggerMessages = mutableListOf<String>()
-        val loggerErrorMessages = mutableListOf<String>()
-        val successMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(
-            logMessages = loggerMessages,
-            errorMessages = loggerErrorMessages,
-            successMessages = successMessages,
-        )
+        val fakeLogger = fakeLogger()
         var reportCalled = false
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
-                modulesResults = mapOf("data" to CheckResult.Success)
+                modulesResults = mapOf(":data" to CheckResult.Success)
             ),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> reportCalled = true }
@@ -69,29 +73,22 @@ class AnalyseArchitectureUseCaseTest {
         )
 
         // Assert
-        assertTrue { loggerMessages.isNotEmpty() }
-        assertTrue { loggerErrorMessages.isEmpty() }
-        assertTrue { successMessages.isNotEmpty() }
+        assertTrue { fakeLogger.logMessages.isNotEmpty() }
+        assertTrue { fakeLogger.errorMessages.isEmpty() }
+        assertTrue { fakeLogger.successMessages.isNotEmpty() }
         assertFalse(reportCalled)
     }
 
     @Test
     fun `Given some modules failing when execute with no report path then error is thrown and log error is called`() {
         // Arrange
-        val loggerMessages = mutableListOf<String>()
-        val loggerErrorMessages = mutableListOf<String>()
-        val successMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(
-            logMessages = loggerMessages,
-            errorMessages = loggerErrorMessages,
-            successMessages = successMessages,
-        )
+        val fakeLogger = fakeLogger()
         var reportCalled = false
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf(
-                    "data" to CheckResult.Success,
-                    "presentation" to CheckResult.Failure(listOf(fakeError)),
+                    ":data" to CheckResult.Success,
+                    ":presentation" to CheckResult.Failure(listOf(fakeError)),
                 )
             ),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
@@ -107,26 +104,19 @@ class AnalyseArchitectureUseCaseTest {
                 errorReportPath = null,
             )
         }
-        assertTrue(loggerErrorMessages.isNotEmpty())
+        assertTrue(fakeLogger.errorMessages.isNotEmpty())
         assertFalse(reportCalled)
     }
 
     @Test
     fun `Given all modules passing with a report path when execute then report is generated`() {
         // Arrange
-        val loggerMessages = mutableListOf<String>()
-        val loggerErrorMessages = mutableListOf<String>()
-        val successMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(
-            logMessages = loggerMessages,
-            errorMessages = loggerErrorMessages,
-            successMessages = successMessages,
-        )
+        val fakeLogger = fakeLogger()
         var capturedReportPath: String? = null
-        var capturedResults: Map<String, CheckResult>? = null
+        var capturedResults: List<ModuleAnalysis>? = null
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
-                modulesResults = mapOf("data" to CheckResult.Success)
+                modulesResults = mapOf(":data" to CheckResult.Success)
             ),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { path, results ->
@@ -147,25 +137,18 @@ class AnalyseArchitectureUseCaseTest {
         assertNotNull(capturedReportPath)
         assertNotNull(capturedResults)
         assertEquals("/tmp/report.md", capturedReportPath)
-        assertTrue(loggerErrorMessages.isEmpty())
+        assertTrue(fakeLogger.errorMessages.isEmpty())
     }
 
     @Test
     fun `Given some modules failing with a report path when execute then both error is thrown and report is generated`() {
         // Arrange
-        val loggerMessages = mutableListOf<String>()
-        val loggerErrorMessages = mutableListOf<String>()
-        val successMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(
-            logMessages = loggerMessages,
-            errorMessages = loggerErrorMessages,
-            successMessages = successMessages,
-        )
+        val fakeLogger = fakeLogger()
         var reportCalled = false
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf(
-                    "presentation" to CheckResult.Failure(listOf(fakeError)),
+                    ":presentation" to CheckResult.Failure(listOf(fakeError)),
                 )
             ),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
@@ -181,41 +164,38 @@ class AnalyseArchitectureUseCaseTest {
                 errorReportPath = "/tmp/report.md",
             )
         }
-        assertTrue(loggerErrorMessages.isNotEmpty())
-        assertTrue(loggerMessages.isNotEmpty())
+        assertTrue(fakeLogger.errorMessages.isNotEmpty())
+        assertTrue(fakeLogger.logMessages.isNotEmpty())
         assertTrue(reportCalled)
     }
 
     @Test
     fun `Given multiple modules all passing when execute then no error is thrown`() {
         // Arrange
-        val fakeLogger = FakeLogger(
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf()
-        )
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf(
-                    "data" to CheckResult.Success,
-                    "domain" to CheckResult.Success,
+                    ":data" to CheckResult.Success,
+                    ":domain" to CheckResult.Success,
                 )
             ),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> }
             ),
-            logger = fakeLogger,
+            logger = fakeLogger(),
         )
 
         // Act
         analyseArchitectureUseCase.execute(
             modules = listOf(
                 TargetModule(
+                    modulePath = ":data",
                     moduleName = "data",
                     internalDependencies = emptyList(),
                     rules = listOf(fakeRule),
                 ),
                 TargetModule(
+                    modulePath = ":domain",
                     moduleName = "domain",
                     internalDependencies = emptyList(),
                     rules = listOf(fakeRule),
@@ -228,22 +208,17 @@ class AnalyseArchitectureUseCaseTest {
     @Test
     fun `Given multiple modules with some passing and some failing when execute then error is thrown`() {
         // Arrange
-        val fakeLogger = FakeLogger(
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
-        )
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(
                 modulesResults = mapOf(
-                    "data" to CheckResult.Success,
-                    "presentation" to CheckResult.Failure(listOf(fakeError)),
+                    ":data" to CheckResult.Success,
+                    ":presentation" to CheckResult.Failure(listOf(fakeError)),
                 )
             ),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
                 onExecute = { _, _ -> }
             ),
-            logger = fakeLogger,
+            logger = fakeLogger(),
         )
 
         // Act, Assert
@@ -251,6 +226,7 @@ class AnalyseArchitectureUseCaseTest {
             analyseArchitectureUseCase.execute(
                 modules = listOf(
                     TargetModule(
+                        modulePath = ":data",
                         moduleName = "data",
                         internalDependencies = emptyList(),
                         rules = listOf(fakeRule),
@@ -265,14 +241,7 @@ class AnalyseArchitectureUseCaseTest {
     @Test
     fun `Given an empty list of modules when execute then no error is thrown and no log messages are produced`() {
         // Arrange
-        val loggerMessages = mutableListOf<String>()
-        val loggerErrorMessages = mutableListOf<String>()
-        val successMessages = mutableListOf<String>()
-        val fakeLogger = FakeLogger(
-            logMessages = loggerMessages,
-            errorMessages = loggerErrorMessages,
-            successMessages = successMessages,
-        )
+        val fakeLogger = fakeLogger()
         val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
             checkArchitectureUseCase = FakeCheckArchitectureUseCase(modulesResults = emptyMap()),
             generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
@@ -288,7 +257,97 @@ class AnalyseArchitectureUseCaseTest {
         )
 
         // Assert
-        assertTrue(loggerMessages.isEmpty())
-        assertTrue(loggerErrorMessages.isEmpty())
+        assertTrue(fakeLogger.logMessages.isEmpty())
+        assertTrue(fakeLogger.errorMessages.isEmpty())
+    }
+
+    @Test
+    fun `Given two modules sharing a name where one fails when execute then error is thrown for both iteration orders`() {
+        // Arrange
+        val carData = TargetModule(
+            modulePath = ":car:data",
+            moduleName = "data",
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+            ),
+            rules = listOf(fakeRule),
+        )
+        val rentData = TargetModule(
+            modulePath = ":rent:data",
+            moduleName = "data",
+            internalDependencies = emptyList(),
+            rules = listOf(fakeRule),
+        )
+        val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
+            checkArchitectureUseCase = FakeCheckArchitectureUseCase(
+                modulesResults = mapOf(
+                    ":car:data" to CheckResult.Failure(listOf(fakeError)),
+                    ":rent:data" to CheckResult.Success,
+                )
+            ),
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
+                onExecute = { _, _ -> }
+            ),
+            logger = fakeLogger(),
+        )
+
+        // Act, Assert
+        assertFails {
+            analyseArchitectureUseCase.execute(
+                modules = listOf(carData, rentData),
+                errorReportPath = null,
+            )
+        }
+        assertFails {
+            analyseArchitectureUseCase.execute(
+                modules = listOf(rentData, carData),
+                errorReportPath = null,
+            )
+        }
+    }
+
+    @Test
+    fun `Given two modules sharing a name when execute with a report path then both modules are reported independently`() {
+        // Arrange
+        val carData = TargetModule(
+            modulePath = ":car:data",
+            moduleName = "data",
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = null, moduleName = "domain"),
+            ),
+            rules = listOf(fakeRule),
+        )
+        val rentData = TargetModule(
+            modulePath = ":rent:data",
+            moduleName = "data",
+            internalDependencies = emptyList(),
+            rules = listOf(fakeRule),
+        )
+        var capturedResults: List<ModuleAnalysis>? = null
+        val analyseArchitectureUseCase = AnalyseArchitectureUseCaseImpl(
+            checkArchitectureUseCase = FakeCheckArchitectureUseCase(
+                modulesResults = mapOf(
+                    ":car:data" to CheckResult.Failure(listOf(fakeError)),
+                    ":rent:data" to CheckResult.Success,
+                )
+            ),
+            generateArchitectureViolationReport = FakeGenerateArchitectureViolationReport(
+                onExecute = { _, results -> capturedResults = results }
+            ),
+            logger = fakeLogger(),
+        )
+
+        // Act, Assert
+        assertFails {
+            analyseArchitectureUseCase.execute(
+                modules = listOf(rentData, carData),
+                errorReportPath = "/tmp/report.md",
+            )
+        }
+        assertNotNull(capturedResults)
+        val results = capturedResults.orEmpty()
+        assertEquals(2, results.size)
+        assertEquals(setOf(":car:data", ":rent:data"), results.map { it.modulePath }.toSet())
+        assertTrue(results.any { it.modulePath == ":car:data" && it.result is CheckResult.Failure })
     }
 }

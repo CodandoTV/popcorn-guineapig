@@ -4,5 +4,6 @@ internal data class ModuleMetric(
     val name: String,
     val fanIn: Int,
     val fanOut: Int,
-    val instability: Float
+    val instability: Float,
+    val modulePath: String,
 )

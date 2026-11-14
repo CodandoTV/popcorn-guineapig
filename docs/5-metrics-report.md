@@ -30,13 +30,16 @@ The report is generated at:
 The CSV file uses the following schema:
 
 ```
-name,fanIn,fanOut,instability
-core,2,0,0.0
-data,1,1,0.5
-presentation,0,2,1.0
+name,fanIn,fanOut,instability,path
+core,2,0,0.0,:core
+data,1,1,0.5,:car:data
+presentation,0,2,1.0,:feature:presentation
 ```
 
-Each row corresponds to one Gradle subproject in your build.
+Each row corresponds to one Gradle subproject in your build. The `path` column is the module's Gradle project path and is the unique identity used to compute FanIn and FanOut. `name` is the display name, so two modules that share a name (for example `:car:data` and `:rent:data`) produce two independent rows with the same `name` and different `path`.
+
+!!!note "`path` column available >= 3.4.0"
+    Reports generated before 3.4.0 had the schema `name,fanIn,fanOut,instability`. The four existing columns keep their order and meaning.
 
 ## Metrics
 
@@ -44,7 +47,7 @@ Each row corresponds to one Gradle subproject in your build.
 
 **Definition:** The number of modules within the project that depend on this module.
 
-**Purpose:** FanIn measures how many other modules rely on a given module. A high FanIn value identifies **core or shared modules** that many parts of the system depend on. Changes to these modules have a broad impact across the project.
+**Purpose:** FanIn measures how many other modules rely on a given module. A high FanIn value identifies **core or shared modules** that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module.
 
 ### FanOut
 
