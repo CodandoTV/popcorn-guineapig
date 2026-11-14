@@ -91,8 +91,8 @@ public open class PopcornParentTask : DefaultTask() {
             }
         )
 
-        val evaluatedProjectPaths = mutableSetOf<String>()
-        val targetModules = buildTargetModules(projectsToEvaluate, evaluatedProjectPaths)
+        val targetModules = buildTargetModules(projectsToEvaluate)
+        val evaluatedProjectPaths = targetModules.map { it.modulePath }.toSet()
 
         val skippedModules = skippedSelectedModules(requestedModules, evaluatedProjectPaths)
         if (skippedModules.isNotEmpty()) {
@@ -112,14 +112,12 @@ public open class PopcornParentTask : DefaultTask() {
 
     private fun buildTargetModules(
         projectsToEvaluate: List<Project>,
-        evaluatedProjectPaths: MutableSet<String>,
     ): List<TargetModule> {
         val projectsByPath = projectsToEvaluate.associateBy { it.path }
         val rulesByProjectPath = resolveRulesByProjectPath(
             children = children,
             projectPaths = projectsToEvaluate.map { it.path },
         )
-        evaluatedProjectPaths.addAll(rulesByProjectPath.keys)
 
         val configurationNames = type.configurationNames()
         return rulesByProjectPath.map { (modulePath, rules) ->
