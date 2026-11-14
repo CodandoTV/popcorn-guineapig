@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.4.0]
+
+### Added
+
+- `InternalDependenciesMetadata.modulePath` exposes the Gradle project path of internal project dependencies, so custom rules can distinguish modules that share a leaf name.
+- The metrics CSV report now includes a trailing `path` column with each module's Gradle project path.
+
+### Fixed
+
+- Modules that share a name (for example `:car:data` and `:rent:data`) are now evaluated, reported and measured independently by `popcornParent` and `popcornModuleMetrics`. Previously the last result overwrote the others by name, which could hide a violation and made FanIn count them as one module.
+- Error report sections are labeled with the module's Gradle project path, so modules that share a name no longer merge into a single section.
+- A project matching more than one `PopcornChildConfiguration` now enforces the union of every matching configuration's rules instead of keeping only the last evaluated result.
+
+### Changed
+
+- Minimum supported Gradle version is now 8.11, required to read `ProjectDependency.path`. The plugin fails fast with a clear message on older Gradle versions.
+- Documentation covers project-path module identity, the metrics `path` column and `InternalDependenciesMetadata.modulePath`.
+
+---
+
 ## [3.3.0]
 
 ### Added
