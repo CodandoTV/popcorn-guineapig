@@ -21,7 +21,6 @@ Guides the setup of `PopcornGpParentPlugin` in a multi-module Kotlin Multiplatfo
 | Java | 17 |
 | Gradle | 8.11 |
 | Kotlin | 2.2.0 |
-| Android Gradle Plugin | 8.7.3 (Android projects only) |
 
 ## Detection: choose the right setup path
 
