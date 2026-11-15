@@ -30,10 +30,21 @@ lane :update_tag do
 
     File.write(version_properties_file, "VERSION=#{new_version}\n".delete('"'))
 
-    sh("git config user.name 'Rods'")
-    sh("git config user.email 'rodrigo.vianna.oliveira@gmail.com'")
     sh("git add #{version_properties_file}")
-    sh("git commit -m 'Update version to #{new_version}'")
+
+    # A release prepared ahead of time already commits the same VERSION line, so
+    # `git add` stages nothing and `git commit` would fail before the tag exists.
+    # Commit only when the file actually changed; otherwise tag the checked-out commit.
+    staged_version = sh("git diff --cached --name-only -- #{version_properties_file}").strip
+
+    if staged_version.empty?
+      UI.message("VERSION=#{new_version} is already committed; tagging the current commit.")
+    else
+      sh("git config user.name 'Rods'")
+      sh("git config user.email 'rodrigo.vianna.oliveira@gmail.com'")
+      sh("git commit -m 'Update version to #{new_version}'")
+    end
+
     sh("git tag #{new_tag}")
     sh("git push origin #{new_tag}")
 
