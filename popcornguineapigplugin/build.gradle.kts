@@ -2,22 +2,17 @@ import java.util.Properties
 
 plugins {
     `kotlin-dsl`
-    `kotlin-dsl-precompiled-script-plugins`
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.vanniktech.maven.publish)
     alias(libs.plugins.kover)
 }
 
 repositories {
-    google()
     mavenCentral()
     gradlePluginPortal()
     maven(url = "https://plugins.gradle.org/m2/")
 }
 
 dependencies {
-    implementation(libs.kotlin.gradle.plugin)
-    implementation(libs.gradle)
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
 }
