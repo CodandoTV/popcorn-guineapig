@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- The error report escapes `|`, backticks and line breaks in its table cells, so a rule pattern such as `(data|network)` no longer breaks the Markdown table the GitHub Action posts on a pull request.
+- A module analysed more than once now renders a single `Violations Found` count and a single `Violation Details` table instead of repeating them per analysis.
+
 ## [3.4.0]
 
 ### Added
