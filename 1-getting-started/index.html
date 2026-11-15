@@ -374,6 +374,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-internal-dependencies-are-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How internal dependencies are detected
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#run-the-task" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -704,6 +715,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#how-internal-dependencies-are-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How internal dependencies are detected
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#run-the-task" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -837,6 +859,21 @@
 <span class="w">    </span><span class="p">...</span>
 <span class="p">}</span>
 </code></pre></div>
+<h4 id="how-internal-dependencies-are-detected">How internal dependencies are detected<a class="headerlink" href="#how-internal-dependencies-are-detected" title="Permanent link">&para;</a></h4>
+<p>A dependency counts as internal when Gradle knows it as a project dependency, such as
+<code>implementation(project(":data"))</code>, whatever <code>group</code> the target module sets. The check is on the
+dependency type, so the root project name never decides what is internal.</p>
+<p>If your modules are declared by coordinates instead, such as
+<code>implementation("com.popcorn:data:1.0")</code>, set <code>groupName</code> to their group. Matching is per whole
+group segment: <code>com.popcorn</code> covers <code>com.popcorn</code> and <code>com.popcorn.data</code>, but never <code>com.popcornx</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title"><code>groupName</code> is deprecated</p>
+<p>Because project dependencies are detected by type, <code>groupName</code> is only needed for
+coordinate-declared modules. It is deprecated and will be removed in <code>4.0.0</code>.</p>
+<p>Before <code>3.4.0</code>, the root project name was used when <code>groupName</code> was unset, so a root project
+named <code>android</code>, <code>core</code> or <code>kotlin</code> turned libraries such as <code>androidx.core:core-ktx</code> into
+internal dependencies.</p>
+</div>
 <h4 id="run-the-task"><strong>Run the task</strong><a class="headerlink" href="#run-the-task" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>popcornParent
 </code></pre></div>

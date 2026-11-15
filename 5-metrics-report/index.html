@@ -755,7 +755,7 @@
 <div class="highlight"><pre><span></span><code>./gradlew<span class="w"> </span>popcornModuleMetrics
 </code></pre></div>
 <blockquote>
-<p><strong>Prerequisite:</strong> The Popcorn Gradle Plugin must be applied with a <code>type</code> configured in your root <code>build.gradle.kts</code>. The task relies on the same project group name used by <code>internalProjectDependencies()</code> to discover inter-module dependencies.</p>
+<p><strong>Prerequisite:</strong> The Popcorn Gradle Plugin must be applied with a <code>type</code> configured in your root <code>build.gradle.kts</code>. The task relies on the same internal-dependency detection as <code>popcornParent</code>: project dependencies are detected by their Gradle type, and modules declared by coordinates are only recognized when <code>groupName</code> is configured.</p>
 </blockquote>
 <div class="admonition note">
 <p class="admonition-title">Module selection</p>
@@ -779,7 +779,7 @@ presentation,0,2,1.0,:feature:presentation
 <h2 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h2>
 <h3 id="fanin">FanIn<a class="headerlink" href="#fanin" title="Permanent link">&para;</a></h3>
 <p><strong>Definition:</strong> The number of modules within the project that depend on this module.</p>
-<p><strong>Purpose:</strong> FanIn measures how many other modules rely on a given module. A high FanIn value identifies <strong>core or shared modules</strong> that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module. A dependency declared only by coordinates (not as a Gradle project dependency) has no project path, so it falls back to leaf-name matching and counts toward every module that shares its leaf name. When the same dependency is declared both as a project dependency and by coordinates, the project path takes precedence, so the edge is attributed to that project only.</p>
+<p><strong>Purpose:</strong> FanIn measures how many other modules rely on a given module. A high FanIn value identifies <strong>core or shared modules</strong> that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module. A dependency declared only by coordinates (not as a Gradle project dependency) has no project path, so it falls back to leaf-name matching and counts toward every module that shares its leaf name; that fallback only applies to coordinate-declared modules that the configured <code>groupName</code> recognizes as internal. When the same dependency is declared both as a project dependency and by coordinates, the project path takes precedence, so the edge is attributed to that project only.</p>
 <h3 id="fanout">FanOut<a class="headerlink" href="#fanout" title="Permanent link">&para;</a></h3>
 <p><strong>Definition:</strong> The number of internal dependencies this module has — i.e., how many other project modules it depends on.</p>
 <p><strong>Purpose:</strong> FanOut measures how much a module relies on the rest of the project. A high FanOut value indicates a module with many outward connections, making it more coupled to the overall system structure.</p>
