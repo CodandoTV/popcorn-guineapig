@@ -42,8 +42,10 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 ```
 
 - `koverHtmlReport` depends on `test`; run it before `build` when checking a change.
-- Release: bump `VERSION` in `popcornguineapigplugin/version.properties` (currently 3.3.0),
-  prepend to `CHANGELOG.md`, then dispatch `publish.yml` manually.
+- Release: use the `trigger-release` skill. It bumps `VERSION` in
+  `popcornguineapigplugin/version.properties`, prepends to `CHANGELOG.md`, pushes
+  the release commit and dispatches `publish.yml`, which publishes to Maven Central
+  and creates the `v<version>` tag.
 
 ## Hard rules
 
@@ -70,7 +72,7 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 `opencode.json` loads this file (`instructions`) and discovers skills in
 `.opencode/skills/` (`skills.paths`). Load the matching skill before a task:
 `popcorn-reference`, `build-and-check`, `run-tests`, `validate-architecture`,
-`documentation-review`, `release-notes`, `review-pr`, `open-pr`,
+`documentation-review`, `release-notes`, `trigger-release`, `review-pr`, `open-pr`,
 `minimum-requirements`, `consumer-app-test`.
 
 To add a skill, create `.opencode/skills/<name>/SKILL.md` (discovery via the

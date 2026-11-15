@@ -80,8 +80,8 @@ docs/                        # User documentation (Zensical; config in mkdocs.ym
 1. Validate architecture
 2. Run full tests
 3. Compile
-4. Update `popcornguineapigplugin/version.properties`
-5. Merge and trigger `publish.yml` workflow
+4. Prepare the version and CHANGELOG with the `release-notes` skill
+5. Publish with the `trigger-release` skill (it dispatches `publish.yml`)
 
 ## FAQ
 

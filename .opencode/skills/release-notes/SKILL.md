@@ -7,6 +7,9 @@ description: Automated release workflow — reads version, categorizes unrelease
 
 Automates version bumping and changelog generation for the Popcorn GuineaPig plugin.
 
+> This skill only **prepares** a release. To commit, push and publish it, use the
+> `trigger-release` skill.
+
 ## When to use
 
 - Preparing a new release
@@ -108,14 +111,17 @@ Prepend a new entry to `CHANGELOG.md` **after the header line** (before the prev
 
 Omit sections that have no entries. Follow the existing format — no date suffix needed (unlike earlier versions).
 
-### 10. Prompt user
+### 10. Hand off
 
-After changes are made, prompt the user to:
+After changes are made, present the changed files and the commit command:
 
 ```bash
 git add popcornguineapigplugin/version.properties CHANGELOG.md
 git commit -m "chore: bump to <new-version>; update CHANGELOG"
-git tag v<new-version>
 ```
 
-Do **not** commit or tag automatically — only present the commands.
+Do **not** commit automatically — only present the commands.
+
+Do **not** create or push `v<new-version>`: the `publish.yml` workflow's
+`fastlane update_tag` lane owns the tag, and a duplicate tag makes the publish
+fail. To publish, continue with the `trigger-release` skill.
