@@ -1,71 +1,77 @@
-@file:Suppress("MaxLineLength", "NestedBlockDepth")
+@file:Suppress("MaxLineLength")
 package com.github.codandotv.popcorn.data.report
 
+import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
 import kotlin.collections.iterator
 
 internal fun List<ArchitectureViolationReport>.toMarkdownReport(): String {
-    if (isNotEmpty()) {
-        val reportContent = StringBuilder()
-        reportContent.append(
-            "# 🍿🐹 Popcorn Guinea Pig Architecture Error Report\n\n"
+    if (isEmpty()) {
+        return ""
+    }
+
+    val reportContent = StringBuilder()
+    reportContent.append(
+        "# 🍿🐹 Popcorn Guinea Pig Architecture Error Report\n\n"
+    )
+
+    groupBy { it.modulePath }.forEach { (modulePath, reports) ->
+        reportContent.appendModuleSummary(
+            modulePath = modulePath,
+            violations = reports.flatMap { it.analysisTable },
         )
+    }
 
-        val summary = groupBy {
-            it.modulePath
-        }
+    return reportContent.toString()
+}
 
-        for (entry in summary) {
-            var generalSummaryStatus = ViolationReportType.PASSED
-            entry.value.forEach { violationReport ->
-                val isThereAnyFailure = violationReport.analysisTable.any { analysisItem ->
-                    analysisItem.result == ViolationReportType.FAILED
-                }
-                if (isThereAnyFailure) {
-                    generalSummaryStatus = ViolationReportType.FAILED
-                }
-            }
-            reportContent.append(
-                """
-## Analysis: ${entry.key.escapeMarkdownCell()} Module
+/**
+ * Writes one summary and one details table per module. A module can be analysed more than once, so
+ * every violation of the group is merged into a single table instead of repeating the summary and
+ * the table header once per analysis.
+ */
+private fun StringBuilder.appendModuleSummary(
+    modulePath: String,
+    violations: List<ViolationReportItem>,
+) {
+    val status = if (violations.any { it.result == ViolationReportType.FAILED }) {
+        ViolationReportType.FAILED
+    } else {
+        ViolationReportType.PASSED
+    }
+    val escapedModulePath = modulePath.escapeMarkdownCell()
+
+    append(
+        """
+## Analysis: $escapedModulePath Module
 
 ### Summary
-- **Status**: ${generalSummaryStatus.toMarkdownStatus()}
-- **Module**: ${entry.key.escapeMarkdownCell()}"""
-            )
-
-            entry.value.forEachIndexed { index, report ->
-                reportContent.append(
-                    """
-- **Violations Found**: ${report.analysisTable.count()}
+- **Status**: ${status.toMarkdownStatus()}
+- **Module**: $escapedModulePath
+- **Violations Found**: ${violations.size}
 
 ---
 
 ## Violation Details
 | # | Module | Dependency | Rule | Description | Status |
 | --|--------|------------|------|-------------|--------|"""
-                )
-                report.analysisTable.forEachIndexed { index, analysisItem ->
-                    reportContent.append(
-                        """
-| ${index + 1} | ${entry.key.escapeMarkdownCell()} | ${analysisItem.internalDependencyName.escapeMarkdownCell()} | ${analysisItem.ruleChecked.escapeMarkdownCell()} | ${analysisItem.ruleDescription.escapeMarkdownCell()} | ${analysisItem.result.toMarkdownStatus()} |"""
-                    )
-                }
-            }
+    )
 
-            reportContent.append(
-                """
+    violations.forEachIndexed { index, violation ->
+        append(
+            """
+| ${index + 1} | $escapedModulePath | ${violation.internalDependencyName.escapeMarkdownCell()} | ${violation.ruleChecked.escapeMarkdownCell()} | ${violation.ruleDescription.escapeMarkdownCell()} | ${violation.result.toMarkdownStatus()} |"""
+        )
+    }
+
+    append(
+        """
             
 -----
 
 """
-            )
-        }
-        return reportContent.toString()
-    } else {
-        return ""
-    }
+    )
 }
 
 internal fun ViolationReportType.toMarkdownStatus() = when (this) {

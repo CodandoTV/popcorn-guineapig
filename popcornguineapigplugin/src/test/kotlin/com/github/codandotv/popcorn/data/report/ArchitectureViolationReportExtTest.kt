@@ -241,6 +241,41 @@ class ArchitectureViolationReportExtTest {
         assertEquals("a\\\\\\|b", "a\\|b".escapeMarkdownCell())
     }
 
+    @Test
+    fun `Given a module analysed twice when toMarkdownReport is called then violations share one summary and one table`() {
+        val sharedReport = ArchitectureViolationReport(
+            modulePath = ":feature-home",
+            analysisTable = listOf(
+                ViolationReportItem(
+                    internalDependencyName = ":shared",
+                    ruleChecked = "DoNotWithRule",
+                    ruleDescription = "Module cannot depend on :shared",
+                    result = ViolationReportType.FAILED,
+                ),
+            ),
+        )
+        val networkReport = ArchitectureViolationReport(
+            modulePath = ":feature-home",
+            analysisTable = listOf(
+                ViolationReportItem(
+                    internalDependencyName = ":network",
+                    ruleChecked = "DoNotWithRule",
+                    ruleDescription = "Module cannot depend on :network",
+                    result = ViolationReportType.FAILED,
+                ),
+            ),
+        )
+
+        val result = listOf(sharedReport, networkReport).toMarkdownReport()
+
+        assertEquals(1, result.split("## Analysis:").size - 1)
+        assertEquals(1, result.lines().count { it.startsWith("- **Violations Found**") })
+        assertEquals(1, result.lines().count { it.contains("## Violation Details") })
+        assertContains(result, "- **Violations Found**: 2")
+        assertContains(result, "| 1 | :feature-home | :shared |")
+        assertContains(result, "| 2 | :feature-home | :network |")
+    }
+
     private fun String.rowStartingWith(prefix: String): String = lines().first { it.startsWith(prefix) }
 
     /** Cells of a Markdown table row, splitting on every pipe that is not escaped with a backslash. */
