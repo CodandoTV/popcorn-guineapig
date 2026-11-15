@@ -1,9 +1,16 @@
 package com.github.codandotv.popcorn.presentation.ext
 
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
+import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.ConfigurationContainer
+import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.logging.Logger
 import org.junit.Test
-import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -65,25 +72,241 @@ class ProjectExtTest {
         assertNull(dependency.toInternalDependencyOrNull("com.popcorn"))
     }
 
+    @Test
+    fun `Given the same project declared in two source sets when deduplicated then keeps one entry`() {
+        // A KMP module may declare project(":car:data") in both commonMain and androidMain.
+        val declaredInCommonMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+        val declaredInAndroidMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+
+        val result = listOf(declaredInCommonMain, declaredInAndroidMain).distinctDependencies()
+
+        assertEquals(listOf(declaredInCommonMain), result)
+    }
+
+    @Test
+    fun `Given coordinate-only dependencies differing only in case when deduplicated then keeps one entry`() {
+        val declaredInCommonMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "Data",
+            modulePath = null,
+        )
+        val declaredInAndroidMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = null,
+        )
+
+        val result = listOf(declaredInCommonMain, declaredInAndroidMain).distinctDependencies()
+
+        assertEquals(1, result.size)
+        assertEquals("Data", result.single().moduleName)
+    }
+
+    @Test
+    fun `Given modules sharing a leaf name when deduplicated then keeps both entries`() {
+        val carData = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+        val rentData = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":rent:data",
+        )
+
+        val result = listOf(carData, rentData).distinctDependencies()
+
+        assertEquals(listOf(carData, rentData), result)
+    }
+
+    @Test
+    fun `Given repeated entries interleaved with others when deduplicated then keeps the first occurrence order`() {
+        val domain = InternalDependenciesMetadata(group = "com.popcorn", moduleName = "domain", modulePath = ":domain")
+        val data = InternalDependenciesMetadata(group = "com.popcorn", moduleName = "data", modulePath = ":data")
+
+        val result = listOf(domain, data, domain).distinctDependencies()
+
+        assertEquals(listOf(domain, data), result)
+    }
+
+    @Test
+    fun `Given a coordinate entry before its project declaration when deduplicated then keeps the project entry`() {
+        val coordinateOnly = InternalDependenciesMetadata(group = "com.popcorn", moduleName = "data", modulePath = null)
+        val declaredAsProject = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+
+        val result = listOf(coordinateOnly, declaredAsProject).distinctDependencies()
+
+        assertEquals(listOf(declaredAsProject), result)
+    }
+
+    @Test
+    fun `Given a project declaration followed by a coordinate entry when deduplicated then keeps the project entry`() {
+        val declaredAsProject = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+        val coordinateOnly = InternalDependenciesMetadata(group = "com.popcorn", moduleName = "data", modulePath = null)
+
+        val result = listOf(declaredAsProject, coordinateOnly).distinctDependencies()
+
+        assertEquals(listOf(declaredAsProject), result)
+    }
+
+    @Test
+    fun `Given a project path and an unrelated coordinate-only dependency when deduplicated then keeps both`() {
+        val declaredAsProject = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+        val unrelatedCoordinate = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "resources",
+            modulePath = null,
+        )
+
+        val result = listOf(declaredAsProject, unrelatedCoordinate).distinctDependencies()
+
+        assertEquals(listOf(declaredAsProject, unrelatedCoordinate), result)
+    }
+
+    @Test
+    fun `Given the same project dependency declared in two source sets when extracted then keeps one dependency`() {
+        // Arrange - A KMP module can expose project(":car:data") from commonMainImplementation and
+        // androidMainImplementation. Gradle yields one entry per declaration.
+        val dataDependency = dependencyProxy(
+            type = ProjectDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = ":car:data",
+        )
+        val project = projectProxy(
+            name = "app",
+            configurations = listOf(
+                configurationProxy("commonMainImplementation", listOf(dataDependency, dataDependency)),
+                configurationProxy("androidMainImplementation", listOf(dataDependency)),
+            ),
+        )
+
+        // Act
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("commonMainImplementation", "androidMainImplementation"),
+            groupName = "com.popcorn",
+        )
+
+        // Assert
+        assertEquals(1, result.size)
+        assertEquals(":car:data", result.single().modulePath)
+    }
+
+    @Test
+    fun `Given a coordinate declaration before the project one when extracted then keeps the project dependency`() {
+        // Arrange
+        val dataCoordinate = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = null,
+        )
+        val dataProjectDependency = dependencyProxy(
+            type = ProjectDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = ":car:data",
+        )
+        val project = projectProxy(
+            name = "app",
+            configurations = listOf(
+                configurationProxy("commonMainImplementation", listOf(dataCoordinate)),
+                configurationProxy("androidMainImplementation", listOf(dataProjectDependency)),
+            ),
+        )
+
+        // Act
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("commonMainImplementation", "androidMainImplementation"),
+            groupName = "com.popcorn",
+        )
+
+        // Assert
+        assertEquals(1, result.size)
+        assertEquals(":car:data", result.single().modulePath)
+    }
+
     private fun <T> dependencyProxy(
         type: Class<T>,
         group: String?,
         name: String,
         path: String?,
-    ): T {
-        return type.cast(
-            Proxy.newProxyInstance(
-                type.classLoader,
-                arrayOf(type),
-                InvocationHandler { _, method, _ ->
-                    when (method.name) {
-                        "getGroup" -> group
-                        "getName" -> name
-                        "getPath" -> path
-                        else -> null
-                    }
-                },
-            )
-        )
+    ): T = proxy(type) { method ->
+        when (method.name) {
+            "getGroup" -> group
+            "getName" -> name
+            "getPath" -> path
+            else -> null
+        }
     }
+
+    private fun projectProxy(
+        name: String,
+        configurations: List<Configuration>,
+    ): Project {
+        val rootProject = proxy(Project::class.java) { method ->
+            if (method.name == "getName") name else null
+        }
+        val logger = proxy(Logger::class.java) { null }
+        val configurationContainer = proxy(ConfigurationContainer::class.java) { method ->
+            if (method.name == "iterator") configurations.iterator() else null
+        }
+
+        lateinit var project: Project
+        project = proxy(Project::class.java) { method ->
+            when (method.name) {
+                "getName" -> name
+                "getProject" -> project
+                "getRootProject" -> rootProject
+                "getConfigurations" -> configurationContainer
+                "getLogger" -> logger
+                else -> null
+            }
+        }
+        return project
+    }
+
+    private fun configurationProxy(
+        name: String,
+        dependencies: List<Dependency>,
+    ): Configuration = proxy(Configuration::class.java) { method ->
+        when (method.name) {
+            "getName" -> name
+            "getDependencies" -> dependencySetProxy(dependencies)
+            else -> null
+        }
+    }
+
+    private fun dependencySetProxy(dependencies: List<Dependency>): DependencySet =
+        proxy(DependencySet::class.java) { method ->
+            if (method.name == "iterator") dependencies.iterator() else null
+        }
+
+    private fun <T> proxy(type: Class<T>, handler: (Method) -> Any?): T =
+        type.cast(
+            Proxy.newProxyInstance(type.classLoader, arrayOf(type)) { _, method, _ ->
+                handler(method)
+            }
+        )
 }

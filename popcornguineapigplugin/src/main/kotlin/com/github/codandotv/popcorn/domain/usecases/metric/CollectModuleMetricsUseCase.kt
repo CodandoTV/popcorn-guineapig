@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.domain.usecases.metric
 import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import com.github.codandotv.popcorn.domain.models.ModuleMetric
 import com.github.codandotv.popcorn.domain.models.TargetModule
+import com.github.codandotv.popcorn.domain.models.identityKey
 
 internal interface CollectModuleMetricsUseCase {
 
@@ -47,11 +48,14 @@ internal class CollectModuleMetricsUseCaseImpl : CollectModuleMetricsUseCase {
     }
 }
 
-private fun InternalDependenciesMetadata.references(module: TargetModule): Boolean {
-    val dependencyPath = modulePath
-    return if (dependencyPath != null) {
-        dependencyPath == module.modulePath
+/**
+ * A project declaration is matched by its project path. A coordinate-only declaration has no path,
+ * so it matches the module name, ignoring case (the documented leaf-name fallback in
+ * docs/5-metrics-report.md). Both branches compare against the shared `identityKey`.
+ */
+private fun InternalDependenciesMetadata.references(module: TargetModule): Boolean =
+    if (modulePath != null) {
+        identityKey == module.modulePath
     } else {
-        moduleName.equals(module.moduleName, ignoreCase = true)
+        identityKey == module.moduleName.lowercase()
     }
-}

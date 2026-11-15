@@ -8,6 +8,7 @@ import com.github.codandotv.popcorn.domain.rules.JustWithRule
 import com.github.codandotv.popcorn.domain.rules.NoDependencyRule
 import org.junit.Test
 import org.junit.Before
+import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 class CheckArchitectureUseCaseTest {
@@ -219,5 +220,26 @@ class CheckArchitectureUseCaseTest {
 
         // Assert
         assertIs<CheckResult.Failure>(result)
+    }
+
+    @Test
+    fun `Given the same module declared with different groups when checked then the rule receives it once`() {
+        // Arrange
+        val targetModule = TargetModule(
+            modulePath = ":domain",
+            moduleName = "domain",
+            internalDependencies = listOf(
+                InternalDependenciesMetadata(group = "com.popcorn", moduleName = "data"),
+                InternalDependenciesMetadata(group = null, moduleName = "data"),
+            ),
+            rules = listOf(DoNotWithRule(notWith = listOf("data"))),
+        )
+
+        // Act
+        val result = checkArchitectureUseCase.execute(targetModule)
+
+        // Assert
+        val failure = assertIs<CheckResult.Failure>(result)
+        assertEquals(1, failure.errors.single().affectedRelationship?.size)
     }
 }

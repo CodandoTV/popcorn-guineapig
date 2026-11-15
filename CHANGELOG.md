@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `popcornModuleMetrics` counts an internal dependency once per module, so a project declared in several source sets (for example `commonMain` and `androidMain`) no longer doubles that module's FanOut and inflates its Instability. A coordinate-only declaration of a module that is also declared as a project dependency is folded into the project-path declaration, so it also counts once.
 - Modules that share a name (for example `:car:data` and `:rent:data`) are now evaluated, reported and measured independently by `popcornParent` and `popcornModuleMetrics`. Previously the last result overwrote the others by name, which could hide a violation and made FanIn count them as one module.
 - Error report sections are labeled with the module's Gradle project path, so modules that share a name no longer merge into a single section.
 - A project matching more than one `PopcornChildConfiguration` now enforces the union of every matching configuration's rules instead of keeping only the last evaluated result.

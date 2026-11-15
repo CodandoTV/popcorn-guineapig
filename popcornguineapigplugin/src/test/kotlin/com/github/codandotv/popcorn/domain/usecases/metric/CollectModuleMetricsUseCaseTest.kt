@@ -277,9 +277,10 @@ class CollectModuleMetricsUseCaseTest {
     }
 
     @Test
-    fun `Given module with duplicate dependencies when invoke then counts unique dependencies only in fanOut`() {
-        // Arrange - Note: The implementation counts duplicates, not unique deps.
-        // This test validates current behavior
+    fun `Given a module with repeated entries when invoke then fanOut counts every entry it receives`() {
+        // Arrange - Uniqueness is guaranteed upstream, by
+        // Project.internalProjectDependencies(), which keeps one entry per module. This use case
+        // only counts the list it is given.
         val modules = listOf(
             TargetModule(
                 modulePath = ":core",
@@ -296,7 +297,35 @@ class CollectModuleMetricsUseCaseTest {
         val result = useCase.invoke(modules)
 
         // Assert
-        assertEquals(2, result[0].fanOut) // Current implementation counts duplicates
+        assertEquals(2, result[0].fanOut)
+    }
+
+    @Test
+    fun `Given a dependent module repeating the same target when invoke then fanIn counts the module once`() {
+        // Arrange
+        val modules = listOf(
+            TargetModule(
+                modulePath = ":core",
+                moduleName = "core",
+                internalDependencies = emptyList(),
+                rules = emptyList()
+            ),
+            TargetModule(
+                modulePath = ":data",
+                moduleName = "data",
+                internalDependencies = listOf(
+                    InternalDependenciesMetadata(group = null, moduleName = "core"),
+                    InternalDependenciesMetadata(group = null, moduleName = "core") // duplicate
+                ),
+                rules = emptyList()
+            )
+        )
+
+        // Act
+        val result = useCase.invoke(modules)
+
+        // Assert
+        assertEquals(1, result.single { it.modulePath == ":core" }.fanIn)
     }
 
     @Test
