@@ -783,6 +783,7 @@ presentation,0,2,1.0,:feature:presentation
 <h3 id="fanout">FanOut<a class="headerlink" href="#fanout" title="Permanent link">&para;</a></h3>
 <p><strong>Definition:</strong> The number of internal dependencies this module has — i.e., how many other project modules it depends on.</p>
 <p><strong>Purpose:</strong> FanOut measures how much a module relies on the rest of the project. A high FanOut value indicates a module with many outward connections, making it more coupled to the overall system structure.</p>
+<p>A dependency counts once per module, even when it is declared in more than one source set. In a KMP module that declares the same project in <code>commonMain</code> and <code>androidMain</code>, that is one outbound edge, not two.</p>
 <h3 id="instability">Instability<a class="headerlink" href="#instability" title="Permanent link">&para;</a></h3>
 <p><strong>Definition:</strong> The ratio of outgoing dependencies to total dependencies (fanIn + fanOut).</p>
 <div class="highlight"><pre><span></span><code>Instability = FanOut / (FanIn + FanOut)
