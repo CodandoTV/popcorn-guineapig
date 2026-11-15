@@ -55,6 +55,8 @@ Each row corresponds to one Gradle subproject in your build. The `path` column i
 
 **Purpose:** FanOut measures how much a module relies on the rest of the project. A high FanOut value indicates a module with many outward connections, making it more coupled to the overall system structure.
 
+A dependency counts once per module, even when it is declared in more than one source set. In a KMP module that declares the same project in `commonMain` and `androidMain`, that is one outbound edge, not two.
+
 ### Instability
 
 **Definition:** The ratio of outgoing dependencies to total dependencies (fanIn + fanOut).
