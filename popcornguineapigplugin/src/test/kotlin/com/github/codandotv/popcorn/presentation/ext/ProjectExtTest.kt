@@ -73,6 +73,140 @@ class ProjectExtTest {
     }
 
     @Test
+    fun `Given a project dependency outside the configured group when mapped then it is internal`() {
+        // A subproject can set its own group; the type still proves the dependency is internal.
+        val dependency = dependencyProxy(
+            type = ProjectDependency::class.java,
+            group = "com.mycompany",
+            name = "core",
+            path = ":core",
+        )
+
+        val result = dependency.toInternalDependencyOrNull("com.popcorn")
+
+        assertEquals(":core", result?.modulePath)
+        assertEquals("core", result?.moduleName)
+    }
+
+    @Test
+    fun `Given a project dependency without group when mapped then it is internal`() {
+        val dependency = dependencyProxy(
+            type = ProjectDependency::class.java,
+            group = null,
+            name = "core",
+            path = ":core",
+        )
+
+        assertEquals(":core", dependency.toInternalDependencyOrNull(null)?.modulePath)
+    }
+
+    @Test
+    fun `Given an external dependency sharing only a group prefix when mapped then it is not internal`() {
+        val dependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcornx",
+            name = "data",
+            path = null,
+        )
+
+        assertNull(dependency.toInternalDependencyOrNull("com.popcorn"))
+    }
+
+    @Test
+    fun `Given an external dependency ending with the configured group when mapped then it is not internal`() {
+        val dependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.example.core",
+            name = "utils",
+            path = null,
+        )
+
+        assertNull(dependency.toInternalDependencyOrNull("core"))
+    }
+
+    @Test
+    fun `Given an external dependency inside the configured group when mapped then it is internal`() {
+        val dependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcorn.data",
+            name = "data",
+            path = null,
+        )
+
+        val result = dependency.toInternalDependencyOrNull("com.popcorn")
+
+        assertNull(result?.modulePath)
+        assertEquals("data", result?.moduleName)
+    }
+
+    @Test
+    fun `Given a root project named android when an androidx dependency is extracted then it is not internal`() {
+        // The root name used to be the detection needle, so "androidx.core" looked internal.
+        val androidxDependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "androidx.core",
+            name = "core-ktx",
+            path = null,
+        )
+        val project = projectProxy(
+            name = "app",
+            rootProjectName = "android",
+            configurations = listOf(configurationProxy("implementation", listOf(androidxDependency))),
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = null,
+        )
+
+        assertEquals(emptyList<InternalDependenciesMetadata>(), result)
+    }
+
+    @Test
+    fun `Given a project dependency in a custom group when extracted then it is internal with its path`() {
+        val coreDependency = dependencyProxy(
+            type = ProjectDependency::class.java,
+            group = "com.mycompany",
+            name = "core",
+            path = ":core",
+        )
+        val project = projectProxy(
+            name = "app",
+            rootProjectName = "popcorn-app",
+            configurations = listOf(configurationProxy("implementation", listOf(coreDependency))),
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = null,
+        )
+
+        assertEquals(1, result.size)
+        assertEquals(":core", result.single().modulePath)
+    }
+
+    @Test
+    fun `Given a blank group name when coordinates are extracted then they are not internal`() {
+        val coordinateDependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = null,
+        )
+        val project = projectProxy(
+            name = "app",
+            configurations = listOf(configurationProxy("implementation", listOf(coordinateDependency))),
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = "   ",
+        )
+
+        assertEquals(emptyList<InternalDependenciesMetadata>(), result)
+    }
+
+    @Test
     fun `Given the same project declared in two source sets when deduplicated then keeps one entry`() {
         // A KMP module may declare project(":car:data") in both commonMain and androidMain.
         val declaredInCommonMain = InternalDependenciesMetadata(
@@ -264,9 +398,14 @@ class ProjectExtTest {
     private fun projectProxy(
         name: String,
         configurations: List<Configuration>,
+        rootProjectName: String = name,
     ): Project {
         val rootProject = proxy(Project::class.java) { method ->
-            if (method.name == "getName") name else null
+            when (method.name) {
+                "getName" -> rootProjectName
+                "getPath" -> ":"
+                else -> null
+            }
         }
         val logger = proxy(Logger::class.java) { null }
         val configurationContainer = proxy(ConfigurationContainer::class.java) { method ->
@@ -277,6 +416,7 @@ class ProjectExtTest {
         project = proxy(Project::class.java) { method ->
             when (method.name) {
                 "getName" -> name
+                "getPath" -> ":$name"
                 "getProject" -> project
                 "getRootProject" -> rootProject
                 "getConfigurations" -> configurationContainer
