@@ -4,7 +4,6 @@ package com.github.codandotv.popcorn.data.report
 import com.github.codandotv.popcorn.domain.models.ViolationReportItem
 import com.github.codandotv.popcorn.domain.models.ViolationReportType
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationReport
-import kotlin.collections.iterator
 
 internal fun List<ArchitectureViolationReport>.toMarkdownReport(): String {
     if (isEmpty()) {
