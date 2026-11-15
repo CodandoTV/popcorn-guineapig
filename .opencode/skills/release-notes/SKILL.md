@@ -28,7 +28,7 @@ VERSION=<current>
 Use the **CHANGELOG.md** as the source of truth (tags may not exist):
 
 1. Read `CHANGELOG.md`
-2. Extract the first `## [<version>]` header whose version is **not** `Unreleased` — that is the **previous** released version. The file may open with an `## [Unreleased]` section, which is not a released version and must be skipped.
+2. Extract the first `## [<version>]` header — that is the **previous** released version
 
 Fallback: if CHANGELOG.md has no version headers, use `git describe --tags --abbrev=0`.
 
@@ -105,8 +105,6 @@ Prepend a new entry to `CHANGELOG.md` **after the header line** (before the prev
 ### Changed
 - ...
 ```
-
-If the file opens with an `## [Unreleased]` section, retitle that section to `## [<new-version>]` instead of adding a second heading — a release promotes the pending section into the released one.
 
 Omit sections that have no entries. Follow the existing format — no date suffix needed (unlike earlier versions).
 
