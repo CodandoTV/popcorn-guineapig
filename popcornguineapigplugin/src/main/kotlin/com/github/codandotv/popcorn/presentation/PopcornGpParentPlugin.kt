@@ -13,6 +13,7 @@ import org.gradle.kotlin.dsl.register
 
 public class PopcornGpParentPlugin : Plugin<Project> {
 
+    @Suppress("DEPRECATION") // groupName stays readable for 3.x and warns at execution time.
     override fun apply(target: Project) {
         requireMinimumGradleVersion()
 
@@ -83,6 +84,22 @@ public class PopcornGpParentPlugin : Plugin<Project> {
 public open class PopcornGpParentPluginExtension {
     public var type: ProjectType? = null
     public var children: List<PopcornChildConfiguration>? = null
+
+    /**
+     * Only needed for internal modules declared by coordinates (`com.popcorn:data:1.0`) instead of
+     * `project(":data")`: a Gradle project dependency is detected by its type, whatever `group`
+     * the target project sets.
+     *
+     * The value matches whole group segments — `com.popcorn` covers `com.popcorn` and
+     * `com.popcorn.data`, never `com.popcornx` — and no longer defaults to the root project name,
+     * which turned libraries such as `androidx.core:core-ktx` into internal dependencies in a
+     * project rooted at `android`.
+     */
+    @Deprecated(
+        message = "Internal dependencies are detected by their Gradle project type. `groupName` " +
+                "only matches internal modules declared by coordinates and will be removed in 4.0.0.",
+    )
     public var groupName: String? = null
+
     public var skillOutputDir: java.io.File? = null
 }

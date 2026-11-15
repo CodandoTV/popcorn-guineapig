@@ -6,6 +6,7 @@ import com.github.codandotv.popcorn.domain.input.configurationNames
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.usecases.metric.GenerateMetricsReportUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
+import com.github.codandotv.popcorn.presentation.ext.popcornLoggerGroupNameDeprecated
 import com.github.codandotv.popcorn.presentation.ext.toPopcornGPLogger
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -31,6 +32,10 @@ public open class PopcornModuleMetricsTask : DefaultTask() {
     ) {
         _reportPath = reportPath
         _groupName = groupName
+
+        if (!groupName.isNullOrBlank()) {
+            logger.popcornLoggerGroupNameDeprecated()
+        }
     }
 
     @TaskAction

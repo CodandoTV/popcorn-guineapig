@@ -39,6 +39,14 @@ internal fun Logger.popcornLoggerWarn(message: String) {
     )
 }
 
+internal fun Logger.popcornLoggerGroupNameDeprecated() {
+    popcornLoggerWarn(
+        "`groupName` is deprecated and will be removed in 4.0.0. Internal dependencies are " +
+                "detected by their Gradle project type, so `groupName` is only used to match " +
+                "internal modules declared by coordinates, such as `com.popcorn:data:1.0`."
+    )
+}
+
 internal fun Logger.toPopcornGPLogger(): com.github.codandotv.popcorn.domain.Logger {
     return object : com.github.codandotv.popcorn.domain.Logger {
         override fun log(message: String) {
