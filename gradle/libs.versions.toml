@@ -1,7 +1,6 @@
 [versions]
 kotlin = "2.2.0"
 junit = "4.13.2"
-gradle = "8.7.3"
 vanniktech = "0.37.0"
 kover = "0.8.0"
 
@@ -9,11 +8,7 @@ kover = "0.8.0"
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin_test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 
-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
-kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech"}
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

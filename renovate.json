@@ -26,11 +26,6 @@
     },
     {
       "matchManagers": ["gradle"],
-      "matchPackageNames": ["com.android.tools.build:gradle"],
-      "groupName": "Android Gradle Plugin"
-    },
-    {
-      "matchManagers": ["gradle"],
       "matchPackageNames": ["com.vanniktech.maven.publish"],
       "groupName": "Maven Publish plugin"
     }

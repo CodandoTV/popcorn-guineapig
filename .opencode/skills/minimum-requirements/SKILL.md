@@ -23,7 +23,6 @@ Parse `gradle/libs.versions.toml` for all dependency versions:
 [versions]
 kotlin = "..."
 junit = "..."
-gradle = "..."
 ```
 
 ### 2. Determine minimum requirements
@@ -33,7 +32,6 @@ Find the minimum supported versions from source code and documentation:
 - **Gradle** — check `gradle-wrapper.properties` and any `minGradleVersion` constants
 - **Java** — check `gradle.properties` JVM args, CI workflow JDK setup, and source/target compatibility
 - **Kotlin** — check `kotlin` version in `libs.versions.toml`
-- **Android Gradle Plugin** — check `buildscript` dependencies if Android support is documented
 - **Project types** — review `ProjectType.kt` (JAVA, KMP, ANDROID)
 
 ### 3. Read existing README
@@ -49,7 +47,6 @@ Write (or update) a "## Minimum requirements" section in `README.md` with a tabl
 | Java | 17 |
 | Gradle | 8.x |
 | Kotlin | 2.2.0 |
-| Android Gradle Plugin | (if applicable) |
 
 ### 5. Summary
 
