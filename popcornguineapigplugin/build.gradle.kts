@@ -93,7 +93,7 @@ val verifyNoRuntimeDependencyLeak by tasks.registering {
         // so prove them on every run instead of trusting a green check forever.
         val canaryLeaks = listOf(
             "com.android.tools.build:gradle:8.7.3",
-            "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0",
+            "org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.20",
         )
         check(leakedModules(canaryLeaks) == canaryLeaks) {
             "AGP/KGP leak detection is broken: it no longer matches ${canaryLeaks.joinToString()}."
