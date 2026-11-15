@@ -82,13 +82,14 @@ internal fun ViolationReportType.toMarkdownStatus() = when (this) {
 private val lineBreak = Regex("\\R")
 
 /**
- * Makes a value safe to write into a Markdown table cell. An unescaped `|` ends the cell, a
- * backtick opens a code span that can swallow the rest of the row and a line break ends the row
- * entirely, so user-supplied rule patterns can break the whole table. Backslashes are escaped
+ * Makes a value safe to write into a Markdown table cell. A table row is split into cells on
+ * unescaped pipes before inline parsing, so an unescaped `|` ends the cell, and a line break ends
+ * the row entirely; user-supplied rule patterns can break the whole table. Backslashes are escaped
  * first, otherwise a pattern that already contains `\|` would be re-escaped into an unescaped pipe.
+ * Backticks are left alone: they cannot move a cell boundary, and escaping them would turn a
+ * deliberate inline code span into literal backticks.
  */
 internal fun String.escapeMarkdownCell(): String = trim()
     .replace("\\", "\\\\")
     .replace("|", "\\|")
-    .replace("`", "\\`")
     .replace(lineBreak, " ")

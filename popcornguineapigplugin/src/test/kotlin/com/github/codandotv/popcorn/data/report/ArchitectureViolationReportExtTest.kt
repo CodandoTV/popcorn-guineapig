@@ -212,7 +212,7 @@ class ArchitectureViolationReportExtTest {
     }
 
     @Test
-    fun `Given a description with a backtick and a line break when toMarkdownReport is called then both stay in one cell`() {
+    fun `Given a description with inline code and a line break when toMarkdownReport is called then the cell keeps both`() {
         val report = ArchitectureViolationReport(
             modulePath = ":feature-home",
             analysisTable = listOf(
@@ -228,7 +228,7 @@ class ArchitectureViolationReportExtTest {
         val row = listOf(report).toMarkdownReport().rowStartingWith("| 1 |")
 
         assertEquals(6, row.cellCount())
-        assertContains(row, "Pattern \\`a\\|b\\` and more")
+        assertContains(row, "Pattern `a\\|b` and more")
     }
 
     /**
