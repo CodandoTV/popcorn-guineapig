@@ -83,6 +83,18 @@ public class PopcornGpParentPlugin : Plugin<Project> {
 public open class PopcornGpParentPluginExtension {
     public var type: ProjectType? = null
     public var children: List<PopcornChildConfiguration>? = null
+
+    /**
+     * Internal group used to recognize internal modules declared by coordinates
+     * (`com.popcorn:data:1.0`) instead of `project(":data")`: a Gradle project dependency is
+     * detected by its type, whatever `group` the target project sets, so this is only needed for
+     * coordinate-declared modules.
+     *
+     * The value matches whole group segments — `com.popcorn` covers `com.popcorn` and
+     * `com.popcorn.data`, never `com.popcornx`. It has no default: a root project named `android`
+     * no longer turns libraries such as `androidx.core:core-ktx` into internal dependencies.
+     */
     public var groupName: String? = null
+
     public var skillOutputDir: java.io.File? = null
 }

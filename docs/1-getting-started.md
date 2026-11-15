@@ -73,6 +73,24 @@ plugins {
 }
 ```
 
+#### How internal dependencies are detected
+
+A dependency counts as internal when Gradle knows it as a project dependency, such as
+`implementation(project(":data"))`, whatever `group` the target module sets. The check is on the
+dependency type, so the root project name never decides what is internal.
+
+If your modules are declared by coordinates instead, such as
+`implementation("com.popcorn:data:1.0")`, set `groupName` to their group. Matching is per whole
+group segment: `com.popcorn` covers `com.popcorn` and `com.popcorn.data`, but never `com.popcornx`.
+
+!!!note "`groupName` has no default"
+    `groupName` remains supported for modules declared by coordinates. It no longer defaults to the
+    root project name, so a root project named `android`, `core` or `kotlin` no longer turns
+    libraries such as `androidx.core:core-ktx` into internal dependencies.
+
+    A module whose coordinate dependencies only matched the old root-name default gets one warning
+    listing them. Set `groupName` explicitly if those modules are internal.
+
 #### **Run the task**
 
 ```sh

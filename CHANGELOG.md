@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The error report escapes `|` and line breaks in its table cells, so a rule pattern such as `(data|network)` no longer breaks the Markdown table the GitHub Action posts on a pull request. Inline code in rule descriptions is preserved.
 - Each module renders exactly one `Violations Found` count and one `Violation Details` table, regardless of how many reports that module produces.
 - The published plugin no longer drags its own build-time dependencies into consumers: `com.android.tools.build:gradle` 8.7.3 and `org.jetbrains.kotlin:kotlin-gradle-plugin` 2.2.0 were declared as `implementation` but never imported by any source file, so they reached the POM at runtime scope and could conflict with a consumer's own AGP, KGP or Gradle version. The plugin's runtime classpath is now empty, and a `verifyNoRuntimeDependencyLeak` build check fails if either ever returns to a published classpath (runtime or `compileOnlyApi`).
+- Internal dependencies are detected by their Gradle project type instead of by matching the dependency `group` against the project group name. A root project named `android`, `core`, `app` or `kotlin` no longer turns libraries such as `androidx.core:core-ktx` into internal dependencies, which used to fail `NoDependencyRule` and `JustWithRule` on external code. In the other direction, a `project(":x")` dependency is detected whatever `group` its module sets, so a custom subproject group no longer hides real dependencies.
 
 ### Changed
 
@@ -30,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimum supported Gradle version is now 8.11, required to read `ProjectDependency.path`. The plugin fails fast with a clear message on older Gradle versions.
 - Documentation covers project-path module identity, the metrics `path` column and `InternalDependenciesMetadata.modulePath`.
 - Error report rows identify a dependency by its Gradle project path when it is a project dependency, so a module depending on two same-named modules shows which one triggered the violation. Coordinate-only dependencies keep the `group:name` label.
+- The root project name is no longer the default internal group: an internal module declared by coordinates (`com.popcorn:data:1.0` instead of `project(":data")`) is only recognized when `groupName` is configured, and the comparison is per whole group segment, so `com.popcorn` no longer matches `com.popcornx`. `groupName` stays supported for that case and is not deprecated. A module whose coordinate dependencies only matched the old root-name default now logs a warning naming them, so the loss of detection is never silent.
 
 ---
 

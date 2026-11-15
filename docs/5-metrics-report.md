@@ -14,7 +14,7 @@ Run the following command from the project root:
 ./gradlew popcornModuleMetrics
 ```
 
-> **Prerequisite:** The Popcorn Gradle Plugin must be applied with a `type` configured in your root `build.gradle.kts`. The task relies on the same project group name used by `internalProjectDependencies()` to discover inter-module dependencies.
+> **Prerequisite:** The Popcorn Gradle Plugin must be applied with a `type` configured in your root `build.gradle.kts`. The task relies on the same internal-dependency detection as `popcornParent`: project dependencies are detected by their Gradle type, and modules declared by coordinates are only recognized when `groupName` is configured.
 
 !!!note "Module selection"
     `--modules` is not supported by `popcornModuleMetrics`. Metrics must analyze the full project graph to compute accurate FanIn and FanOut values.
@@ -47,7 +47,7 @@ Each row corresponds to one Gradle subproject in your build. The `path` column i
 
 **Definition:** The number of modules within the project that depend on this module.
 
-**Purpose:** FanIn measures how many other modules rely on a given module. A high FanIn value identifies **core or shared modules** that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module. A dependency declared only by coordinates (not as a Gradle project dependency) has no project path, so it falls back to leaf-name matching and counts toward every module that shares its leaf name. When the same dependency is declared both as a project dependency and by coordinates, the project path takes precedence, so the edge is attributed to that project only.
+**Purpose:** FanIn measures how many other modules rely on a given module. A high FanIn value identifies **core or shared modules** that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module. A dependency declared only by coordinates (not as a Gradle project dependency) has no project path, so it falls back to leaf-name matching and counts toward every module that shares its leaf name; that fallback only applies to coordinate-declared modules that the configured `groupName` recognizes as internal. When the same dependency is declared both as a project dependency and by coordinates, the project path takes precedence, so the edge is attributed to that project only.
 
 ### FanOut
 

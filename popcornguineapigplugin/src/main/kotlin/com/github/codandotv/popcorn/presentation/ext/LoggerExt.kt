@@ -39,6 +39,19 @@ internal fun Logger.popcornLoggerWarn(message: String) {
     )
 }
 
+internal fun Logger.popcornLoggerImplicitGroupNameRemoved(
+    rootProjectName: String,
+    dependencyIds: List<String>,
+) {
+    popcornLoggerWarn(
+        "`groupName` no longer defaults to the root project name [$rootProjectName]. These " +
+                "coordinate dependencies were internal before and are not any more: " +
+                dependencyIds.joinToString(", ") +
+                ". If they are internal modules, declare them as project dependencies or set " +
+                "`groupName` explicitly."
+    )
+}
+
 internal fun Logger.toPopcornGPLogger(): com.github.codandotv.popcorn.domain.Logger {
     return object : com.github.codandotv.popcorn.domain.Logger {
         override fun log(message: String) {

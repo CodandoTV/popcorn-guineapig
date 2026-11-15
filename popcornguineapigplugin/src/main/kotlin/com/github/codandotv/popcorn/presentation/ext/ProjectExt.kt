@@ -11,33 +11,52 @@ internal fun Project.internalProjectDependencies(
     groupName: String?,
 ): List<InternalDependenciesMetadata> {
     val internalProjectDependencies = mutableListOf<InternalDependenciesMetadata>()
-    val projectGroupName = groupName ?: project.rootProject.name
+    // A project dependency is internal whatever its group says, so the group is only needed to
+    // recognize modules declared by coordinates. Unset means "detect by type alone".
+    val internalGroupName = groupName?.trim()?.takeIf { it.isNotEmpty() }
+    val rootProjectName = rootProject.name
+    // The root project name was the implicit internal group before 3.4.0. Coordinate declarations
+    // that only matched that default lose detection, so they are reported instead of dropped
+    // silently.
+    val lostCoordinateDependencies = mutableListOf<String>()
 
-    logger.popcornLoggerDebug("Project group name is $projectGroupName")
+    logger.popcornLoggerDebug(
+        internalGroupName?.let { "Detecting internal dependencies by type or group [$it]" }
+            ?: "Detecting internal dependencies by type"
+    )
 
     project.configurations.onEach { conf ->
-        configurationNames.forEach { configurationName ->
-            if (conf.name == configurationName) {
-                logger.popcornLoggerDebug("Checking configuration [${conf.name}, $configurationName]")
+        if (conf.name in configurationNames) {
+            logger.popcornLoggerDebug("Checking configuration [${conf.name}]")
 
-                conf.dependencies.forEach { safeDep ->
-                    logger.popcornLoggerDebug("PopcornGp: ${safeDep.group}:${safeDep.name} <--> $projectGroupName")
+            conf.dependencies.forEach { safeDep ->
+                logger.popcornLoggerDebug("PopcornGp: ${safeDep.group}:${safeDep.name}")
 
-                    safeDep.toInternalDependencyOrNull(projectGroupName)?.let { internalDependency ->
-                        logger.popcornLoggerDebug(
-                            "PopcornGp: Dependency ${safeDep.name} is internal at " +
-                                    (internalDependency.modulePath ?: "unknown path")
-                        )
-                        internalProjectDependencies.add(internalDependency)
-                    }
+                if (groupName == null && safeDep.matchedImplicitRootGroup(rootProjectName)) {
+                    lostCoordinateDependencies += safeDep.coordinateLabel()
+                }
+
+                safeDep.toInternalDependencyOrNull(internalGroupName)?.let { internalDependency ->
+                    logger.popcornLoggerDebug(
+                        "PopcornGp: Dependency ${safeDep.name} is internal at " +
+                                (internalDependency.modulePath ?: "unknown path")
+                    )
+                    internalProjectDependencies.add(internalDependency)
                 }
             }
         }
     }
 
+    if (lostCoordinateDependencies.isNotEmpty()) {
+        logger.popcornLoggerImplicitGroupNameRemoved(
+            rootProjectName = rootProjectName,
+            dependencyIds = lostCoordinateDependencies.distinct().sorted(),
+        )
+    }
+
     val distinctDependencies = internalProjectDependencies.distinctDependencies()
 
-    logger.popcornLoggerDebug("Internal deps: $distinctDependencies of $projectGroupName")
+    logger.popcornLoggerDebug("Internal deps: $distinctDependencies of ${project.path}")
     return distinctDependencies
 }
 
@@ -81,16 +100,53 @@ internal fun List<InternalDependenciesMetadata>.distinctDependencies(): List<Int
     return distinct.values.toList()
 }
 
+/**
+ * A declaration is internal when Gradle knows it as a project dependency, whatever `group` the
+ * target project sets: the type is exact, the group is a name.
+ *
+ * A dependency declared only by coordinates (`com.popcorn:data:1.0`) has no Gradle project behind
+ * it, so it is internal only when it shares the explicitly configured internal group, compared on
+ * whole group segments so `com.popcorn` matches `com.popcorn` and `com.popcorn.data`, never
+ * `com.popcornx`.
+ */
 internal fun Dependency.toInternalDependencyOrNull(
-    projectGroupName: String,
-): InternalDependenciesMetadata? {
-    if (group?.contains(projectGroupName) != true) {
-        return null
-    }
-
-    return InternalDependenciesMetadata(
+    internalGroupName: String?,
+): InternalDependenciesMetadata? = when {
+    this is ProjectDependency -> InternalDependenciesMetadata(
         group = group,
         moduleName = name,
-        modulePath = (this as? ProjectDependency)?.path,
+        modulePath = path,
     )
+
+    internalGroupName != null && group.isWithinGroup(internalGroupName) -> InternalDependenciesMetadata(
+        group = group,
+        moduleName = name,
+        modulePath = null,
+    )
+
+    else -> null
 }
+
+/** `com.popcorn` matches `com.popcorn` and `com.popcorn.data`, never `com.popcornx`. */
+private fun String?.isWithinGroup(internalGroupName: String): Boolean {
+    if (this == null) return false
+
+    return this == internalGroupName || startsWith("$internalGroupName.")
+}
+
+/**
+ * Whether the old implicit root-name group used to classify this declaration as internal.
+ *
+ * Only coordinate declarations lose detection now; a project dependency stays internal. The match
+ * is per whole group segment, so a root project named `android` does not report every `androidx.*`
+ * library as lost detection.
+ */
+private fun Dependency.matchedImplicitRootGroup(rootProjectName: String?): Boolean =
+    this !is ProjectDependency &&
+        !rootProjectName.isNullOrBlank() &&
+        group.hasSegment(rootProjectName)
+
+private fun String?.hasSegment(segment: String): Boolean =
+    this?.split('.')?.contains(segment) == true
+
+private fun Dependency.coordinateLabel(): String = group?.let { "$it:$name" } ?: name
