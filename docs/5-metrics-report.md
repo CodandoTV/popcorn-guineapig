@@ -47,7 +47,7 @@ Each row corresponds to one Gradle subproject in your build. The `path` column i
 
 **Definition:** The number of modules within the project that depend on this module.
 
-**Purpose:** FanIn measures how many other modules rely on a given module. A high FanIn value identifies **core or shared modules** that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module. A dependency declared only by coordinates (not as a Gradle project dependency) has no project path, so it falls back to leaf-name matching and counts toward every module that shares its leaf name.
+**Purpose:** FanIn measures how many other modules rely on a given module. A high FanIn value identifies **core or shared modules** that many parts of the system depend on. Changes to these modules have a broad impact across the project. FanIn is matched by Gradle project path, so dependencies on two modules that share a name are attributed to the correct module. A dependency declared only by coordinates (not as a Gradle project dependency) has no project path, so it falls back to leaf-name matching and counts toward every module that shares its leaf name. When the same dependency is declared both as a project dependency and by coordinates, the project path takes precedence, so the edge is attributed to that project only.
 
 ### FanOut
 
@@ -55,7 +55,7 @@ Each row corresponds to one Gradle subproject in your build. The `path` column i
 
 **Purpose:** FanOut measures how much a module relies on the rest of the project. A high FanOut value indicates a module with many outward connections, making it more coupled to the overall system structure.
 
-A dependency counts once per module, even when it is declared in more than one source set. In a KMP module that declares the same project in `commonMain` and `androidMain`, that is one outbound edge, not two.
+A dependency counts once per module, even when it is declared in more than one source set. In a KMP module that declares the same project in `commonMain` and `androidMain`, that is one outbound edge, not two. A coordinate-only declaration of a module that is also declared as a project dependency is folded into that project declaration, so the same module never counts twice.
 
 ### Instability
 

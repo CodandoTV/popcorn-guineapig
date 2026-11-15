@@ -3,6 +3,7 @@ package com.github.codandotv.popcorn.domain.usecases.check
 import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.models.CheckResult
 import com.github.codandotv.popcorn.domain.models.ArchitectureViolationError
+import com.github.codandotv.popcorn.domain.models.identityKey
 
 internal interface CheckArchitectureUseCase {
     fun execute(
@@ -18,7 +19,7 @@ internal class CheckArchitectureUseCaseImpl : CheckArchitectureUseCase {
         val rules = targetModule.rules
         val internalDependencies = targetModule.internalDependencies
         val sortedInternalProjectDependencies = internalDependencies
-            .distinct()
+            .distinctBy { it.identityKey }
             .sortedWith(
                 compareBy(
                     { it.moduleName },
