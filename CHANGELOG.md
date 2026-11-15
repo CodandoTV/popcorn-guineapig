@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A project matching more than one `PopcornChildConfiguration` now enforces the union of every matching configuration's rules instead of keeping only the last evaluated result.
 - The error report escapes `|` and line breaks in its table cells, so a rule pattern such as `(data|network)` no longer breaks the Markdown table the GitHub Action posts on a pull request. Inline code in rule descriptions is preserved.
 - Each module renders exactly one `Violations Found` count and one `Violation Details` table, regardless of how many reports that module produces.
-- The published plugin no longer drags its own build-time dependencies into consumers: `com.android.tools.build:gradle` 8.7.3 and `org.jetbrains.kotlin:kotlin-gradle-plugin` 2.2.0 were declared as `implementation` but never imported by any source file, so they reached the POM at runtime scope and could conflict with a consumer's own AGP, KGP or Gradle version. The plugin's runtime classpath is now empty, and a `verifyNoRuntimeDependencyLeak` build check fails if either ever returns.
+- The published plugin no longer drags its own build-time dependencies into consumers: `com.android.tools.build:gradle` 8.7.3 and `org.jetbrains.kotlin:kotlin-gradle-plugin` 2.2.0 were declared as `implementation` but never imported by any source file, so they reached the POM at runtime scope and could conflict with a consumer's own AGP, KGP or Gradle version. The plugin's runtime classpath is now empty, and a `verifyNoRuntimeDependencyLeak` build check fails if either ever returns to a published classpath (runtime or `compileOnlyApi`).
 
 ### Changed
 

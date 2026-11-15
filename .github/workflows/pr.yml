@@ -22,5 +22,5 @@ jobs:
       run: chmod +x gradlew
     - name: Run unit tests
       run: ./gradlew popcornguineapigplugin:koverHtmlReport
-    - name: Verify AGP and KGP stay off the runtime classpath
+    - name: Verify AGP and KGP stay off the published classpaths
       run: ./gradlew popcornguineapigplugin:verifyNoRuntimeDependencyLeak
