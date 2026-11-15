@@ -241,6 +241,12 @@ class ArchitectureViolationReportExtTest {
         assertEquals("a\\\\\\|b", "a\\|b".escapeMarkdownCell())
     }
 
+    /**
+     * Defensive guarantee of the renderer, not a state a user can currently trigger: since 3.4.0
+     * [com.github.codandotv.popcorn.domain.usecases.check.GenerateArchitectureViolationReportImpl]
+     * emits one report per analysed module, and the rules-per-project map keeps each module to a
+     * single entry. The grouping still has to hold for any number of reports per module.
+     */
     @Test
     fun `Given a module analysed twice when toMarkdownReport is called then violations share one summary and one table`() {
         val sharedReport = ArchitectureViolationReport(
