@@ -1,5 +1,6 @@
 package com.github.codandotv.popcorn.presentation.ext
 
+import com.github.codandotv.popcorn.domain.models.InternalDependenciesMetadata
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.ProjectDependency
 import org.junit.Test
@@ -63,6 +64,72 @@ class ProjectExtTest {
         )
 
         assertNull(dependency.toInternalDependencyOrNull("com.popcorn"))
+    }
+
+    @Test
+    fun `Given the same project declared in two source sets when deduplicated then keeps one entry`() {
+        // A KMP module may declare project(":car:data") in both commonMain and androidMain.
+        val declaredInCommonMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+        val declaredInAndroidMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+
+        val result = listOf(declaredInCommonMain, declaredInAndroidMain).distinctDependencies()
+
+        assertEquals(listOf(declaredInCommonMain), result)
+    }
+
+    @Test
+    fun `Given coordinate-only dependencies differing only in case when deduplicated then keeps one entry`() {
+        val declaredInCommonMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "Data",
+            modulePath = null,
+        )
+        val declaredInAndroidMain = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = null,
+        )
+
+        val result = listOf(declaredInCommonMain, declaredInAndroidMain).distinctDependencies()
+
+        assertEquals(1, result.size)
+        assertEquals("Data", result.single().moduleName)
+    }
+
+    @Test
+    fun `Given modules sharing a leaf name when deduplicated then keeps both entries`() {
+        val carData = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":car:data",
+        )
+        val rentData = InternalDependenciesMetadata(
+            group = "com.popcorn",
+            moduleName = "data",
+            modulePath = ":rent:data",
+        )
+
+        val result = listOf(carData, rentData).distinctDependencies()
+
+        assertEquals(listOf(carData, rentData), result)
+    }
+
+    @Test
+    fun `Given repeated entries interleaved with others when deduplicated then keeps the first occurrence order`() {
+        val domain = InternalDependenciesMetadata(group = "com.popcorn", moduleName = "domain", modulePath = ":domain")
+        val data = InternalDependenciesMetadata(group = "com.popcorn", moduleName = "data", modulePath = ":data")
+
+        val result = listOf(domain, data, domain).distinctDependencies()
+
+        assertEquals(listOf(domain, data), result)
     }
 
     private fun <T> dependencyProxy(

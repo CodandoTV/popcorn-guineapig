@@ -34,9 +34,21 @@ internal fun Project.internalProjectDependencies(
         }
     }
 
-    logger.popcornLoggerDebug("Internal deps: $internalProjectDependencies of $projectGroupName")
-    return internalProjectDependencies
+    val distinctDependencies = internalProjectDependencies.distinctDependencies()
+
+    logger.popcornLoggerDebug("Internal deps: $distinctDependencies of $projectGroupName")
+    return distinctDependencies
 }
+
+/**
+ * Keeps one entry per module. A KMP module can declare the same project in more than one
+ * source set (for example `commonMain` and `androidMain`), which yields one entry per
+ * declaration. The identity is the Gradle project path when it is known and the module name
+ * otherwise, the same rule the metrics use case applies when it matches incoming dependencies
+ * to the modules that declared them.
+ */
+internal fun List<InternalDependenciesMetadata>.distinctDependencies(): List<InternalDependenciesMetadata> =
+    distinctBy { dependency -> dependency.modulePath ?: dependency.moduleName.lowercase() }
 
 internal fun Dependency.toInternalDependencyOrNull(
     projectGroupName: String,
