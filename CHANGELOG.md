@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modules that share a name (for example `:car:data` and `:rent:data`) are now evaluated, reported and measured independently by `popcornParent` and `popcornModuleMetrics`. Previously the last result overwrote the others by name, which could hide a violation and made FanIn count them as one module.
 - Error report sections are labeled with the module's Gradle project path, so modules that share a name no longer merge into a single section.
 - A project matching more than one `PopcornChildConfiguration` now enforces the union of every matching configuration's rules instead of keeping only the last evaluated result.
+- The error report escapes `|` and line breaks in its table cells, so a rule pattern such as `(data|network)` no longer breaks the Markdown table the GitHub Action posts on a pull request. Inline code in rule descriptions is preserved.
+- Each module renders exactly one `Violations Found` count and one `Violation Details` table, regardless of how many reports that module produces.
 
 ### Changed
 
