@@ -71,7 +71,7 @@ bash scripts/detektcheck.sh                        # Detekt locally (MegaLinter 
 `.opencode/skills/` (`skills.paths`). Load the matching skill before a task:
 `popcorn-reference`, `build-and-check`, `run-tests`, `validate-architecture`,
 `documentation-review`, `release-notes`, `review-pr`, `open-pr`,
-`minimum-requirements`.
+`minimum-requirements`, `consumer-app-test`.
 
 To add a skill, create `.opencode/skills/<name>/SKILL.md` (discovery via the
 configured path is automatic) and add it to the list above. This repo carries no
