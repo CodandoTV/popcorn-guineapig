@@ -83,13 +83,13 @@ If your modules are declared by coordinates instead, such as
 `implementation("com.popcorn:data:1.0")`, set `groupName` to their group. Matching is per whole
 group segment: `com.popcorn` covers `com.popcorn` and `com.popcorn.data`, but never `com.popcornx`.
 
-!!!warning "`groupName` is deprecated"
-    Because project dependencies are detected by type, `groupName` is only needed for
-    coordinate-declared modules. It is deprecated and will be removed in `4.0.0`.
+!!!note "`groupName` has no default"
+    `groupName` remains supported for modules declared by coordinates. It no longer defaults to the
+    root project name, so a root project named `android`, `core` or `kotlin` no longer turns
+    libraries such as `androidx.core:core-ktx` into internal dependencies.
 
-    Before `3.4.0`, the root project name was used when `groupName` was unset, so a root project
-    named `android`, `core` or `kotlin` turned libraries such as `androidx.core:core-ktx` into
-    internal dependencies.
+    A module whose coordinate dependencies only matched the old root-name default gets one warning
+    listing them. Set `groupName` explicitly if those modules are internal.
 
 #### **Run the task**
 

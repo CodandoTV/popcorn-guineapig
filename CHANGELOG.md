@@ -31,11 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimum supported Gradle version is now 8.11, required to read `ProjectDependency.path`. The plugin fails fast with a clear message on older Gradle versions.
 - Documentation covers project-path module identity, the metrics `path` column and `InternalDependenciesMetadata.modulePath`.
 - Error report rows identify a dependency by its Gradle project path when it is a project dependency, so a module depending on two same-named modules shows which one triggered the violation. Coordinate-only dependencies keep the `group:name` label.
-- The root project name is no longer the default internal group: an internal module declared by coordinates (`com.popcorn:data:1.0` instead of `project(":data")`) is only recognized when `groupName` is configured, and the comparison is per whole group segment, so `com.popcorn` no longer matches `com.popcornx`.
-
-### Deprecated
-
-- `groupName` — internal dependencies are detected by type, so it is now only used to match internal modules declared by coordinates. Setting it warns once per task run and it will be removed in `4.0.0`.
+- The root project name is no longer the default internal group: an internal module declared by coordinates (`com.popcorn:data:1.0` instead of `project(":data")`) is only recognized when `groupName` is configured, and the comparison is per whole group segment, so `com.popcorn` no longer matches `com.popcornx`. `groupName` stays supported for that case and is not deprecated. A module whose coordinate dependencies only matched the old root-name default now logs a warning naming them, so the loss of detection is never silent.
 
 ---
 
