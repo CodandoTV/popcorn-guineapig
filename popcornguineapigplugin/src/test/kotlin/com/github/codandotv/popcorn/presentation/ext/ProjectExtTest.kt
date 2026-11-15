@@ -14,6 +14,7 @@ import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class ProjectExtTest {
 
@@ -148,10 +149,12 @@ class ProjectExtTest {
             name = "core-ktx",
             path = null,
         )
+        val warnings = mutableListOf<String>()
         val project = projectProxy(
             name = "app",
             rootProjectName = "android",
             configurations = listOf(configurationProxy("implementation", listOf(androidxDependency))),
+            warnings = warnings,
         )
 
         val result = project.internalProjectDependencies(
@@ -160,6 +163,111 @@ class ProjectExtTest {
         )
 
         assertEquals(emptyList<InternalDependenciesMetadata>(), result)
+        assertTrue(warnings.isEmpty(), "androidx is external, so no lost detection is reported")
+    }
+
+    @Test
+    fun `Given a padded group name when coordinates are extracted then it is trimmed and internal`() {
+        // The trim in internalProjectDependencies is what makes this match; base matched nothing.
+        val coordinateDependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = null,
+        )
+        val project = projectProxy(
+            name = "app",
+            configurations = listOf(configurationProxy("implementation", listOf(coordinateDependency))),
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = " com.popcorn ",
+        )
+
+        assertEquals(1, result.size)
+        assertNull(result.single().modulePath)
+        assertEquals("data", result.single().moduleName)
+    }
+
+    @Test
+    fun `Given an unset group name when a coordinate dependency matches the root name then it is reported`() {
+        // Those dependencies used to be internal because the root name was the implicit group.
+        val coordinateDependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = null,
+        )
+        val warnings = mutableListOf<String>()
+        val project = projectProxy(
+            name = "app",
+            rootProjectName = "popcorn",
+            configurations = listOf(configurationProxy("implementation", listOf(coordinateDependency))),
+            warnings = warnings,
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = null,
+        )
+
+        assertEquals(emptyList<InternalDependenciesMetadata>(), result)
+        val warning = warnings.single()
+        assertTrue(warning.contains("groupName"), "warning must point at the explicit configuration")
+        assertTrue(warning.contains("popcorn"), "warning must name the old implicit group")
+        assertTrue(warning.contains("com.popcorn:data"), "warning must name the affected dependency")
+    }
+
+    @Test
+    fun `Given a configured group name when coordinates match the root name then nothing is reported`() {
+        val coordinateDependency = dependencyProxy(
+            type = ModuleDependency::class.java,
+            group = "com.popcorn",
+            name = "data",
+            path = null,
+        )
+        val warnings = mutableListOf<String>()
+        val project = projectProxy(
+            name = "app",
+            rootProjectName = "popcorn",
+            configurations = listOf(configurationProxy("implementation", listOf(coordinateDependency))),
+            warnings = warnings,
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = "com.popcorn",
+        )
+
+        assertEquals(1, result.size)
+        assertTrue(warnings.isEmpty(), "an explicit group keeps detection, so nothing was lost")
+    }
+
+    @Test
+    fun `Given an unset group name when a project dependency matches the root name then nothing is reported`() {
+        // A project dependency is internal by type, so the removed root-name default cannot lose it.
+        val coreDependency = dependencyProxy(
+            type = ProjectDependency::class.java,
+            group = "com.popcorn",
+            name = "core",
+            path = ":core",
+        )
+        val warnings = mutableListOf<String>()
+        val project = projectProxy(
+            name = "app",
+            rootProjectName = "popcorn",
+            configurations = listOf(configurationProxy("implementation", listOf(coreDependency))),
+            warnings = warnings,
+        )
+
+        val result = project.internalProjectDependencies(
+            configurationNames = listOf("implementation"),
+            groupName = null,
+        )
+
+        assertEquals(":core", result.single().modulePath)
+        assertTrue(warnings.isEmpty(), "a project dependency is still detected by type")
     }
 
     @Test
@@ -399,6 +507,7 @@ class ProjectExtTest {
         name: String,
         configurations: List<Configuration>,
         rootProjectName: String = name,
+        warnings: MutableList<String> = mutableListOf(),
     ): Project {
         val rootProject = proxy(Project::class.java) { method ->
             when (method.name) {
@@ -407,7 +516,7 @@ class ProjectExtTest {
                 else -> null
             }
         }
-        val logger = proxy(Logger::class.java) { null }
+        val logger = loggerProxy(warnings)
         val configurationContainer = proxy(ConfigurationContainer::class.java) { method ->
             if (method.name == "iterator") configurations.iterator() else null
         }
@@ -442,6 +551,17 @@ class ProjectExtTest {
         proxy(DependencySet::class.java) { method ->
             if (method.name == "iterator") dependencies.iterator() else null
         }
+
+    private fun loggerProxy(warnings: MutableList<String>): Logger =
+        Proxy.newProxyInstance(
+            Logger::class.java.classLoader,
+            arrayOf(Logger::class.java),
+        ) { _, method, args ->
+            if (method.name == "warn") {
+                warnings.add((args?.singleOrNull() as? String).orEmpty())
+            }
+            null
+        } as Logger
 
     private fun <T> proxy(type: Class<T>, handler: (Method) -> Any?): T =
         type.cast(

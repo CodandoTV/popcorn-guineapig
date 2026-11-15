@@ -9,29 +9,25 @@ import kotlin.test.assertTrue
 class LoggerExtTest {
 
     @Test
-    fun `Given a logger when the deprecation is reported then it names the property and the version`() {
+    fun `Given a logger when the implicit root group is reported then it names the property and the dependencies`() {
         val warnings = mutableListOf<String>()
+        val calledMethods = mutableListOf<String>()
         val logger = proxyLogger { method, args ->
+            calledMethods.add(method)
             if (method == "warn") warnings.add(args.single() as String)
         }
 
-        logger.popcornLoggerGroupNameDeprecated()
+        logger.popcornLoggerImplicitGroupNameRemoved(
+            rootProjectName = "popcorn",
+            dependencyIds = listOf("com.popcorn:data", "com.popcorn:domain"),
+        )
 
         val warning = warnings.single()
-        assertTrue(warning.contains("groupName"), "warning must name the deprecated property")
-        assertTrue(warning.contains("deprecated"), "warning must say the property is deprecated")
-        assertTrue(warning.contains("4.0.0"), "warning must say when it is removed")
-    }
-
-    @Test
-    fun `Given a logger when the group name deprecation is reported then it only warns`() {
-        // A deprecation must stay a warning: it cannot fail a consumer build or hide in debug output.
-        val calledMethods = mutableListOf<String>()
-        val logger = proxyLogger { method, _ -> calledMethods.add(method) }
-
-        logger.popcornLoggerGroupNameDeprecated()
-
-        assertEquals(listOf("warn"), calledMethods)
+        assertTrue(warning.contains("groupName"), "warning must name the property to configure")
+        assertTrue(warning.contains("popcorn"), "warning must name the removed implicit group")
+        assertTrue(warning.contains("com.popcorn:data"), "warning must name the affected dependency")
+        assertTrue(warning.contains("com.popcorn:domain"), "warning must list every affected dependency")
+        assertEquals(listOf("warn"), calledMethods, "the migration signal must not fail a consumer build")
     }
 
     private fun proxyLogger(onCall: (method: String, args: List<Any?>) -> Unit): Logger =
