@@ -14,6 +14,11 @@ internal fun Project.internalProjectDependencies(
     // A project dependency is internal whatever its group says, so the group is only needed to
     // recognize modules declared by coordinates. Unset means "detect by type alone".
     val internalGroupName = groupName?.trim()?.takeIf { it.isNotEmpty() }
+    val rootProjectName = rootProject.name
+    // The root project name was the implicit internal group before 3.4.0. Coordinate declarations
+    // that only matched that default lose detection, so they are reported instead of dropped
+    // silently.
+    val lostCoordinateDependencies = mutableListOf<String>()
 
     logger.popcornLoggerDebug(
         internalGroupName?.let { "Detecting internal dependencies by type or group [$it]" }
@@ -27,6 +32,10 @@ internal fun Project.internalProjectDependencies(
             conf.dependencies.forEach { safeDep ->
                 logger.popcornLoggerDebug("PopcornGp: ${safeDep.group}:${safeDep.name}")
 
+                if (groupName == null && safeDep.matchedImplicitRootGroup(rootProjectName)) {
+                    lostCoordinateDependencies += safeDep.coordinateLabel()
+                }
+
                 safeDep.toInternalDependencyOrNull(internalGroupName)?.let { internalDependency ->
                     logger.popcornLoggerDebug(
                         "PopcornGp: Dependency ${safeDep.name} is internal at " +
@@ -36,6 +45,13 @@ internal fun Project.internalProjectDependencies(
                 }
             }
         }
+    }
+
+    if (lostCoordinateDependencies.isNotEmpty()) {
+        logger.popcornLoggerImplicitGroupNameRemoved(
+            rootProjectName = rootProjectName,
+            dependencyIds = lostCoordinateDependencies.distinct().sorted(),
+        )
     }
 
     val distinctDependencies = internalProjectDependencies.distinctDependencies()
@@ -117,3 +133,20 @@ private fun String?.isWithinGroup(internalGroupName: String): Boolean {
 
     return this == internalGroupName || startsWith("$internalGroupName.")
 }
+
+/**
+ * Whether the old implicit root-name group used to classify this declaration as internal.
+ *
+ * Only coordinate declarations lose detection now; a project dependency stays internal. The match
+ * is per whole group segment, so a root project named `android` does not report every `androidx.*`
+ * library as lost detection.
+ */
+private fun Dependency.matchedImplicitRootGroup(rootProjectName: String?): Boolean =
+    this !is ProjectDependency &&
+        !rootProjectName.isNullOrBlank() &&
+        group.hasSegment(rootProjectName)
+
+private fun String?.hasSegment(segment: String): Boolean =
+    this?.split('.')?.contains(segment) == true
+
+private fun Dependency.coordinateLabel(): String = group?.let { "$it:$name" } ?: name

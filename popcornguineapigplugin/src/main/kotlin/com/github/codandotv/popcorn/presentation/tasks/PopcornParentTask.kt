@@ -8,7 +8,6 @@ import com.github.codandotv.popcorn.domain.models.TargetModule
 import com.github.codandotv.popcorn.domain.rules.PopcornGuineaPigRule
 import com.github.codandotv.popcorn.domain.usecases.check.AnalyseArchitectureUseCase
 import com.github.codandotv.popcorn.presentation.ext.internalProjectDependencies
-import com.github.codandotv.popcorn.presentation.ext.popcornLoggerGroupNameDeprecated
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerLifecycle
 import com.github.codandotv.popcorn.presentation.ext.popcornLoggerWarn
 import com.github.codandotv.popcorn.presentation.ext.toPopcornGPLogger
@@ -61,10 +60,6 @@ public open class PopcornParentTask : DefaultTask() {
         _reportPath = reportPath.orEmpty()
         _groupName = groupName
         _errorReportEnabled = errorReportEnabled
-
-        if (!groupName.isNullOrBlank()) {
-            logger.popcornLoggerGroupNameDeprecated()
-        }
     }
 
     @TaskAction

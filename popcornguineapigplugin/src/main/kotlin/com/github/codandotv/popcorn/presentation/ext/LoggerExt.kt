@@ -39,11 +39,16 @@ internal fun Logger.popcornLoggerWarn(message: String) {
     )
 }
 
-internal fun Logger.popcornLoggerGroupNameDeprecated() {
+internal fun Logger.popcornLoggerImplicitGroupNameRemoved(
+    rootProjectName: String,
+    dependencyIds: List<String>,
+) {
     popcornLoggerWarn(
-        "`groupName` is deprecated and will be removed in 4.0.0. Internal dependencies are " +
-                "detected by their Gradle project type, so `groupName` is only used to match " +
-                "internal modules declared by coordinates, such as `com.popcorn:data:1.0`."
+        "`groupName` no longer defaults to the root project name [$rootProjectName]. These " +
+                "coordinate dependencies were internal before and are not any more: " +
+                dependencyIds.joinToString(", ") +
+                ". If they are internal modules, declare them as project dependencies or set " +
+                "`groupName` explicitly."
     )
 }
 
