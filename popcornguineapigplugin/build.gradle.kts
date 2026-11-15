@@ -1,4 +1,7 @@
 import java.util.Properties
+import org.gradle.api.artifacts.result.ResolvedComponentResult
+import org.gradle.api.artifacts.result.ResolvedDependencyResult
+import org.gradle.api.provider.Provider
 
 plugins {
     `kotlin-dsl`
@@ -15,6 +18,60 @@ repositories {
 dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test)
+}
+
+/**
+ * Module ids of everything resolved for this configuration, walked from the root
+ * of the resolution result so a transitive leak is caught as well as a direct one.
+ */
+fun ResolvedComponentResult.allModuleIds(): Set<String> {
+    val visited = mutableSetOf<ResolvedComponentResult>()
+    val ids = mutableSetOf<String>()
+
+    fun collect(component: ResolvedComponentResult) {
+        if (!visited.add(component)) return
+        component.moduleVersion?.let { ids.add("${it.group}:${it.name}") }
+        component.dependencies
+            .filterIsInstance<ResolvedDependencyResult>()
+            .forEach { collect(it.selected) }
+    }
+
+    collect(this)
+    return ids
+}
+
+val runtimeComponentIds: Provider<List<String>> =
+    configurations.runtimeClasspath
+        .flatMap { it.incoming.resolutionResult.rootComponent }
+        .map { it.allModuleIds().sorted() }
+
+/**
+ * AGP and KGP must stay off the published runtime classpath: this plugin only talks to
+ * the Gradle API, and shipping either one forces a version on every consumer's
+ * build-logic classpath, where it conflicts with their own (#112).
+ */
+val verifyNoRuntimeDependencyLeak by tasks.registering {
+    group = "verification"
+    description = "Fails when AGP or KGP leaks onto the plugin's runtime classpath."
+
+    val componentIds = runtimeComponentIds
+
+    doLast {
+        val leaked = componentIds.get().filter { id ->
+            id.startsWith("com.android.tools.build:") ||
+                id.startsWith("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        }
+        if (leaked.isNotEmpty()) {
+            throw GradleException(
+                "AGP/KGP leaked onto the plugin's runtime classpath: ${leaked.joinToString()}. " +
+                    "Declare them as compileOnly and resolve them through pluginManager.withPlugin(...) instead.",
+            )
+        }
+    }
+}
+
+tasks.named("check") {
+    dependsOn(verifyNoRuntimeDependencyLeak)
 }
 
 tasks.test {
