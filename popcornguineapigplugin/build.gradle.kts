@@ -92,7 +92,7 @@ val verifyNoRuntimeDependencyLeak by tasks.registering {
         // A leak only fails the build if the matcher and the resolution walk both work,
         // so prove them on every run instead of trusting a green check forever.
         val canaryLeaks = listOf(
-            "com.android.tools.build:gradle:8.7.3",
+            "com.android.tools.build:gradle:8.13.2",
             "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0",
         )
         check(leakedModules(canaryLeaks) == canaryLeaks) {
